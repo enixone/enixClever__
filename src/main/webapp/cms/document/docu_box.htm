@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="subject" content="enixClever">
+<meta name="author" content="enixClever">
+<meta name="publisher" content="enixClever">
+<meta name="description" content="enixClever">
+<meta name="robots" content="index,follow">
+<meta name="keywords" content="enixClever, 전자적비밀관리 시스템">
+<title>enixClever</title>
+<link rel="stylesheet" type="text/css" href="./inc/css/common.css">
+<link rel="stylesheet" type="text/css" href="./inc/css/layout.css">
+<script type="text/javascript" src="./inc/js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="./inc/js/dafault.js"></script>
+</head>
+
+<body>
+<div id="wrap">
+	<div id="header">
+		<div class="top">
+			<a href="#" class="logo-area"><img src="./images/logo.png" alt="현대케피코" /></a>
+		</div>
+	</div>
+	<div id="bottom_capa">
+		<div class="progress">
+			<div class="capatxt"><span>12.1GB</span> / 20GB</div>
+			<div class="capatxt_s"><a href="#">개인함현황</a></div>
+			<div class="barstick"><div class="barfill" style="width:50%;"></div></div>
+		</div>
+		<div class="txtbt">
+			<a href="#"><span>환경설정</span></a><i></i>
+			<a href="#">Windows 개인함</a>
+			<a href="#">HELP</a>
+		</div>
+	</div>
+	<div class="container">
+		<div class="navigation_docubox active">
+			<div class="navigation-wrap-docubox">
+				<a href="#"><div class="navigation-title"><img src="images/icon_pen.png" class="pdR10">새문서 등록</div></a>
+				<ul class="navBtnWrap cont-body-scroll height100">
+					<li><a href="#" class="navBtn_docubox"><img src="images/icon_folder.png">000 Sanfablic</a></li>
+					<li><a href="#" class="navBtn_docubox"><img src="images/icon_folder.png">000 데이터바우처사업</a></li>
+					<li><a href="#" class="navBtn_docubox"><img src="images/icon_folder.png">001 클라우드 시그너처 견적</a></li>
+					<li><a href="#" class="navBtn_docubox"><img src="images/icon_folder.png">010 공공.국방</a></li>
+					<li><a href="#" class="navBtn_docubox"><img src="images/icon_folder.png">020 금융</a></li>
+					<li><a href="#" class="navBtn_docubox"><img src="images/icon_folder.png">030 제조,서비스</a></li>
+					<li><a href="#" class="navBtn_docubox"><img src="images/icon_folder.png">040 정부사업</a></li>
+					<li><a href="#" class="navBtn_docubox"><img src="images/icon_folder.png">050 물류.백화점.유통</a></li>
+					<li><a href="#" class="navBtn_docubox"><img src="images/icon_folder.png">060 식품.외식</a></li>
+					<li><a href="#" class="navBtn_docubox"><img src="images/icon_folder.png">070 교육.대학</a></li>
+					<li><a href="#" class="navBtn_docubox"><img src="images/icon_folder.png">080 병원.제약.의료</a></li>
+					<li><a href="#" class="navBtn_docubox"><img src="images/icon_folder.png">090 종교</a></li>
+				</ul>
+			</div>
+			<script>
+				$(document).ready(function(){
+					$(".navBtnArrow").on("click",function(){
+						$navSubWrap = $(this).next();
+						$(".navSubWrap").slideUp();
+						$(".navBtnWrap li").removeClass("on");
+
+						if($navSubWrap.css("display")=="none"){
+							$(this).closest("li").addClass("on");
+							$navSubWrap.slideDown(500);
+						}
+					});
+				});
+			</script>
+		</div>
+		
+		<div class="container-wrap active">
+			<div id="topmenu">
+				<ul class="navi">
+					<li><a href="#">내문서함</a></li>
+					<li class="on"><a href="#">부서문서함<span class="close"></span></a></li>
+					<li><a href="#">공통공유함</a></li>
+					<li><a href="#">개인함</a></li>
+					<li><a href="#">시스템관리</a></li>
+				</ul>
+				
+			</div>
+			<div class="navi-group">
+					<li><!-- <input type="text" name="" id="" placeholder="제목에서 검색"> -->
+						<form id="search">
+							<fieldset class="bg_search fld_search">
+								<label for="searchQuery" class="lab_keyword">제목에서 검색</label>
+								<input type="text" class="tf_keyword" id="searchQuery" name="query" title="검색어 입력" autocomplete="off" spellcheck="false">
+								<button type="submit" class="btn_search"></button>
+								<span class="txt_bar"></span>
+								<div class="btn_detail">
+									<a href="javascript:;">상세 <i></i></a>
+									<div class="detailbox_area">
+										<li>
+											<label for="">제목</label>
+											<input type="text" name="" id="" class="w380">
+										</li>
+										<li>
+											<label for="">작성자</label>
+											<input type="text" name="" id="" class="w380">
+										</li>
+										<li>
+											<label for="">문서유형</label>
+											<input type="checkbox" id="check1"><span>보고서</span>
+											<input type="checkbox" id="check2"><span>품의서</span>
+											<input type="checkbox" id="check3"><span>기획서</span>
+											<input type="checkbox" id="check4"><span>기타문서</span>
+										</li>
+										<li>
+											<label for="">검색위치</label>
+											<input type="checkbox" id="check1"><span>부서문서함</span>
+											<input type="checkbox" id="check2"><span>공통공유함</span>
+											<input type="checkbox" id="check3"><span>개인함</span>
+										</li>
+										<li>
+											<label for="">기간설정</label>
+											<div class="dropdown">
+													<button type="button" class="btn_dropdown__white">직접입력</button>
+													<ul class="dropdown_items__my">
+														<li class="selected"><a href="javascript:void(0);">전체</a></li>
+														<li><a href="javascript:void(0);">1주일</a></li>
+														<li><a href="javascript:void(0);">1개월</a></li>
+														<li><a href="javascript:void(0);">3개월</a></li>
+														<li><a href="javascript:void(0);">6개월</a></li>
+														<li><a href="javascript:void(0);">직접입력</a></li>
+													</ul>
+											</div>
+											<input type="text" name="" id="" class="w100"><span class="pdX5">~</span><input type="text" name="" id="" class="w100">
+											<div id="schedule" style="display: block;">
+											  <div class="scheduleBox">
+												<div class="year_month"> <a href="javascript:void(0);" class="prev_month" data=""> <img src="./images/btn_prev_calendar.png" alt="이전달" title=""> </a>
+												  <div class="ym_txt">2022.08</div>
+												  <a href="javascript:void(0);" class="next_month"> <img src="./images/btn_next_calendar.png" alt="다음달" title=""> </a> </div>
+												<div class="calendar">
+												  <table border="0" cellpadding="0" cellspacing="0">
+													<colgroup>
+													<col width="14.285%">
+													<col width="14.285%">
+													<col width="14.285%">
+													<col width="14.285%">
+													<col width="14.285%">
+													<col width="14.285%">
+													<col width="14.285%">
+													</colgroup>
+													<thead>
+													  <tr>
+														<th class="weekday day_off">일</th>
+														<th class="weekday">월</th>
+														<th class="weekday">화</th>
+														<th class="weekday">수</th>
+														<th class="weekday">목</th>
+														<th class="weekday">금</th>
+														<th class="weekday saturday">토</th>
+													  </tr>
+													</thead>
+													<tbody class="cal-body">
+													  <tr>
+														<td class="default">&nbsp;</td>
+														<td><div class="day-wrap">
+															<div class="day-pos" data-year="2022" data-month="08" data-day="01" data-closed="n">1</div>
+														  </div></td>
+														<td><div class="day-wrap">
+															<div class="day-pos" data-year="2022" data-month="08" data-day="02" data-closed="n">2</div>
+														  </div></td>
+														<td><div class="day-wrap">
+															<div class="day-pos" data-year="2022" data-month="08" data-day="03" data-closed="n">3</div>
+														  </div></td>
+														<td><div class="day-wrap">
+															<div class="day-pos" data-year="2022" data-month="08" data-day="04" data-closed="n">4</div>
+														  </div></td>
+														<td><div class="day-wrap">
+															<div class="day-pos" data-year="2022" data-month="08" data-day="05" data-closed="n">5</div>
+														  </div></td>
+														<td><div class="day-wrap">
+															<div class="day-pos  " data-year="2022" data-month="08" data-day="06" data-closed="y">6</div>
+														  </div></td>
+													  </tr>
+													  <tr>
+														<td><div class="day-wrap">
+															<div class="day-pos" data-year="2022" data-month="08" data-day="07" data-closed="y">7</div>
+														  </div></td>
+														<td><div class="day-wrap">
+															<div class="day-pos selected" data-year="2022" data-month="08" data-day="08" data-closed="n">8</div>
+														  </div></td>
+														<td><div class="day-wrap">
+															<div class="day-pos   " data-year="2022" data-month="08" data-day="09" data-closed="n">9</div>
+														  </div></td>
+														<td><div class="day-wrap">
+															<div class="day-pos   " data-year="2022" data-month="08" data-day="10" data-closed="n">10</div>
+														  </div></td>
+														<td><div class="day-wrap">
+															<div class="day-pos   " data-year="2022" data-month="08" data-day="11" data-closed="n">11</div>
+														  </div></td>
+														<td><div class="day-wrap">
+															<div class="day-pos   " data-year="2022" data-month="08" data-day="12" data-closed="n">12</div>
+														  </div></td>
+														<td><div class="day-wrap">
+															<div class="day-pos  " data-year="2022" data-month="08" data-day="13" data-closed="y">13</div>
+														  </div></td>
+													  </tr>
+													  <tr>
+														<td><div class="day-wrap">
+															<div class="day-pos  " data-year="2022" data-month="08" data-day="14" data-closed="y">14</div>
+														  </div></td>
+														<td><div class="day-wrap">
+															<div class="day-pos   " data-year="2022" data-month="08" data-day="15" data-closed="n">15</div>
+														  </div></td>
+														<td><div class="day-wrap">
+															<div class="day-pos   " data-year="2022" data-month="08" data-day="16" data-closed="n">16</div>
+														  </div></td>
+														<td><div class="day-wrap">
+															<div class="day-pos   " data-year="2022" data-month="08" data-day="17" data-closed="n">17</div>
+														  </div></td>
+														<td><div class="day-wrap">
+															<div class="day-pos   " data-year="2022" data-month="08" data-day="18" data-closed="n">18</div>
+														  </div></td>
+														<td><div class="day-wrap">
+															<div class="day-pos   " data-year="2022" data-month="08" data-day="19" data-closed="n">19</div>
+														  </div></td>
+														<td><div class="day-wrap">
+															<div class="day-pos  " data-year="2022" data-month="08" data-day="20" data-closed="y">20</div>
+														  </div></td>
+													  </tr>
+													  <tr>
+														<td><div class="day-wrap">
+															<div class="day-pos  " data-year="2022" data-month="08" data-day="21" data-closed="y">21</div>
+														  </div></td>
+														<td><div class="day-wrap">
+															<div class="day-pos   " data-year="2022" data-month="08" data-day="22" data-closed="n">22</div>
+														  </div></td>
+														<td><div class="day-wrap">
+															<div class="day-pos   today" data-year="2022" data-month="08" data-day="23" data-closed="n">23</div>
+														  </div></td>
+														<td><div class="day-wrap">
+															<div class="day-pos   " data-year="2022" data-month="08" data-day="24" data-closed="n">24</div>
+														  </div></td>
+														<td><div class="day-wrap">
+															<div class="day-pos   " data-year="2022" data-month="08" data-day="25" data-closed="n">25</div>
+														  </div></td>
+														<td><div class="day-wrap">
+															<div class="day-pos   " data-year="2022" data-month="08" data-day="26" data-closed="n">26</div>
+														  </div></td>
+														<td><div class="day-wrap">
+															<div class="day-pos  " data-year="2022" data-month="08" data-day="27" data-closed="y">27</div>
+														  </div></td>
+													  </tr>
+													  <tr>
+														<td><div class="day-wrap">
+															<div class="day-pos  " data-year="2022" data-month="08" data-day="28" data-closed="y">28</div>
+														  </div></td>
+														<td><div class="day-wrap">
+															<div class="day-pos   " data-year="2022" data-month="08" data-day="29" data-closed="n">29</div>
+														  </div></td>
+														<td><div class="day-wrap">
+															<div class="day-pos   " data-year="2022" data-month="08" data-day="30" data-closed="n">30</div>
+														  </div></td>
+														<td><div class="day-wrap">
+															<div class="day-pos   " data-year="2022" data-month="08" data-day="31" data-closed="n">31</div>
+														  </div></td>
+														<td class="default">&nbsp;</td>
+														<td class="default">&nbsp;</td>
+														<td class="default">&nbsp;</td>
+													  </tr>
+													</tbody>
+												  </table>
+												</div>
+											  </div>
+											  <a href="#" class="btn_detailsc">오늘로 선택</a>
+											  </div>
+
+											
+
+										</li>
+										<a href="#" class="btn_detailsc">즐겨찾기</a>
+									</div>
+								</div>
+							</fieldset>
+						</form>
+					</li>
+					<li><a href="#"><img src="./images/btn_setting.png" alt=""></a></li>
+			</div>
+			<div class="container-full">
+				<div class="row">
+					<div class="btnGroup">
+						<a href="#" class="btn btnLine">목록</a>
+						<a href="#" class="btn btnFill">본문</a>
+					</div>
+					<label for="t_like_chk1" class="findTlike_top pdL5">
+						<input type="checkbox" name="t_like_chk1" id="t_like_chk1" value="Y"><span class="like_icon" ></span>
+					</label>
+					<div class="frm-title-wrap">
+						<div class="frm-title">비밀이력카드 </div>
+					</div>
+					<div class="secret_card_title">
+						제목 : 회사 경영전략 보고서
+					</div>
+					<div class="secret_card_data">
+						최초등록 : 2022-08-30 / 보존기간 : 2023-02-31
+					</div>
+
+					<div class="frm-body-full">
+						<div class="frm-body-frame ">
+							<div class="cont-body-wrap">
+								<table class="table-list-secret">
+									<colgroup>
+										<col width="180px">
+										<col width="">
+										<col width="100px">
+										<col width="100px">
+										<col width="100px">
+									</colgroup>
+									<thead>
+										<tr>
+											<th class="text-center">일시</th>
+											<th class="text-center">내용</th>
+											<th class="text-center">소속</th>
+											<th class="text-center">계급</th>
+											<th class="text-center">성명</th>
+										</tr>
+									</thead>
+								</table>
+								<div>
+									<table class="table-list-secret">
+										<colgroup>
+											<col width="180px">
+											<col width="">
+											<col width="100px">
+											<col width="100px">
+											<col width="100px">
+										</colgroup>
+										<tbody>
+											<tr>
+												<td>2020-04-28 09:42:34</td>
+												<td class="text-left"><a href="#">파일다운로드(경영통계.xlsx)</a></td>
+												<td>정보기획팀</td>
+												<td>부장</td>
+												<td>장민호</td>
+											</tr>
+											<tr>
+												<td>2020-04-28 09:42:34</td>
+												<td class="text-left"><a href="#">파일다운로드(경영통계.xlsx)</a></td>
+												<td>정보기획팀</td>
+												<td>부장</td>
+												<td>장민호</td>
+											</tr>
+											<tr>
+												<td>2020-04-28 09:42:34</td>
+												<td class="text-left"><a href="#">파일다운로드(경영통계.xlsx)</a></td>
+												<td>정보기획팀</td>
+												<td>부장</td>
+												<td>장민호</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="PageArea">
+					<a href="#" class="arrow">&lt;&lt;</a>
+					<a href="#" class="arrow mgR10">&lt;</a>
+					<a href="#" class="on">1</a>
+					<a href="#">2</a>
+					<a href="#">3</a>
+					<a href="#">4</a>
+					<a href="#">5</a>
+					<a href="#">6</a>
+					<a href="#">7</a>
+					<a href="#">8</a>
+					<a href="#">9</a>
+					<a href="#">10</a>
+					<a href="#" class="arrow mgL10">&gt;</a>
+					<a href="#" class="arrow">&gt;&gt;</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+$(document).ready(function(){
+	$(".close").on("click",function(e){
+		e.preventDefault();
+		enixClever.alert.info("삭제event");
+	});
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.enixone.enixClever.cms.was.dao.UserDao">
+
+    <!-- 사용자 전체 목록 조회 -->
+    <select id="selectUserList" resultMap="commonSql.User">
+        SELECT *
+        FROM (
+	        SELECT
+	        	<include refid="commonSql.pagingSelect"/>
+	            EU.USER_KEY, EU.USER_NAME, EU.GROUP_NAME, EU.POSITION_ID,EU.POSITION_NAME, EU.TEL_NO,
+	            EU.ROLE_ID, EU.ROLE_NAME,
+	            (SELECT CODE_NAME FROM EC_CODE WHERE CODE = EU.STATUS_CODE AND CODE_GROUP = 'ACTION') AS STATUS_NAME,
+	            EU.STATUS_CODE,
+	            SALT, 
+	            CONVERT(CHAR(16), EU.CREATE_DATE, 20) AS CREATE_DATE,
+	            EU.UPDATE_DATE, EMAIL,
+	            CONVERT(CHAR(16), EU.LAST_ACCESS_DATE, 20) AS LAST_ACCESS_DATE 
+	        FROM EC_USER EU 
+	        INNER JOIN EC_GROUP_ASSIGN AD ON EU.USER_KEY = AD.USER_KEY AND AD.IS_MAIN = 'Y'
+			<if test = "statusCode != null">  WHERE EU.STATUS_CODE = #{statusCode} AND EU.USER_KEY != '_ALL' </if>
+			) LIST
+        <include refid="commonSql.pagingWhere"/>
+    </select>
+    
+    <!-- 사용자명/직책으로 검색 -->
+	  <select id="searchUserListByUserName" resultMap="commonSql.User">
+	        SELECT
+	            EU.USER_KEY, EU.USER_NAME, EU.POSITION_NAME,
+				(SELECT GROUP_NAME FROM EC_GROUP WHERE GROUP_ID = EG.GROUP_ID) AS GROUP_NAME,
+	            (SELECT ROLE_NAME FROM EC_ROLE WHERE ROLE_ID = EU.ROLE_ID) AS ROLE_NAME,
+	            (SELECT CODE_NAME FROM EC_CODE WHERE CODE = EU.STATUS_CODE AND CODE_GROUP = 'ACTION') AS STATUS_NAME,
+	            EU.CREATE_DATE, EU.UPDATE_DATE
+	        FROM EC_USER EU
+	        INNER JOIN EC_ROLE ER ON EU.ROLE_ID = ER.ROLE_ID
+			INNER JOIN EC_GROUP_ASSIGN AD ON EU.USER_KEY = AD.USER_KEY AND AD.IS_MAIN = 'Y'
+			INNER JOIN EC_GROUP EG ON AD.GROUP_ID = EG.GROUP_ID
+			WHERE EU.STATUS_CODE = 'ACTIVE' AND (EU.USER_NAME LIKE '%${userName}%' OR ER.ROLE_NAME LIKE '%${userName}%' OR EG.GROUP_NAME LIKE '%${userName}%')
+	    </select>
+	    
+	<!-- 유저 테이블 검색 -->
+	  <select id="selectMainUser" resultMap="commonSql.User">
+	   SELECT *
+	   FROM (
+	        SELECT
+	        	<include refid="commonSql.pagingSelect"/>
+	            EU.USER_KEY, EU.USER_NAME, EU.POSITION_NAME,
+				(SELECT GROUP_NAME FROM EC_GROUP WHERE GROUP_ID = EG.GROUP_ID) AS GROUP_NAME,
+	            (SELECT ROLE_NAME FROM EC_ROLE WHERE ROLE_ID = EU.ROLE_ID) AS ROLE_NAME,
+	            (SELECT CODE_NAME FROM EC_CODE WHERE CODE = EU.STATUS_CODE AND CODE_GROUP = 'ACTION') AS STATUS_NAME,
+	            EU.CREATE_DATE, EU.UPDATE_DATE
+	        FROM EC_USER EU
+	        INNER JOIN EC_ROLE ER ON EU.ROLE_ID = ER.ROLE_ID
+			INNER JOIN EC_GROUP_ASSIGN AD ON EU.USER_KEY = AD.USER_KEY AND AD.IS_MAIN = 'Y'
+			INNER JOIN EC_GROUP EG ON AD.GROUP_ID = EG.GROUP_ID
+			WHERE EU.STATUS_CODE = 'ACTIVE' AND (EU.USER_NAME LIKE '%${userName}%' OR ER.ROLE_NAME LIKE '%${userName}%' OR EG.GROUP_NAME LIKE '%${userName}%')
+			) LIST	
+			<include refid="commonSql.pagingWhere"/>
+	    </select>    
+	    
+	     
+    <!-- 부서/그룹 구성원 조회 -->
+    <select id="selectgroupMember" resultMap="commonSql.User">
+        SELECT *
+        FROM (
+	        SELECT
+	        	<include refid="commonSql.pagingSelect"/>
+	            EU.USER_KEY, 
+				EU.USER_NAME, 
+				EU.POSITION_NAME,
+				EU.TEL_NO,
+	            EU.ROLE_NAME,
+	            (SELECT CODE_NAME FROM EC_CODE WHERE CODE = EU.STATUS_CODE AND CODE_GROUP = 'ACTION') AS STATUS_NAME,
+	            EU.STATUS_CODE,
+	            CONVERT(CHAR(16), EU.CREATE_DATE, 20) AS CREATE_DATE
+	        FROM EC_USER EU 
+	       	WHERE GROUP_ID = #{groupId} AND EU.STATUS_CODE != 'DELETED' AND EU.USER_KEY != '_ALL'
+			) LIST
+        <include refid="commonSql.pagingWhere"/>
+    </select>
+
+    <!-- 부서 사용자 전체 목록 조회 -->
+    <select id="selectAllGroupUserList" resultMap="commonSql.User">
+        SELECT
+            EU.USER_KEY, EU.USER_NAME, EU.USER_PASS, EU.POSITION_ID,
+            ROLE_ID, (SELECT ROLE_NAME FROM EC_ROLE WHERE ROLE_ID = EU.ROLE_ID) AS ROLE_NAME,
+            EU.STATUS_CODE, EU.SALT, EU.CREATE_DATE, EU.UPDATE_DATE, EU.EMAIL
+        FROM EC_USER EU
+        INNER JOIN EC_GROUP_ASSIGN AD ON EU.USER_KEY = AD.USER_KEY AND AD.GROUP_ID = #{groupId}
+    </select>
+
+    <!-- 부서 사용자 목록 조회 (페이징) -->
+    <select id="selectGroupUserList" resultMap="commonSql.User">
+        SELECT *
+        FROM (
+            SELECT
+                <include refid="commonSql.pagingSelect"/>
+                EU.USER_KEY, EU.USER_NAME, EU.USER_PASS, EU.POSITION_ID,
+                ROLE_ID, (SELECT ROLE_NAME FROM EC_ROLE WHERE ROLE_ID = EU.ROLE_ID) AS ROLE_NAME,
+                EU.STATUS_CODE, EU.SALT, EU.CREATE_DATE, EU.UPDATE_DATE, EU.EMAIL
+            FROM EC_USER EU
+            INNER JOIN EC_GROUP_ASSIGN AD ON EU.USER_KEY = AD.USER_KEY AND AD.GROUP_ID = #{groupId}
+        ) LIST
+        <include refid="commonSql.pagingWhere"/>
+    </select>
+
+  	<!-- 사용자 상세 정보 조회 -->
+    <select id="selectUserInfo" resultMap="commonSql.User">
+		SELECT
+            EU.USER_KEY, 
+            EU.USER_NAME, 
+            EU.USER_PASS, 
+            EU.POSITION_ID,
+            EU.POSITION_NAME, 
+            EU.GROUP_ID, 
+            EU.GROUP_NAME,
+            EU.ROLE_ID, 
+            EU.ROLE_NAME, 
+            EU.TEL_NO,
+            EU.STATUS_CODE, 
+            EU.SALT, 
+            CONVERT(CHAR(10), EU.CREATE_DATE, 23) AS CREATE_DATE, 
+            EU.UPDATE_DATE, 
+            EU.EMAIL, 
+            CONVERT(CHAR(16), EU.LAST_ACCESS_DATE, 20) AS LAST_ACCESS_DATE,
+			ER.APPLY_ADMIN AS IS_ADMIN
+        FROM EC_USER EU
+		INNER JOIN EC_ROLE ER ON ER.ROLE_ID = EU.ROLE_ID 
+        WHERE
+            EU.USER_KEY = #{userKey}
+    </select>
+    
+    <!-- 사용자 등록 -->
+    <insert id="insertUser" parameterType="User">
+        INSERT INTO EC_USER
+        (USER_ID, USER_KEY, USER_NAME, USER_PASS, GROUP_ID, GROUP_NAME, EMAIL, ROLE_ID, ROLE_NAME, TEL_NO, POSITION_ID, POSITION_NAME ,STATUS_CODE, SALT, CREATE_DATE)
+        VALUES
+        (#{userId}, #{userKey}, #{userName}, #{userPass}, #{groupId}, #{groupName}, #{email, jdbcType=VARCHAR},#{roleId}, 
+        (SELECT ROLE_NAME FROM EC_ROLE WHERE ROLE_ID = #{roleId}),
+        #{telNo}, 
+        #{positionId, jdbcType=VARCHAR}, 
+        (SELECT CODE_NAME FROM EC_CODE WHERE CODE_GROUP = 'POSITION' AND CODE = #{positionId}),
+        #{statusCode}, #{salt}, GETDATE())
+    </insert>
+
+    <!-- 사용자 수정 -->
+    <update id="updateUser" parameterType="User">
+    	UPDATE EC_USER
+        <trim prefix="SET" suffixOverrides=",">
+            <if test = "@com.enixone.enixClever.cms.was.utils.CommonUtil@notEmpty(userName)"> USER_NAME = #{userName},</if>
+            <if test = "@com.enixone.enixClever.cms.was.utils.CommonUtil@notEmpty(userPass)"> USER_PASS = #{userPass},</if>
+            <if test = "@com.enixone.enixClever.cms.was.utils.CommonUtil@notEmpty(roleId)"> ROLE_ID = #{roleId},</if>
+            <if test = "@com.enixone.enixClever.cms.was.utils.CommonUtil@notEmpty(roleId)"> ROLE_NAME = (SELECT ROLE_NAME FROM EC_ROLE WHERE ROLE_ID = #{roleId}),</if>
+            <if test = "@com.enixone.enixClever.cms.was.utils.CommonUtil@notEmpty(positionId)"> POSITION_ID = #{positionId},</if>
+            <if test = "@com.enixone.enixClever.cms.was.utils.CommonUtil@notEmpty(positionId)"> POSITION_NAME = (SELECT CODE_NAME FROM EC_CODE WHERE CODE_GROUP = 'POSITION' AND CODE = #{positionId}),</if>
+            <if test = "@com.enixone.enixClever.cms.was.utils.CommonUtil@notEmpty(statusCode)"> STATUS_CODE = #{statusCode},</if>
+            <if test = "@com.enixone.enixClever.cms.was.utils.CommonUtil@notEmpty(email)"> EMAIL = #{email},</if>
+            <if test = "@com.enixone.enixClever.cms.was.utils.CommonUtil@notEmpty(telNo)"> TEL_NO = #{telNo},</if>
+            UPDATE_DATE = GETDATE(),
+        </trim>
+        WHERE
+        USER_KEY = #{userKey}
+    </update>
+
+
+    <!-- 사용자 상태 수정 -->
+    <update id="updateUserStatus">
+        UPDATE EC_USER
+        <trim prefix="SET" suffixOverrides=",">
+            <if test = "statusCode != null"> STATUS_CODE = #{statusCode},</if>
+            UPDATE_DATE = GETDATE(),
+        </trim>
+        WHERE
+        USER_KEY = #{userKey}
+    </update>
+    
+    
+    <!-- 마지막 로그인시간 업데이트 -->
+    <update id="setUserLastLoginDate">
+        UPDATE EC_USER
+         	SET LAST_ACCESS_DATE = GETDATE()
+        WHERE
+        USER_KEY = #{userKey}
+    </update>
+
+    <!-- 사용자 목록 삭제 -->
+    <delete id="deleteUserList" parameterType="List">
+        UPDATE EC_USER SET STATUS_CODE = 'DELETED', UPDATE_DATE = GETDATE()
+        WHERE
+        USER_KEY IN
+        <foreach collection="list" item="item" index="index" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </delete>
+    
+   	<!-- 복원 --> 
+   	<update id="approvalUser" parameterType="User">
+        UPDATE EC_USER 
+       	SET 
+        	STATUS_CODE = 'ACTIVE',
+        	UPDATE_DATE = GETDATE() 
+        WHERE
+        USER_KEY = #{userKey}
+    </update>
+    
+</mapper>

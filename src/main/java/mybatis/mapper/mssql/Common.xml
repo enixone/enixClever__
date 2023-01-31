@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="commonSql">
+    <sql id="pagingSelect">
+        COUNT(*) OVER () AS TOTAL_COUNT,
+        ROW_NUMBER() OVER(ORDER BY ${paging.orderKey} ${paging.orderBy}) AS RNUM,
+        #{paging.pageNo} AS PAGE_NO, #{paging.perPage} AS PER_PAGE,
+        #{paging.orderKey, jdbcType=VARCHAR} AS ORDER_KEY, #{paging.orderBy, jdbcType=VARCHAR} AS ORDER_BY, #{paging.keyword, jdbcType=VARCHAR} AS KEYWORD,
+    </sql>
+
+    <sql id="pagingWhere">
+        WHERE RNUM BETWEEN #{paging.startNo} AND #{paging.endNo}
+    </sql>
+
+    <sql id="pagingSql">
+        FROM (
+        SELECT
+        COUNT(*) OVER () AS TOTAL_COUNT,
+        ROW_NUMBER() OVER(ORDER BY ${paging.orderKey} ${paging.orderBy}) AS RNUM,
+        #{paging.pageNo} AS PAGE_NO, #{paging.perPage} AS PER_PAGE,
+        #{paging.orderKey} AS ORDER_KEY, #{paging.orderBy} AS ORDER_BY, #{paging.keyword} AS KEYWORD,
+        TB_ALIAS.*
+        FROM
+        ${tableName} AS TB_ALIAS
+        <where>
+            <if test="paging.searchKey != null and paging.keyword != null">
+                ${paging.searchKey} = '${paging.keyword}'
+            </if>
+        </where>
+        ) LIST
+        WHERE RNUM BETWEEN #{paging.startNo} AND #{paging.endNo}
+        ORDER BY RNUM ASC
+    </sql>
+
+    <!-- 공통 -->
+    <resultMap id="commonPaging" type="com.enixone.enixClever.cms.was.base.PaginationVO">
+        <result property="pageNo" column="PAGE_NO"/>
+        <result property="perPage" column="PER_PAGE"/>
+        <result property="totalCount" column="TOTAL_COUNT"/>
+        <result property="totalPage" column="TOTAL_PAGE"/>
+        <result property="orderKey" column="ORDER_KEY"/>
+        <result property="orderBy" column="ORDER_BY"/>
+        <result property="keyword" column="KEYWORD"/>
+        <result property="statusCode" column="STATUS_CODE"/>
+    </resultMap>
+
+    <!-- 유저 -->
+    <resultMap id="User" type="com.enixone.enixClever.cms.was.model.UserVO" extends="commonPaging">
+        <id property="userId" column="USER_ID"/>
+        <result property="userKey" column="USER_KEY"/>
+        <result property="userName" column="USER_NAME"/>
+        <result property="userPass" column="USER_PASS"/>
+        <result property="roleId" column="ROLE_ID"/>
+        <result property="roleName" column="ROLE_NAME"/>
+        <result property="groupId" column="GROUP_ID"/>
+        <result property="groupName" column="GROUP_NAME"/>
+        <result property="positionId" column="POSITION_ID"/>
+        <result property="positionName" column="POSITION_NAME"/>
+        <result property="statusCode" column="STATUS_CODE"/>
+        <result property="statusName" column="STATUS_NAME"/>
+        <result property="salt" column="SALT"/>
+        <result property="createDate" column="CREATE_DATE"/>
+        <result property="updateDate" column="UPDATE_DATE"/>
+        <result property="email" column="EMAIL"/>
+        <result property="telNo" column="TEL_NO"/>
+        <result property="lastAccessDate" column="LAST_ACCESS_DATE"/>
+        <result property="isAdmin" column="IS_ADMIN"/>
+    </resultMap>
+    
+    <!-- 워크플로우 -->
+    <resultMap id="WorkFlow" type="com.enixone.enixClever.cms.was.model.WorkFlowVO" extends="commonPaging">
+        <id property="workflowId" column="WORKFLOW_ID"/>
+        <result property="docId" column="DOC_ID"/>
+        <result property="workflowType" column="WORKFLOW_TYPE"/>
+        <result property="workflowStatus" column="WORKFLOW_STATUS"/>
+        <result property="workflowTypeName" column="WORKFLOW_TYPE_NAME"/>
+        <result property="workflowStatusName" column="WORKFLOW_STATUS_NAME"/>
+        <result property="workflowOwner" column="WORKFLOW_OWNER"/>
+        <result property="creatorInfo" column="CREATOR_INFO"/>
+        <result property="creatorId" column="CREATOR_ID"/>
+        <result property="creatorName" column="CREATOR_NAME"/>
+        <result property="creationDate" column="CREATION_DATE"/>
+        <result property="creatorMessage" column="CREATOR_MESSAGE"/>
+        <result property="actorId" column="ACTOR_ID"/>
+        <result property="actorName" column="ACTOR_NAME"/>
+        <result property="actionDate" column="ACTION_DATE"/>
+        <result property="actorMessage" column="ACTOR_MESSAGE"/>
+        <result property="isCompleted" column="IS_COMPLETED"/>
+        <result property="completedDate" column="COMPLETED_DATE"/>
+    </resultMap>
+    
+    <!-- 그룹 유저 -->
+    <resultMap id="AssignDept" type="com.enixone.enixClever.cms.was.model.AssignDeptVO" extends="commonPaging">
+        <id property="userId" column="USER_ID"/>
+        <result property="userKey" column="USER_KEY"/>
+        <result property="groupId" column="GROUP_ID"/>
+        <result property="isMain" column="IS_MAIN"/>
+    </resultMap>
+
+    <!-- 파일 -->
+    <resultMap id="File" type="com.enixone.enixClever.cms.was.model.FileVO" extends="commonPaging">
+        <id property="fileId" column="FILE_ID"/>
+        <result property="fileName" column="FILE_NAME"/>
+        <result property="extension" column="EXTENSION"/>
+        <result property="fileSize" column="FILE_SIZE"/>
+        <result property="fileHash" column="FILE_HASH"/>
+        <result property="filePath" column="FILE_PATH"/>
+        <result property="statusCode" column="STATUS_CODE"/>
+        <result property="statusCodeName" column="STATUS_CODE_NAME"/>
+        <result property="createDate" column="CREATE_DATE"/>
+        <result property="attr01" column="ATTR_01"/>
+        <result property="attr02" column="ATTR_02"/>
+        <result property="attr03" column="ATTR_03"/>
+        <result property="attr04" column="ATTR_04"/>
+        <result property="attr05" column="ATTR_05"/>
+    </resultMap>
+
+    <!-- 폴더 -->
+    <resultMap id="Folder" type="com.enixone.enixClever.cms.was.model.FolderVO" extends="commonPaging">
+        <id property="folderId" column="FOLDER_ID"/>
+        <result property="folderName" column="FOLDER_NAME"/>
+        <result property="parentFolderId" column="PARENT_FOLDER_ID"/>
+        <result property="parentFolderName" column="PARENT_FOLDER_NAME"/>
+        <result property="boxId" column="BOX_ID"/>
+        <result property="childCount" column="CHILD_COUNT"/>
+        <result property="docCount" column="DOC_COUNT"/>
+        <result property="permissionId" column="PERMISSION_ID"/>
+        <result property="permissionName" column="PERMISSION_NAME"/>
+        <result property="statusCode" column="STATUS_CODE"/>
+        <result property="statusCodeName" column="STATUS_CODE_NAME"/>
+        <result property="typeCode" column="TYPE_CODE"/>
+        <result property="typeCodeName" column="TYPE_CODE_NAME"/>
+        <result property="isGroupOnly" column="IS_GROUP_ONLY"/>
+        <result property="isSystem" column="IS_SYSTEM"/>
+        <result property="creatorId" column="CREATOR_ID"/>
+        <result property="creatorName" column="CREATOR_NAME"/>
+        <result property="createDate" column="CREATE_DATE"/>
+        <result property="updatorId" column="UPDATOR_ID"/>
+        <result property="updatorName" column="UPDATOR_NAME"/>
+        <result property="updateDate" column="UPDATE_DATE"/>
+        <result property="deletorId" column="DELETOR_ID"/>
+        <result property="deletorName" column="DELETOR_NAME"/>
+        <result property="deleteDate" column="DELETE_DATE"/>
+        <result property="fullPath" column="FULL_PATH"/>
+    </resultMap> 
+
+    <!-- 문서함 -->
+    <resultMap id="Box" type="com.enixone.enixClever.cms.was.model.BoxVO" extends="commonPaging">
+        <id property="boxId" column="BOX_ID"/>
+        <result property="boxName" column="BOX_NAME"/>
+        <result property="boxIndex" column="BOX_INDEX"/>
+        <result property="statusCode" column="STATUS_CODE"/>
+        <result property="statusName" column="STATUS_NAME"/>
+    </resultMap>
+
+    <!-- 문서 -->
+    <resultMap id="Document" type="com.enixone.enixClever.cms.was.model.DocumentVO" extends="commonPaging">
+        <id property="docId" column="DOC_ID"/>
+        <result property="firstDocId" column="FIRST_DOC_ID"/>
+        <result property="docName" column="DOC_NAME"/>
+        <result property="docNo" column="DOC_NO"/>
+        <result property="docTypeId" column="DOC_TYPE_ID"/>
+        <result property="docTypeIdName" column="DOC_TYPE_ID_NAME"/>
+        <result property="fileCount" column="FILE_COUNT"/>
+        <result property="version" column="VERSION"/>
+        <result property="description" column="DESCRIPTION"/>
+        <result property="permissionId" column="PERMISSION_ID"/>
+        <result property="permissionName" column="PERMISSION_NAME"/>
+        <result property="expireCode" column="EXPIRE_CODE"/>
+        <result property="expireDate" column="EXPIRE_DATE"/>
+        <result property="expireCodeName" column="EXPIRE_CODE_NAME"/>
+        <result property="statusCode" column="STATUS_CODE"/>
+        <result property="statusCodeName" column="STATUS_CODE_NAME"/>
+        <result property="securityCode" column="SECURITY_CODE"/>
+        <result property="securityCodeName" column="SECURITY_CODE_NAME"/>
+        <result property="creatorId" column="CREATOR_ID"/>
+        <result property="creatorName" column="CREATOR_NAME"/>
+        <result property="createDate" column="CREATE_DATE"/>
+        <result property="creatorMessage" column="CREATOR_MESSAGE"/>
+        <result property="ownerId" column="OWNER_ID"/>
+        <result property="ownerName" column="OWNER_NAME"/>
+        <result property="updatorId" column="UPDATOR_ID"/>
+        <result property="updatorName" column="UPDATOR_NAME"/>
+        <result property="updateDate" column="UPDATE_DATE"/>
+        <result property="deletorId" column="DELETOR_ID"/>
+        <result property="deletorName" column="DELETOR_NAME"/>
+        <result property="deleteDate" column="DELETE_DATE"/>
+        <result property="viewCount" column="VIEW_COUNT"/>
+        <result property="workflowId" column="WORKFLOW_ID"/>
+		<result property="workflowStatus" column="WORKFLOW_STATUS"/>
+		<result property="workflowStatusName" column="WORKFLOW_STATUS_NAME"/>
+		<result property="workflowTypeName" column="WORKFLOW_TYPE_NAME"/>
+		<result property="actionDate" column="ACTION_DATE"/>
+		<result property="actorId" column="ACTOR_ID"/>
+		<result property="actorName" column="ACTOR_NAME"/>
+		<result property="actorMessage" column="ACTOR_MESSAGE"/>
+		<result property="creationDate" column="CREATION_DATE"/>
+		<result property="groupName" column="GROUP_NAME"/>
+    </resultMap>
+    
+    
+    <!-- 그룹 -->
+    <resultMap id="Group" type="com.enixone.enixClever.cms.was.model.GroupVO" extends="commonPaging">
+        <id property="groupId" column="GROUP_ID"/>
+        <result property="groupName" column="GROUP_NAME"/>
+        <result property="parentGroupId" column="PARENT_GROUP_ID"/>
+        <result property="parentGroupName" column="PARENT_GROUP_NAME"/>
+        <result property="groupFolderId" column="GROUP_FOLDER_ID"/>
+        <result property="groupFolderName" column="GROUP_FOLDER_NAME"/>
+        <result property="statusCode" column="STATUS_CODE"/>
+        <result property="statusCodeName" column="STATUS_CODE_NAME"/>
+        <result property="createDate" column="CREATE_DATE"/>
+        <result property="updateDate" column="UPDATE_DATE"/>
+        <result property="childCount" column="CHILD_COUNT"/>
+        <result property="userCount" column="USER_COUNT"/>
+    </resultMap>
+    
+    <!-- 권한 -->
+    <resultMap id="Permission" type="com.enixone.enixClever.cms.was.model.PermissionVO" extends="commonPaging">
+        <id property="permissionId" column="PERMISSION_ID"/>
+        <result property="permissionName" column="PERMISSION_NAME"/>
+        <result property="isSystem" column="IS_SYSTEM"/>
+        <result property="ownerId" column="OWNER_ID"/>
+        <result property="ownerName" column="OWNER_NAME"/>
+        <result property="ownerType" column="OWNER_TYPE"/>
+        <result property="ownerTypeName" column="OWNER_TYPE_NAME"/>
+        <result property="creatorId" column="CREATOR_ID"/>
+        <result property="creatorName" column="CREATOR_NAME"/>
+        <result property="createDate" column="CREATE_DATE"/>
+        <result property="updatorId" column="UPDATOR_ID"/>
+        <result property="updatorName" column="UPDATOR_NAME"/>
+        <result property="updateDate" column="UPDATE_DATE"/>
+        <result property="lastAssignDate" column="LAST_ASSIGN_DATE"/>
+    </resultMap>
+
+    <!-- 권한 할당 -->
+    <resultMap id="AssignPermission" type="com.enixone.enixClever.cms.was.model.AssignPermissionVO" extends="commonPaging">
+        <id property="permissionId" column="PERMISSION_ID"/>
+        <id property="targetId" column="TARGET_ID"/>
+        <result property="targetName" column="TARGET_NAME"/>
+        <result property="targetType" column="TARGET_TYPE"/>
+        <result property="targetTypeName" column="TARGET_TYPE_NAME"/>
+        <result property="read" column="APPLY_READ"/>
+        <result property="create" column="APPLY_CREATE"/>
+        <result property="update" column="APPLY_UPDATE"/>
+        <result property="delete" column="APPLY_DELETE"/>
+        <result property="listView" column="APPLY_LIST_VIEW"/>
+        <result property="permission" column="APPLY_PERMISSION"/>
+        <result property="download" column="APPLY_DOWNLOAD"/>
+        <result property="edit" column="APPLY_EDIT"/>
+        <result property="print" column="APPLY_PRINT"/>
+    </resultMap>
+
+	<!-- 코드 -->
+	<resultMap id="Code" type="com.enixone.enixClever.cms.was.model.CodeVO" extends="commonPaging">
+        <id property="code" column="CODE"/>
+        <result property="codeGroup" column="CODE_GROUP"/>
+        <result property="codeName" column="CODE_NAME"/>
+        <result property="idx" column="IDX"/>
+        <result property="description" column="DESCRIPTION"/>
+    </resultMap>
+	
+    <!-- 역할 -->
+    <resultMap id="Role" type="com.enixone.enixClever.cms.was.model.RoleVO" extends="commonPaging">
+        <id property="roleId" column="ROLE_ID"/>
+        <result property="roleName" column="ROLE_NAME"/>
+        <result property="applyFolders" column="APPLY_FOLDERS"/>
+        <result property="applyDocs" column="APPLY_DOCS"/>
+        <result property="read" column="APPLY_READ"/>
+        <result property="create" column="APPLY_CREATE"/>
+        <result property="update" column="APPLY_UPDATE"/>
+        <result property="delete" column="APPLY_DELETE"/>
+        <result property="listView" column="APPLY_LIST_VIEW"/>
+        <result property="permission" column="APPLY_PERMISSION"/>
+        <result property="admin" column="APPLY_ADMIN"/>
+        <result property="creatorId" column="CREATOR_ID"/>
+        <result property="creatorName" column="CREATOR_NAME"/>
+        <result property="createDate" column="CREATE_DATE"/>
+        <result property="updatorId" column="UPDATOR_ID"/>
+        <result property="updatorName" column="UPDATOR_NAME"/>
+        <result property="updateDate" column="UPDATE_DATE"/>
+    </resultMap>
+
+    <!-- 북마크 문서 -->
+    <resultMap id="DocumentBookmark" type="com.enixone.enixClever.cms.was.model.DocumentBookmarkVO" extends="commonPaging">
+        <id property="bookmarkId" column="BOOKMARK_ID"/>
+        <result property="userKey" column="USER_KEY"/>
+        <result property="docId" column="DOC_ID"/>
+        <result property="docName" column="DOC_NAME"/>
+        <result property="createDate" column="CREATE_DATE"/>
+    </resultMap>
+
+    <!-- 북마크 폴더 -->
+    <resultMap id="BookmarkFolder" type="com.enixone.enixClever.cms.was.model.BookmarkFolderVO" extends="commonPaging">
+        <id property="bookmarkId" column="BOOKMARK_ID"/>
+        <result property="userKey" column="USER_KEY"/>
+        <result property="folderId" column="FOLDER_ID"/>
+        <result property="folderName" column="FOLDER_NAME"/>
+        <result property="createDate" column="CREATE_DATE"/>
+    </resultMap>
+
+    <!-- 속성 -->
+    <resultMap id="Type" type="com.enixone.enixClever.cms.was.model.TypeVO" extends="commonPaging">
+        <id property="typeId" column="TYPE_ID"/>
+        <result property="typeName"  column="TYPE_NAME"/>
+        <result property="isBaseType"  column="IS_BASE_TYPE"/>
+    </resultMap>
+
+    <!-- 속성 아이템 -->
+    <resultMap id="TypeItem" type="com.enixone.enixClever.cms.was.model.TypeItemVO" extends="commonPaging">
+        <id property="typeId" column="TYPE_ID"/>
+        <id property="itemId" column="ITEM_ID"/>
+        <result property="itemName"  column="ITEM_NAME"/>
+        <result property="sortNo"  column="SORT_NO"/>
+    </resultMap>
+
+    <!-- 문서 속성 아이템 -->
+    <resultMap id="DocumentTypeItem" type="com.enixone.enixClever.cms.was.model.DocumentTypeItemVO" extends="commonPaging">
+        <id property="docId" column="DOC_ID"/>
+        <id property="typeId" column="TYPE_ID"/>
+        <result property="itemId"  column="ITEM_ID"/>
+        <result property="itemName"  column="ITEM_NAME"/>
+        <result property="itemValue"  column="ITEM_VALUE"/>
+    </resultMap>
+
+    <!-- URL LINK -->
+    <resultMap id="UrlLink" type="com.enixone.enixClever.cms.was.model.UrlLinkVO" extends="commonPaging">
+        <id property="linkId" column="LINK_ID"/>
+        <result property="creatorId" column="CREATOR_ID"/>
+        <result property="creatorName" column="CREATOR_NAME"/>
+        <result property="docId" column="DOC_ID"/>
+        <result property="linkName" column="LINK_NAME"/>
+        <result property="createDate" column="CREATE_DATE"/>
+        <result property="expireDate" column="EXPIRE_DATE"/>
+        <result property="readLimit" column="READ_LIMIT"/>
+        <result property="readCount" column="READ_COUNT"/>
+        <result property="linkStatus" column="LINK_STATUS"/>
+        <result property="linkStatusName" column="LINK_STATUS_NAME"/>
+    </resultMap>
+
+    <!-- 문서 이력 -->
+    <resultMap id="DocumentHistory" type="com.enixone.enixClever.cms.was.model.DocumentHistoryVO" extends="commonPaging">
+        <id property="historyId" column="HISTORY_ID"/>
+        <result property="docId" column="DOC_ID"/>
+        <result property="docName" column="DOC_NAME"/>
+        <result property="actorId"  column="ACTOR_ID"/>
+        <result property="actorName"  column="ACTOR_NAME"/>
+        <result property="actorRoleId"  column="ACTOR_ROLE_ID"/>
+        <result property="actorRoleName"  column="ACTOR_ROLE_NAME"/>
+        <result property="actionCode"  column="ACTION_CODE"/>
+        <result property="actionDate"  column="ACTION_DATE"/>
+        <result property="actionIp"  column="ACTION_IP"/>
+        <result property="isBatch"  column="IS_BATCH"/>
+    </resultMap>
+
+    <!-- 소유권 변경 프로세스 -->
+    <resultMap id="ChangeOwner" type="com.enixone.enixClever.cms.was.model.ChangeOwnerVO" extends="commonPaging">
+        <id property="changeId" column="CHANGE_ID"/>
+        <result property="giverId" column="GIVER_ID"/>
+        <result property="giverName" column="GIVER_NAME"/>
+        <result property="takerId"  column="TAKER_ID"/>
+        <result property="takerName"  column="TAKER_NAME"/>
+        <result property="statusCode"  column="STATUS_CODE"/>
+        <result property="statusCodeName"  column="STATUS_CODE_NAME"/>
+        <result property="giveDate"  column="GIVE_DATE"/>
+        <result property="takeDate"  column="TAKE_DATE"/>
+    </resultMap>
+    
+    <!-- 사용자별 문서 -->
+    <resultMap id="ActorStats" type="com.enixone.enixClever.cms.was.model.statistics.ActorStats" extends="commonPaging">
+        <id property="userKey" column="USER_KEY"/>
+        <result property="userName" column="USER_NAME"/>
+        <result property="groupId" column="GROUP_ID"/>
+        <result property="groupName"  column="GROUP_NAME"/>
+        <result property="readCount"  column="READ_CNT"/>
+        <result property="createCount"  column="CREATE_CNT"/>
+        <result property="updateCount"  column="UPDATE_CNT"/>
+        <result property="deleteCount"  column="DELETE_CNT"/>
+    </resultMap>
+    
+    <!-- 유형별 문서 -->
+    <resultMap id="TypeStats" type="com.enixone.enixClever.cms.was.model.statistics.TypeStats" extends="commonPaging">
+        <id property="typeId" column="TYPE_ID"/>
+        <result property="typeName" column="TYPE_NAME"/>
+        <result property="readCount"  column="READ_CNT"/>
+        <result property="createCount"  column="CREATE_CNT"/>
+        <result property="updateCount"  column="UPDATE_CNT"/>
+        <result property="deleteCount"  column="DELETE_CNT"/>
+    </resultMap>
+    
+    <!-- 문서 추적 -->
+    <resultMap id="DocumentTrace" type="com.enixone.enixClever.cms.was.model.statistics.DocumentTrace" extends="commonPaging">
+        <id property="historyId" column="HISTORY_ID"/>
+        <result property="groupId" column="GROUP_ID"/>
+        <result property="groupName"  column="GROUP_NAME"/>
+        <result property="userKey"  column="USER_KEY"/>
+        <result property="userName"  column="USER_NAME"/>
+        <result property="docId"  column="DOC_ID"/>
+        <result property="docName"  column="DOC_NAME"/>
+        <result property="actionCode"  column="ACTION_CODE"/>
+        <result property="actionName"  column="ACTION_NAME"/>
+        <result property="actionDate"  column="ACTION_DATE"/>
+    </resultMap>
+    
+
+</mapper>

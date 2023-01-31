@@ -1,0 +1,57 @@
+    	<li>
+			<form name="search">
+				<fieldset class="bg_search fld_search">
+					<input type="text" class="tf_keyword" id="keyword" name="keyword" placeholder="검색어 입력" onkeyup="fnSearchDocListEnter(event.keyCode, this.value);">
+					<button type="button" class="btn_search" onclick="fnSearchDocList('docName', document.search.keyword.value);"></button>
+					<span class="txt_bar"></span>
+					<div class="btn_detail">
+						<a href="javascript:;">상세 <i></i></a>
+						<div class="detailbox_area">
+							<li>
+								<label for="">제목</label>
+								<input type="text" name="" id="" class="w380">
+							</li>
+							<li>
+								<label for="">작성자</label>
+								<input type="text" name="" id="" class="w380">
+							</li>
+							<li>
+								<label for="">문서유형</label>
+								<input type="checkbox" id="check1"><span>보고서</span>
+								<input type="checkbox" id="check2"><span>품의서</span>
+								<input type="checkbox" id="check3"><span>기획서</span>
+								<input type="checkbox" id="check4"><span>기타문서</span>
+							</li>
+							<li>
+								<label for="">검색위치</label>
+								<input type="checkbox" id="check1"><span>부서문서함</span>
+								<input type="checkbox" id="check2"><span>공통공유함</span>
+								<input type="checkbox" id="check3"><span>개인함</span>
+							</li>
+							<li>
+								<label for="">기간설정</label>
+								<div class="dropdown">
+										<button type="button" class="btn_dropdown__white">직접입력</button>
+										<ul class="dropdown_items__my">
+											<li class="selected"><a href="javascript:void(0);">전체</a></li>
+											<li><a href="javascript:void(0);">1주일</a></li>
+											<li><a href="javascript:void(0);">1개월</a></li>
+											<li><a href="javascript:void(0);">3개월</a></li>
+											<li><a href="javascript:void(0);">6개월</a></li>
+											<li><a href="javascript:void(0);">직접입력</a></li>
+										</ul>
+								</div>
+								<input type="text" name="" id="" class="w100"><span class="pdX5">~</span><input type="text" name="" id="" class="w100">
+								<div id="cardendar" style="display: block;"></div>
+							</li>
+							<a href="#" class="btn_detailsc">즐겨찾기</a>
+						</div>
+					</div>
+				</fieldset>
+			</form>
+		</li>
+		
+		
+		
+		
+		

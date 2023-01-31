@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.enixone.enixClever.cms.was.dao.FileDao">
+
+    <!--
+    ============================
+    =   EC_FILE 관련 쿼리
+    ============================
+    -->
+
+    <!-- 문서의 파일 목록 조회 -->
+    <select id="selectFileListByDocId" resultMap="commonSql.File">
+        SELECT
+            F.FILE_ID, F.FILE_NAME, F.EXTENSION, F.FILE_PATH, F.FILE_SIZE, F.FILE_HASH, F.STATUS_CODE, F.CREATE_DATE,
+            F.STATUS_CODE, (SELECT EC.CODE_NAME FROM EC_CODE EC WHERE EC.CODE_GROUP = 'DOCUMENT_STATUS' AND EC.CODE = F.STATUS_CODE) AS STATUS_CODE_NAME,
+            F.ATTR_01, F.ATTR_02, F.ATTR_03, F.ATTR_04, F.ATTR_05
+        FROM EC_FILE F
+        INNER JOIN EC_DOCUMENT_FILE_MAPPING MDF ON F.FILE_ID = MDF.FILE_ID AND MDF.DOC_ID = #{docId}
+        ORDER BY F.FILE_NAME ASC
+    </select>
+
+    <!-- 파일 상세 정보 조회 -->
+    <select id="selectFileInfo" resultMap="commonSql.File">
+        SELECT
+            FILE_ID, FILE_NAME, EXTENSION, FILE_SIZE, FILE_PATH, FILE_HASH, STATUS_CODE, CREATE_DATE,
+            ATTR_01, ATTR_02, ATTR_03, ATTR_04, ATTR_05
+        FROM EC_FILE
+        WHERE
+            FILE_ID = #{fileId}
+    </select>
+
+    <!-- 파일 등록 -->
+    <insert id="insertFile" parameterType="File">
+        INSERT INTO EC_FILE
+        (FILE_ID, FILE_NAME, EXTENSION, FILE_SIZE, FILE_HASH, FILE_PATH, STATUS_CODE, CREATE_DATE, ATTR_01, ATTR_02, ATTR_03, ATTR_04, ATTR_05)
+        VALUES
+        (#{fileId}, #{fileName}, #{extension, jdbcType=VARCHAR}, #{fileSize}, #{fileHash, jdbcType=VARCHAR}, #{filePath}, #{statusCode}, GETDATE(),
+        #{attr01, jdbcType=VARCHAR}, #{attr02, jdbcType=VARCHAR}, #{attr03, jdbcType=VARCHAR}, #{attr04, jdbcType=VARCHAR}, #{attr05, jdbcType=VARCHAR})
+    </insert>
+
+    <!-- 파일 수정 -->
+    <update id="updateFile" parameterType="File">
+        UPDATE EC_FILE
+        <trim prefix="SET" suffixOverrides=",">
+            <if test = "fileName != null"> FILE_NAME = #{fileName},</if>
+            <if test = "extension != null"> EXTENSION = #{extension},</if>
+            <if test = "fileSize != null"> FILE_SIZE = #{fileSize},</if>
+            <if test = "fileHash != null"> FILE_HASH = #{fileHash},</if>
+            <if test = "filePath != null"> FILE_PATH = #{filePath},</if>
+            <if test = "statusCode != null"> STATUS_CODE = #{statusCode},</if>
+            <if test = "attr01 != null"> ATTR_01 = #{attr01},</if>
+            <if test = "attr02 != null"> ATTR_02 = #{attr01},</if>
+            <if test = "attr03 != null"> ATTR_03 = #{attr01},</if>
+            <if test = "attr04 != null"> ATTR_04 = #{attr01},</if>
+            <if test = "attr05 != null"> ATTR_05 = #{attr01},</if>
+        </trim>
+        WHERE
+        FILE_ID = #{fileId}
+    </update>
+
+    <!-- 파일 단건 삭제 -->
+    <delete id="deleteFile" parameterType="List">
+        DELETE FROM EC_FILE
+        WHERE
+        FILE_ID = #{fileId}
+    </delete>
+
+    <!-- 파일 목록 삭제 -->
+    <delete id="deleteFileList" parameterType="List">
+        DELETE FROM EC_FILE
+        WHERE
+        FILE_ID IN
+        <foreach collection="list" item="item" index="index" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <!-- 문서의 파일 일괄 삭제 -->
+    <delete id="deleteFileListByDocId" parameterType="List">
+        DELETE FROM EC_FILE
+        WHERE
+        FILE_ID IN (
+            SELECT FILE_ID
+            FROM EC_DOCUMENT_FILE_MAPPING
+            WHERE DOC_ID = #{docId}
+        )
+    </delete>
+
+
+    <!--
+    ===================================
+    =   EC_DOCUMENT_FILE_MAPPING 관련 쿼리
+    ===================================
+    -->
+    <!-- 문서 / 파일 맵핑 등록 -->
+    <insert id="insertDocFileMapping">
+        INSERT INTO EC_DOCUMENT_FILE_MAPPING
+        (DOC_ID, FILE_ID)
+        VALUES
+        (#{docId}, #{fileId})
+    </insert>
+
+    <!-- 문서 / 파일 맵핑 삭제 -->
+    <delete id="deleteDocFileMapping">
+        DELETE FROM EC_DOCUMENT_FILE_MAPPING
+        WHERE
+            DOC_ID = #{docId}
+        AND FILE_ID = #{fileId}
+    </delete>
+
+    <!-- 문서에 해당한 파일 맵핑 전체 삭제 -->
+    <delete id="deleteDocFileMappingByDocId">
+        DELETE FROM EC_DOCUMENT_FILE_MAPPING
+        WHERE
+            DOC_ID = #{docId}
+    </delete>
+
+
+</mapper>

@@ -1,0 +1,46 @@
+<div id="" class="modal">
+	<div class="modal-title">
+		역할 등록
+		<div class="modal-btnGrp">
+			<a href="#" class="modal-close" onclick="_roleCreate.evtCancelClick()"><img src="/enixClever/manage/assets/images/modal_cancel.png" alt=""></a>
+		</div>
+	</div>
+		<div class="modal-body">
+			<div class="write_info_area">
+				<form name="roleCreateForm" autocomplete="off">
+					<table class="">
+						<colgroup>
+							<col width="15%">
+							<col width="85%">
+						</colgroup>
+						<thead>
+							<tr> 
+								<th>명칭</th>
+								<td>
+									<input type="text" name="roleName" id="roleName" data-name="명칭" placeholder="역할 명을 입력하세요" style="width: 100%; border-bottom: 1px solid #e9ecef">
+								</td>
+							</tr>
+							<tr> 
+								<th>역할</th>
+								<td>
+									<table name="accessorListTable">
+		                    		</table>
+								</td>
+							</tr>
+						</thead>
+					</table>
+				</form>
+			</div>
+			<div class="sys-modal-footer">
+				<a href="#" onclick="_roleCreate.evtSubmitClick()" class="modal-save-btn">확인</a>
+				<a href="#" onclick="_roleCreate.evtCancelClick()" class="modal-cancle-btn">취소</a>
+			</div>
+		</div>
+</div>
+
+<script>
+    // 스크립트 로드 후 콜백을 전달한다
+function loadScript(callback) {
+	 $.getScript("/enixClever/manage/role/roleCreate.js", callback);
+}
+</script>

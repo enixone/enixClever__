@@ -1,0 +1,65 @@
+<div class="sys-full-frm">
+	<div class="sys-frm-body-full">
+		<!-- 상단 -->
+		<div class="">
+			<div class="frm-title-wrap">
+				<div class="frm-title">유형 관리</div>
+			</div>
+			<div class="btnGroup">
+				<button class="btn btn-sm btn-line" onclick="evtCreateTypePopup()">등록</button>
+			</div>
+		</div>
+		
+		<!-- 하단 -->
+		<div class="sys-contents-area">
+			<!-- 좌측 -->
+			<div class="sys-leftList" style="width: 45%">
+				<div style="padding-right: 15px">
+					<!-- 테이블 -->
+					<table id="typeListTable">
+					</table>
+					<!-- 페이지 -->
+					<div id="typeListPagination" class="PageArea" style="position: relative; border-top: none;">
+	 		         </div>
+ 		         </div>
+			</div>
+			<!-- 우측 -->
+			<div class="sys-divContent" style="left: 45%; right: 5%">
+				<div class="sys-viewWrap">
+					<form name="typeDetailForm">
+	                	<table class="table-list">
+	                		<colgroup>
+	                			<col width="20%">
+	                			<col width="80%">
+	                		</colgroup>
+	                		<thead>
+								<tr> 
+									<th>명칭</th>
+										<td><input name="typeName" type="text" class="sysTableinput" readonly></td>
+								</tr>
+								<tr> 
+									<th>아이디</th>
+										<td><input name="typeId" type="text" class="sysTableinput" readonly></td>
+								</tr>
+							</thead>
+						</table>
+							<div class="table-responsive" style="margin-top: 10px">
+                               <table id="typeItemTable">
+                               </table>
+                            </div>
+						<div class="type-btnGroup">
+							<button class="btn btn-sm btn-line" type="button" onclick="evtModifyTypePopup()">수정</button>
+							<button class="btn btn-sm btn-line-accent" type="button" onclick="evtDeleteTypePopup()">삭제</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+</div>
+<script>
+$(document).ready(function() {
+	$.getScript("/enixClever/manage/system/typeManagement.js");
+});
+</script>

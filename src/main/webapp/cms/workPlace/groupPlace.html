@@ -1,0 +1,97 @@
+<!-- 컨텐츠 -->
+<div class="app-main__inner p-0">
+    <div class="app-inner-layout h-100p">
+        <div class="app-inner-layout__wrapper h-100p">
+            <!-- 좌측 -->
+            <div class="app-inner-layout__sidebar card">
+                <ul class="nav flex-column">
+                    <li class="nav-item-header nav-item text-center"><h4 id="boxNameLabel" class="p-t-15 m-b-6">전사 문서함</h4></li>
+                    <li class="nav-item-divider nav-item"></li>
+                    <li class="nav-item">
+                        <div id="groupBoxTree">
+                        </div>
+                        <div id="emptyTreeMessage" class="text-danger text-center mt-2">
+                            문서함 폴더가 비어있습니다.
+                        </div>
+                    </li>
+                    <li class="nav-item-header nav-item hidden" id="treeTestDiv">
+                        <div>
+<!--                            <button class="btn btn-success m-2" onclick="evtCreateChildFolderPopup()">자식 폴더 등록</button>-->
+<!--                            <button class="btn btn-success m-2" onclick="evtModifyFolderPopup()">폴더 수정</button>-->
+<!--                            <button class="btn btn-success m-2" onclick="evtRenameFolderPopup()">폴더 리네임</button>-->
+<!--                            <button class="btn btn-success m-2" onclick="evtDeleteFolderPopup()">폴더 삭제</button>-->
+                        </div>
+                    </li>
+                    <li class="nav-item-divider nav-item"></li>
+                    <li class="nav-item p-30">
+                        <div class="row">
+                            <i class="text-info lnr-apartment mr-2"></i> 부서 기본 폴더
+                        </div>
+                        <div class="row p-t-20">
+                            <i class="text-danger lnr-apartment mr-2"></i> 부서원 전용 폴더
+                        </div>
+                        <div class="row p-lg-0 p-t-20">
+                            <span class="fancytree-node fancytree-folder fancytree-exp-n fancytree-ico-cf">
+                                <span role="presentation" class="fancytree-icon m-0 mr-2"></span> 일반 폴더 (타 부서원에게 보임)
+                            </span>
+                        </div>
+                    </li>
+                    <li class="nav-item-divider nav-item"></li>
+                    <li class="nav-item p-30">
+                        <h7>Tree 우 클릭 시 메뉴가 나옵니다</h7>
+                        <h7>메뉴는 권한에 따라 활성/비활성 처리가 됩니다</h7>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- 본문 -->
+            <div class="app-inner-layout__content card">
+                <div>
+                    <!-- 본문 맨위 -->
+                    <div class="app-inner-layout__top-pane">
+                        <div class="pane-left">
+                            <button class="btn btn-outline-info m-2" onclick="evtCreateDocumentPopup()">문서 등록</button>
+                            <button class="btn btn-outline-info m-2" onclick="evtModifyDocumentPopup()">문서 수정</button>
+                            <button class="btn btn-outline-info m-2" onclick="evtDeleteDocumentPopup()">문서 삭제</button>
+                            <button class="btn btn-outline-info m-2" onclick="evtBookmarkDocument()">문서 북마크</button>
+                            <button class="btn btn-outline-info m-2" onclick="evtUrlLink()">URL 링크 생성</button>
+                        </div>
+                    </div>
+                    <!-- 본문 데이터 목록 -->
+                    <div class="bg-white">
+                        <div class="table-responsive" >
+                            <table id="documentListTable" class="text-nowrap table-lg mb-0 table table-hover">
+                            </table>
+                        </div>
+                        <div id="groupPlaceNoDocMessage" class="text-center p-40 hidden">
+                            <label class="text-danger text-xl-center">조회된 문서가 없습니다.</label>
+                        </div>
+                        <div id="docListPagination" class="app-inner-layout__bottom-pane d-block text-center">
+                            <nav class="" aria-label="Page navigation example">
+                                <ul class="pagination">
+                                    <li class="page-item"><a href="javascript:void(0);" class="page-link"><span>«</span></a></li>
+                                    <li class="page-item"><a href="javascript:void(0);" class="page-link">1</a></li>
+                                    <li class="page-item active"><a href="javascript:void(0);" class="page-link">2</a></li>
+                                    <li class="page-item"><a href="javascript:void(0);" class="page-link">3</a></li>
+                                    <li class="page-item"><a href="javascript:void(0);" class="page-link">4</a></li>
+                                    <li class="page-item"><a href="javascript:void(0);" class="page-link">5</a></li>
+                                    <li class="page-item"><a href="javascript:void(0);" class="page-link"><span>»</span></a></li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 상세 -->
+            <div class="app-inner-layout__content card detailView" name="docDetail">
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $.getScript("/enixClever/cms/workPlace/groupPlace.js");
+    });
+</script>

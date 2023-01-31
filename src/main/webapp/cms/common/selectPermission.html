@@ -1,0 +1,53 @@
+<div name="selectPermissionDiv">
+	<div class="modal-title">
+		접근권한 목록
+		<div class="modal-btnGrp">
+			<a href="#" class="modal-close"><img src="/enixClever/assets/images/modal_cancel.png" alt=""></a>
+		</div>
+	</div>
+	<div class="modal-body">
+		<div class="modal_info_area">
+		<div class="info_access" >
+			<dl>
+				<dt>권한목록</dt>
+				<dd>
+					<div class="divScrollBox" style="height:300px">
+						<table name="permissionListTableM" style="width:100%;" border="0"> 
+						</table>
+					</div>
+				</dd>
+			</dl>
+		</div>
+		<div class="info_access">
+			<dl>
+				<dt>적용대상</dt>
+				<dd>
+				<div name="selectPermissionDiv" class="divScrollBox" style="height:180px;">
+					<table border="0" width="100%" class="permission-table" name="accessorListTable">
+					</table>
+					<!-- 초기 출력 -->
+					<div id="dataDivInit" class="dataDivision"><p>권한목록을 선택하세요.</p><p>권한목록이 없는 경우 새로만들기를 선택하세요.</p></div>
+					<!-- 데이터 가져오는 중 -->
+					<div id="dataDivIng" class="dataDivision" style="display:none;">데이터를 가져 오는 중입니다</div>
+					<!-- 데이터가 없는 경우 -->
+					<div id="dataDivNoData" class="dataDivision" style="display:none;">문서 접근권한 대상자가 없습니다. </div>
+				</div>
+				</dd>
+			</dl>
+		</div>
+	</div>
+	</div>
+	<div class="modal-footer">
+		<a href="#" onClick="_selectPermission.evtSubmitClick()" class="modal-save-btn">적용</a>
+		<a href="#" onClick="_selectPermission.evtCancelClick()" class="modal-cancle-btn">취소</a>
+		<a href="#" onClick="_selectPermission.evtCreatePermissionPopup()" class="modal-newmake-btn rel-pop1">새로 만들기</a>
+	</div>
+</div>
+<!-- 접근권한 목록 end -->
+
+<script>
+    // 스크립트 로드 후 콜백을 전달한다
+    function loadScript(callback) {
+        $.getScript("/enixClever/cms/common/selectPermission.js", callback);
+    }
+</script>

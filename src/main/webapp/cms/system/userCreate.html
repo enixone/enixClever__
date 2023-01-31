@@ -1,0 +1,68 @@
+<div id="" class="modalM">
+	<div class="modal-title">
+		사용자 등록
+		</div>
+		<div class="modal-btnGrp">
+			<a href="#" class="modal-close"><img src="/enixClever/assets/images/modal_cancel.png" alt=""></a>
+		</div>
+		<div class="modal-body">
+			<div class="write_info_area">
+				<form name="userCreateForm">
+					<table border="0">
+						<tr> 
+							<th><font class="txt-red">*</font>아이디</th>
+							<td><input type="text" name="userKey" id="Subject" tabindex="3" placeholder="아이디를 입력하세요" style="width: 99%;"></td>
+						</tr>
+						<tr> 
+							<th><font class="txt-red">*</font>성명</th>
+							<td><input type="text" name="userName" id="Subject" tabindex="3" placeholder="성명을 입력하세요" style="width: 99%;"></td>
+						</tr>
+						<tr> 
+							<th><font class="txt-red">*</font>소속부서</th>
+							<td><input type="text" name="groupName" id="groupName" tabindex="3" placeholder="소속부서를 입력하세요"  style="width: 85%;"><br/>
+								<input type="hidden" name="groupId" id="groupId"></td>
+						</tr>
+						<tr> 
+							<th><font class="txt-red">*</font>직책(역할)</th>
+							<td><input type="text" name="roleName" id="roleName" tabindex="3" placeholder="직책(역할)을 입력하세요" style="width: 99%;">
+								<input type="hidden" name="roleId" id="roleId"></td>
+						</tr>
+						<tr> 
+							<th><font class="txt-red">*</font>전자메일</th>
+							<td><input type="text" name="email" id="Subject" tabindex="3" placeholder="전자메일을 입력하세요" style="width: 99%;" value="kimsfeel@naver.com"></td>
+						</tr>
+						<tr> 
+							<th><font class="txt-red">*</font>비밀번호</th>
+							<td><input type="password" name="userPass" id="userPass" tabindex="3" placeholder="비밀번호를 입력하세요" style="width: 99%;" value="a1234567"></td>
+						</tr>
+						<tr> 
+							<th><font class="txt-red">*</font>비밀(확인)</th>
+							<td><input type="password" name="userPassConfirm" id="userPassConfirm" tabindex="3" placeholder="비밀번호를 입력하세요" style="width: 99%;" value="a1234567"></td>
+						</tr>
+						<tr> 
+							<th><font class="txt-red">*</font>상태</th>
+							<td>
+								<div class="rDefault">
+									<input type="radio" name="statusCode" value="ACTIVE" checked />
+									<label for="statusCode">활성화</label>	
+									<input type="radio" name="statusCode" value="PASSIVE" />
+									<label for="statusCode">등록대기</label>	
+								</div>
+							</td>
+						</tr>
+					</table>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<a href="#" onclick="_userCreate.evtSubmitClick()" class="modal-save-btn">확인</a>
+				<a href="#" onclick="_userCreate.evtCancelClick()" class="modal-cancle-btn">취소</a>
+			</div>
+		</div>
+</div>
+
+<script>
+    // 스크립트 로드 후 콜백을 전달한다
+    function loadScript(callback) {
+       $.getScript("./cms/system/userCreate.js", callback);
+    }
+</script>

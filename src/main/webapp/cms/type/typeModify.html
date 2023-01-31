@@ -1,0 +1,68 @@
+<div id="" class="modalM">
+	<div class="modal-title">
+		문서 유형 수정
+		</div>
+		<div class="modal-btnGrp">
+			<a href="#" class="modal-close"><img src="/enixClever/assets/images/modal_cancel.png" alt=""></a>
+		</div>
+		<div class="modal-body">
+			<div class="form_info_area">
+				<form name="typeModifyForm">
+					<table border="0">
+						<tr> 
+							<th><font class="txt-red">*</font>문서 유형 아이디</th>
+							<td><input type="text" name="typeId" placeholder="아이디를 입력하세요" style="width: 99%;"></td>
+						</tr>
+						<tr> 
+							<th><font class="txt-red">*</font>문서 유형 명</th>
+							<td><input type="text" name="typeName" placeholder="아이디를 입력하세요" style="width: 99%;"></td>
+						</tr>
+						<tr> 
+							<th><font class="txt-red">*</font>기본 문서 유형</th>
+							<td>
+								<div>
+			                        <input type="checkbox" name="isBaseType" id="permissionIsSystem_modify" class="custom-control-input">
+			                        <label class="custom-control-label" for="permissionIsSystem_modify"></label>
+			                	</div>
+							</td>
+						</tr>
+						<tr> 
+							<th><font class="txt-red">*</font>속성 목록</th>
+							<td>
+								
+				                    <div class="float-right">
+				                        <button type="button" onclick="_typeModify.evtAddTypeItem()" class="mb-2 mr-2 btn-transition btn btn-outline-primary">대상 추가</button>
+				                    </div>
+				                    <table name="typeItemListTable" class="text-nowrap table-lg mb-0 table table-hover">
+				                        <thead>
+				                        <tr>
+				                            <td>속성 아이디</td>
+				                            <td>속성 명</td>
+				                            <td>속성 순서</td>
+				                            <td></td>
+				                        </tr>
+				                        </thead>
+				                        <tbody>
+				                        </tbody>
+				                    </table>
+				                
+			                </td>	
+						</tr>
+					</table>
+				</form>
+			
+			
+			<div class="modal-footer">
+				<a href="#" onclick="_typeModify.evtSubmitClick()" class="modal-save-btn">확인</a>
+				<a href="#" onclick="_typeModify.evtCancelClick()" class="modal-cancle-btn">취소</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+    // 스크립트 로드 후 콜백을 전달한다
+    function loadScript(callback) {
+       $.getScript("./cms/type/typeModify.js", callback);
+    }
+</script>

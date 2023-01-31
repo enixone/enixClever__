@@ -1,0 +1,60 @@
+<!-- 복사 -->
+<div id="defaultModal2" class="modal">
+	<div class="modal-title">
+		<div id="label_workflow_information">결재정보 입력</div>
+		<div class="modal-btnGrp">
+			<a href="#" class="modal-close"><img src="/enixClever/assets/images/modal_cancel.png" alt=""></a>
+		</div>
+	</div>
+	<div class="modal-body">
+		<div class="modal_info_area" style="padding:0px 10px 0px 10px;">
+		<form name="documentPromotionForm">
+		<input type="hidden" name="docId">
+				<table class="table-list" border="0">
+				<colgroup>
+					<col width="100px">
+					<col width="*">
+				</colgroup>
+				<thead>
+					<tr>
+						<th>승인자</th>
+						<td class="text-left">
+							<div>
+								<input type="hidden" name="actorId" id="actorId">
+								<input type="text" name="actorName" id="actorName" class="tf_subject"  style="width:250px" size="24" readonly><a href="#" onclick="_workflowStep.evtSelectUser('actorId','actorName');" class="btn_txtbt">승인자 선택</a>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<th class="text-center">요청사유</th> 
+						<td class="text-left">
+							<textarea class="textarea" name="_creatorMessage" id="_creatorMessage" placeholder="사유를 입력해 주세요"></textarea>			
+						</td>
+					</tr>
+				</thead>
+			</table>
+		
+		<div class="modal-footer">
+			<a href="#" class="modal-save-btn" onclick="_workflowStep.evtSubmitClick()">확인</a>
+			<a href="#" class="modal-cancle-btn" onclick="_workflowStep.evtCancelClick()">취소</a>
+		</div>
+		</div>
+		
+	</div>
+</div>
+
+
+<script>
+    
+    // 스크립트 로드 후 콜백을 전달한다
+    function loadScript(callback) {
+		$.getScript("/enixClever/cms/common/documentPromotion.js", callback);
+    }
+    
+    
+    
+    
+</script>
+
+
+

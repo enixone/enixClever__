@@ -1,0 +1,150 @@
+<div class="row">
+		<div class="frm-title-wrap">
+			<div class="frm-title">사용자 관리</div>
+		</div>
+	
+			<div class="frm-body-full">
+				<div class="app-inner-layout__sidebar card leftgroupcard">
+	                <ul class="nav flex-column">
+	                    <li class="nav-item-header nav-item"></li>
+	                   	<ul class="nav nav-tabs" id="tabListDiv"></ul>
+	                    <li class="nav-item">
+	                        <div id="boxListDiv">
+	
+	                        </div>
+	                    </li>
+	<!--                    <li class="nav-item-header nav-item text-center"><h4 id="boxNameLabel"></h4></li>-->
+	<!--                    <li class="nav-item-divider nav-item"></li>-->
+	                    <li class="nav-item">
+	                        <div id="groupTree">
+	                        </div>
+	                    </li>
+	                    <li class="nav-item text-center">
+	                        <div id="emptyTreeMessage" class="hidden">
+	                            <h5 class="text-danger mt-2">그룹이 없습니다.</h5>
+	                            <button class="btn btn-success m-2" onclick="evtCreateRootGroupPopup()">최상위 부서 등록</button>
+	                        </div>
+	                    </li>
+	                    <li class="nav-item-divider nav-item"></li>
+	                    <li class="nav-item-header nav-item" id="treeTestDiv">
+	                        <h6>Tree 우 클릭 시 부서를 생성/수정/삭제 가능</h6>
+	                        <div>
+	<!--                            <button class="btn btn-success m-2" onclick="evtAddTreeNode()">자식 추가 테스트</button>-->
+	<!--                            <button class="btn btn-success m-2" onclick="evtCreateGroupPopup()">하위 부서 등록</button>-->
+	<!--                            <button class="btn btn-success m-2" onclick="evtModifyGroupPopup()">부서 수정</button>-->
+	<!--                            <button class="btn btn-success m-2" onclick="evtDeleteGroupPopup()">부서 삭제</button>-->
+	                        </div>
+	                    </li>
+	                    <li class="nav-item">
+	                        <div>
+	                        </div>
+	                    </li>
+	                </ul>
+	            </div>
+			
+		
+		
+			<div class="app-inner-layout__content card">
+			                <div class="card-body rightgroupview">
+			                    <!-- 부서 정보 표시 -->
+			                    <form name="groupInfoDiv">
+			                        <h2 class="bb-line">
+			                            <b><i class="metismenu-icon pe-7s-users"></i></b>
+			                            <b name="groupName"></b>
+			                        </h2>
+			                        <div class="vertical-timeline vertical-timeline--animate vertical-timeline--one-column">
+			                            <!-- 부서 명 -->
+			                            <div class="vertical-timeline-item vertical-timeline-element">
+			                                <div>
+			                                    <span class="vertical-timeline-element-icon bounce-in">
+			                                        <i class="badge badge-dot badge-dot-xl badge-success"></i>
+			                                    </span>
+			                                    <div class="vertical-timeline-element-content bounce-in">
+			                                        <span class="vertical-timeline-element-date">부서 명</span>
+			<!--                                        <h4 class="timeline-title" name="groupName"></h4>-->
+			                                        <p name="groupName"></p>
+			                                    </div>
+			                                </div>
+			                            </div>
+			                            <!-- 상위 부서 -->
+			                            <div class="vertical-timeline-item vertical-timeline-element">
+			                                <div>
+			                                    <span class="vertical-timeline-element-icon bounce-in">
+			                                        <i class="badge badge-dot badge-dot-xl badge-success"></i>
+			                                    </span>
+			                                    <div class="vertical-timeline-element-content bounce-in">
+			                                        <span class="vertical-timeline-element-date">상위 부서</span>
+			<!--                                        <h4 class="timeline-title" name="parentGroupName"> </h4>-->
+			                                        <p name="parentGroupName"></p>
+			                                    </div>
+			                                </div>
+			                            </div>
+			                            <!-- 부서 상태 -->
+			                            <div class="vertical-timeline-item vertical-timeline-element">
+			                                <div>
+			                                    <span class="vertical-timeline-element-icon bounce-in">
+			                                        <i class="badge badge-dot badge-dot-xl badge-success"></i>
+			                                    </span>
+			                                    <div class="vertical-timeline-element-content bounce-in">
+			                                        <span class="vertical-timeline-element-date">부서 상태</span>
+			<!--                                        <h4 class="timeline-title" name="statusCodeName"></h4>-->
+			                                        <p name="statusCodeName"></p>
+			                                    </div>
+			                                </div>
+			                            </div>
+			                            <!-- 등록 일 -->
+			                            <div class="vertical-timeline-item vertical-timeline-element">
+			                                <div>
+			                                    <span class="vertical-timeline-element-icon bounce-in">
+			                                        <i class="badge badge-dot badge-dot-xl badge-success"></i>
+			                                    </span>
+			                                    <div class="vertical-timeline-element-content bounce-in">
+			                                        <span class="vertical-timeline-element-date">등록일</span>
+			<!--                                        <h4 class="timeline-title" name="createDate"></h4>-->
+			                                        <p name="createDate"></p>
+			                                    </div>
+			                                </div>
+			                            </div>
+			                            <!-- 수정 일 -->
+			                            <div class="vertical-timeline-item vertical-timeline-element">
+			                                <div>
+			                                    <span class="vertical-timeline-element-icon bounce-in">
+			                                        <i class="badge badge-dot badge-dot-xl badge-success"></i>
+			                                    </span>
+			                                    <div class="vertical-timeline-element-content bounce-in">
+			                                        <span class="vertical-timeline-element-date">수정일</span>
+			<!--                                        <h4 class="timeline-title" name="updateDate"></h4>-->
+			                                        <p name="updateDate"></p>
+			                                    </div>
+			                                </div>
+			                            </div>
+			                            <!-- 수정 일 -->
+			                            <div class="vertical-timeline-item vertical-timeline-element">
+			                                <div>
+			                                    <span class="vertical-timeline-element-icon bounce-in">
+			                                        <i class="badge badge-dot badge-dot-xl badge-success"></i>
+			                                    </span>
+			                                    <div class="vertical-timeline-element-content bounce-in">
+			                                        <span class="vertical-timeline-element-date">부서원</span>
+			<!--                                        <h4 class="timeline-title" name="updateDate"></h4>-->
+			                                        <div name="groupUserListDiv">
+			                                        </div>
+			                                    </div>
+			                                </div>
+			                            </div>
+			                        </div>
+			                    </form>
+			
+			
+			<!--                    <h5 class="mt-3 bb-line">부서원 <label name="groupUserCountLabel"></label></h5>-->
+			<!--                    <div class="w-25" name="groupUserListDiv"></div>-->
+		         </div>
+		    </div>
+	    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $.getScript("./cms/system/groupManagement.js");
+    });
+</script>

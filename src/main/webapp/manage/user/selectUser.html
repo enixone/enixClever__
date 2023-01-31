@@ -1,0 +1,63 @@
+<!-- 폴더선택 -->
+<div id="defaultModal1" class="modal">
+	<div class="modal-title">
+		소유자를 선택하세요.
+		<div class="modal-btnGrp">
+			<a href="#" class="modal-close" style="margin: 0px;"><img src="/enixClever/assets/images/modal_cancel.png" onclick="evtCancelClick()"></a>
+		</div>
+	</div>
+	<div class="modal-body"> 
+		<div class="modal_info_area">
+			<div class="info_copy">
+			<form name="userForm" onsubmit="return false;">
+				<table border="0" style="width:100%" >
+						<tr>
+							<td align="center" >
+								<input type="text" id="userName" name="userName" class="searchText" tabindex="3" placeholder="성명/직책을 검색하세요"  onkeyUp="evtKeyUp(event.keyCode, this.value);" autocomplete="off">
+							</td>
+							<td align="right" style="width:70px">
+							<button class="btn btn-md btn-line-primary" onclick="evtSelectUser();">검색</button></td>
+						</tr>
+						<trvalign="top">
+							<td colspan="2">
+							<div name="selectUserData" class="selectUserData">
+								<table name="selectUserTable">
+									<tbody>
+									</tbody>
+								</table>
+								<!-- 초기 출력 -->
+								<div id="dataDivInit" class="dataDivision" style="display:block;">권한-대상을 검색하세요.</div>
+								<!-- 데이터 가져오는 중 -->
+								<div id="dataDivIng" class="dataDivision" style="display:none;"><img src="/enixClever/assets/images/loading.gif"></div>
+								<!-- 데이터가 없는 경우 -->
+								<div id="dataDivNoData" class="dataDivision" style="display:none;">조건에 맞는 사용자 없습니다. </div>
+							</div>
+							
+							</td>
+						</tr>
+				</table>
+			</form>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<a href="#" class="modal-save-btn" onclick="evtSubmitClick(this)">확인</a>
+		<a href="#" class="modal-cancle-btn" onclick="evtCancelClick()">취소</a>
+	</div>
+</div>
+
+<!-- 폴더선택 end -->
+
+<!-- Fancytree -->
+<link rel="stylesheet" type="text/css" href="/enixClever/plugins/jquery-contextmenu/jquery.contextMenu.css">
+
+<script src="/enixClever/plugins/fancytree/jquery.fancytree-all.js"></script>
+<script src="/enixClever/plugins/fancytree/modules/jquery.fancytree.contextMenu.js"></script>
+
+
+<script>
+    // 스크립트 로드 후 콜백을 전달한다
+    function loadScript(callback) {
+		$.getScript("/enixClever/manage/user/selectUser.js", callback);
+    }
+</script>

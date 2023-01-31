@@ -1,0 +1,89 @@
+<!-- 복사 -->
+<div id="defaultModal" class="modal">
+	<div class="modal-title">
+		<div id="label_workflow_information">폴더 수정</div>
+		<div class="modal-btnGrp">
+			<a href="#" class="modal-close"><img src="/enixClever/assets/images/modal_cancel.png" alt=""></a>
+		</div>
+	</div>
+	<div class="modal-body">
+		<div class="modal_info_area" style="padding:0px 10px 0px 10px;">
+		<form name="folderModifyForm">
+			<input type="text" name="statusCode">
+			<input name="parentFolderId" type="text"/>
+            <input name="boxId" type="text"/>
+			<input name="folderId" type="text"/>
+            <input type="text" name="isSystem" value="N"/>
+				<table class="table-list" border="0">
+				<colgroup>
+					<col width="100px">
+					<col width="*">
+				</colgroup>
+				<thead>
+					<tr>
+						<th class="text-center">폴더명</th> 
+						<td class="text-left">
+							<input type="text"  name="folderName" placeholder="" value="" style="width:95%;">
+						</td>
+					</tr>
+					<tr>
+						<th class="text-center">상태</th> 
+						<td class="text-left">
+							<div class="rDefault">
+								<input type="radio" name="statusCode" id="statusActivate" value="ACTIVATE" checked>
+								<label for="statusActivate">활성</label>	
+								<input type="radio" name="statusCode" id="statusDisable" value="DISABLE">
+								<label for="statusDisable">비활성</label>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<th class="text-center">폴더유형</th> 
+						<td class="text-left">
+							<div class="rDefault">
+								<input type="radio" name="typeCode" id="typeCode" value="NORMAL" checked>
+								<label for="typeCode">일반폴더</label>
+							</div>	
+						</td>
+					</tr>
+					<tr>
+						<th class="text-center">부서전용</th> 
+						<td class="text-left">
+							<div class="rDefault">
+								<input type="checkbox" name="isGroupOnly" id="folderCreate_isGroupOnly">
+	                            <label for="folderCreate_isGroupOnly">부서 전용 폴더로 사용합니다</label>
+	                        </div>
+						</td>
+					</tr>
+					<tr>
+						<th class="text-center">권한</th> 
+						<td class="text-left">
+							<div style="padding-bottom:10px;">
+								<input type="text" name="permissionName" id="permissionName" style="width: 85%;font-weight:600;" >
+								<input type="hidden" name="permissionId" id="permissionId"><a href="#" onclick="_docCreate.evtSelectPermission();" class="btn_txtbt">권한선택</a>
+							</div>
+							<div name="selectPermissionDiv" class="divScrollBox" style="height:150px">
+								<table border="0" width="100%" class="permission-table" name="permissionListTable">
+								</table>
+							</div>
+						</td>
+					</tr>
+				</thead>
+			</table>
+		
+		<div class="modal-footer">
+			<a href="#" class="modal-save-btn" onclick="_folderModify.evtSubmitClick()">확인</a>
+			<a href="#" class="modal-cancle-btn" onclick="_folderModify.evtCancelClick()">취소</a>
+		</div>
+		</div>
+		
+	</div>
+</div>
+
+
+<script>
+    // 스크립트 로드 후 콜백을 전달한다
+    function loadScript(callback) {
+        $.getScript("/enixClever/cms/folder/folderModify.js", callback);
+    }
+</script>

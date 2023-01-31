@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.enixone.enixClever.cms.was.dao.history.DocumentHistoryDao">
+
+    <!--
+    ======================================
+    =   EC_DOCUMENT_HISTORY 관련 쿼리
+    ======================================
+    -->
+
+    <!-- 문서 이력 조회 -->
+    <select id="selectDocumentHistoryList" resultMap="commonSql.DocumentHistory">
+        SELECT
+		    HISTORY_ID, DOC_ID, DOC_NAME, 
+		    ACTOR_ID, 
+			ACTOR_NAME, 
+			ACTOR_ROLE_ID, 
+			ACTOR_ROLE_NAME,
+			CONCAT(EU.GROUP_NAME,'/',HD.ACTOR_ROLE_NAME) AS ACTOR_ROLE_NAME,
+		    (SELECT CODE_NAME FROM EC_CODE WHERE CODE_GROUP = 'ACTION' AND CODE = HD.ACTION_CODE ) AS ACTION_CODE,
+		    CONVERT(CHAR(16), ACTION_DATE, 20) AS ACTION_DATE, ACTION_IP, IS_BATCH
+		FROM EC_DOCUMENT_HISTORY HD
+		INNER JOIN EC_USER EU ON HD.ACTOR_ID = EU.USER_KEY
+		WHERE DOC_ID = #{docId} AND IS_BATCH = 1
+        ORDER BY ACTION_DATE DESC
+    </select>
+
+    <!-- 문서 이력 등록 -->
+    <insert id="insertDocumentHistory" parameterType="DocumentHistory">
+        INSERT INTO EC_DOCUMENT_HISTORY
+        (HISTORY_ID, DOC_ID, DOC_NAME, ACTOR_ID, ACTOR_NAME, ACTOR_ROLE_ID, ACTOR_ROLE_NAME, ACTION_CODE, ACTION_DATE, ACTION_IP, IS_BATCH)
+        VALUES
+        (
+	        #{historyId}, #{docId}, #{docName}, 
+	        #{actorId}, #{actorName},
+	        #{actorRoleId},#{actorRoleName}, 
+	        #{actionCode}, GETDATE(), #{actionIp}, #{isBatch}
+        )
+    </insert>
+    
+    
+    
+    <!--
+    ======================================
+    =   스케줄러 수집 관련
+    ======================================
+    -->
+    
+    <!-- 사용자의 문서 사용 현황을 조회한다 -->
+    <select id="selectDailyUserStat" resultType="Map">
+        SELECT
+            ACTION_CODE, COUNT(*) AS CNT
+        FROM EC_DOCUMENT_HISTORY
+        WHERE
+            ACTOR_ID = #{actorId}
+        AND ACTION_DATE BETWEEN #{fromDate} AND #{toDate}
+        GROUP BY ACTION_CODE
+    </select>
+    
+    <!-- 부서의 문서 사용 현황을 조회한다 -->
+    <select id="selectDailyGroupStat" resultType="Map">
+        SELECT
+            ACTION_CODE, COUNT(*) AS CNT
+        FROM EC_DOCUMENT_HISTORY
+        WHERE
+            ACTOR_ID IN (
+                SELECT U.USER_KEY FROM EC_USER U
+                INNER JOIN EC_GROUP_ASSIGN AD
+                    ON U.USER_KEY = AD.USER_KEY
+                    AND AD.IS_MAIN = 'Y'
+                    AND AD.GROUP_ID = #{groupId}
+            )
+        AND ACTION_DATE BETWEEN #{fromDate} AND #{toDate}
+        GROUP BY ACTION_CODE
+    </select>
+    
+    <!-- 문서 조회 현황을 조회한다 -->
+    <select id="selectDailyMostReadStat" resultType="Map">
+        SELECT
+            DOC_ID, COUNT(*) AS CNT
+        FROM EC_DOCUMENT_HISTORY
+        WHERE
+            ACTION_CODE = 'READ'
+        AND ACTION_DATE BETWEEN #{fromDate} AND #{toDate}
+        GROUP BY DOC_ID
+        ORDER BY CNT DESC
+    </select>
+    
+    <!-- 문서 유형별 현황을 조회한다 -->
+    <select id="selectDailyTypeStat" resultType="Map">
+        SELECT DOC_TYPE_ID, HD.ACTION_CODE, COUNT(*) AS CNT
+        FROM EC_DOCUMENT_HISTORY HD
+        INNER JOIN EC_DOCUMENT D ON HD.DOC_ID = D.DOC_ID
+        WHERE
+            ACTION_DATE BETWEEN #{fromDate} AND #{toDate}
+        GROUP BY D.DOC_TYPE_ID, HD.ACTION_CODE
+
+    </select>
+</mapper>

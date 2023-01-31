@@ -1,0 +1,32 @@
+<div class="row">
+		<div class="frm-title-wrap">
+			<div class="frm-title">비밀소유현황</div>
+		</div>
+		<div class="frm-body-full">
+		<div class="frm-body-frame ">
+			<div class="cont-body-wrap">
+				<!-- 페이지리스트 테이블 -->
+				<table id="documentListTable" class="table-listT">
+				</table>
+				
+				<!-- 리스트가 없는 경우 화면 출력 -->
+				<table id="groupPlaceNoDocMessage">
+                   <tbody>
+	                    <tr>
+							<td>조회된 문서가 없습니다..---</td>
+						</tr>
+					</tbody>
+				</table>
+                
+                <!-- 페이지 네비게이션 -->
+				<div id="docListPagination"  class="PageArea">
+                </div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+    $(document).ready(function () {
+        $.getScript("./cms/security/securityOwn.js");
+    });
+</script>

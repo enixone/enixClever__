@@ -1,0 +1,77 @@
+<div class="row">
+		<div class="frm-title-wrap">
+			<div class="frm-title">문서 유형 관리</div>
+		</div>
+		<div class="btnGroup"> 
+			<button class="btn btn-sm btn-line" onclick="evtCreateTypePopup()">등록</button>
+		</div>
+		
+		<div class="frm-body-full">
+		<div class="frm-body-frame ">
+			<div class="cont-body-wrap">
+				<div class="itemList">	
+					<!-- 페이지리스트 테이블 -->
+					<table id="typeListTable" class="table-list table-line" border="0">
+					</table>
+					
+					<!-- 리스트가 없는 경우 화면 출력 -->
+					<table id="typeManagementNoDocMessage">
+	                   <tbody>
+		                    <tr>
+								<td>조회된 문서가 없습니다..---</td>
+							</tr>
+						</tbody>
+					</table>
+	                
+	                <!-- 페이지 네비게이션 -->
+						<div id="typeListPagination" >
+		                </div>
+	                </div>
+	                
+                <div class="itemDetail">
+	                <div class="sysWriteinfo-area">
+	                	<form name="typeDetailForm">
+		                	<table class="sysTable " border="0">
+								<tr> 
+									<th class="sysTableth">아이디</th>
+										<td class="sysTabletd"><input name="typeId" type="text" class="sysTableinput" readonly></td>
+								</tr>
+								<tr class="sysTabletr"> 
+									<th class="sysTableth">명칭</th>
+										<td class="sysTabletd"><input name="typeName" type="text" class="sysTableinput" readonly></td>
+								</tr>
+								<tr> 
+									<th class="sysTableth">기본 문서 유형</th>
+										<td class="sysTabletd"><input name="isBaseType" type="checkbox" class=" sysTableCheck" readonly></td>
+								</tr>
+								<tr> 
+									<th class="sysTableth attrlist" style="position: fixed"  >속성 목록</th>
+										<td>
+											<div class="table-responsive">
+		                                        <table id="typeItemTable" class="text-nowrap table-lg mb-0 table table-hover">
+		                                        </table>
+		                                    </div>
+	                                    </td>
+								</tr>
+							</table>
+								<div id="noTypeItemMessage" class="text-center p-40 hidden">
+		                           <label class="text-danger text-xl-center">조회된 속성이 없습니다.</label>
+	                     		</div>
+                     			<div class="type-btnGroup"> 
+									<button class="btn btn-sm btn-line" type="button" onclick="evtModifyTypePopup()">수정</button>
+									<button class="btn btn-sm btn-line-accent" type="button" onclick="evtDeleteTypePopup()">삭제</button>
+								</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	
+	</div>
+	
+</div>
+<script>
+	$(document).ready(function() {
+		$.getScript("./cms/system/typeManagement.js");
+	});
+</script>

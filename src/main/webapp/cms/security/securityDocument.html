@@ -1,0 +1,61 @@
+<div class="row">
+		<div class="frm-title-wrap">
+			<div class="frm-title">비밀관리 기록부</div>
+		</div>
+		<div class="sub-title">■ 부처명 : 정보체계과</div>
+		<div class="frm-body-full">
+		<div class="frm-body-frame ">
+			
+			<div class="cont-body-wrap">
+				<table id="documentListTable" class="table-listM table-hover" border="1">
+					<colgroup>
+							<col width="10%">
+							<col width="10%">
+							<col width="10%">
+							<col width="5%">
+							<col width="10%">
+							<col width="20%">
+							<col width="10%">
+							<col width="10%">
+							<col width="10%">
+							<col width="15%">
+							<col width="10%">
+					</colgroup>
+					<thead>
+						<tr>
+							<th class="aCenter" rowspan="2">관리<br/>번호</th>
+							<th class="aCenter" colspan="2">생산/접수</th>
+							<th class="aCenter" rowspan="2">문서번호</th>
+							<th class="aCenter" rowspan="2">등급</th>
+							<th class="aCenter" rowspan="2">제목</th>
+							<th class="aCenter" rowspan="2">사본<br/>번호</th>
+							<th class="aCenter" colspan="2">예고문</th>
+							<th class="aCenter" rowspan="2">비고</th>
+							<th class="aCenter" rowspan="2">이력<br/>카드</th>
+						</tr>
+						<tr>
+							<th>일자</th>
+							<th>발신처</th>
+							<th>보호기간</th>
+							<th>보존기간</th>
+						</tr>
+					</thead>
+				</table>
+			</div>
+			<!-- 페이지 네비게이션 -->
+			<div id="docListPagination"  class="PageArea">
+			</div>
+			<!-- 리스트가 없는 경우 화면 출력 -->
+			<div id="noDataDiv" class="dataDivision">
+		      <div id="noDataImage" class="noDataImage"><img src="/enixClever/assets/images/loading.gif"></div>
+		      <div id="noDataMessage" class="txt-message"></div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript" src="/enixClever/assets/javascript/enixTableSecurity.js"></script>
+<script>
+    $(document).ready(function () {
+		$.getScript("./cms/security/securityDocument.js");
+    });
+</script>

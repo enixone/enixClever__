@@ -1,0 +1,88 @@
+<div id="popupSelectAccessor" class="card md-content">
+    <div class="card-body">
+        <h5 class="card-title">대상 선택</h5>
+        <div class="modal-btnGrp">
+			<a href="#" class="modal-close" onclick="_selectAccessor.evtCancelClick()"><img src="/enixClever/manage/assets/images/modal_cancel.png" alt=""></a>
+		</div>
+        <div class="sys-row" >
+            <div class="col-lg-4">
+                <div class="mb-3 card">
+                    <div class="card-header-tab card-header">
+                        <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
+                            <i class="header-icon lnr-users icon-gradient bg-night-fade"> </i>
+                            부서 목록
+                        </div>
+                    </div>
+                    <div class="p-0 card-body" style="height:calc(100vh - 450px)">
+                        <div id="accessorGroupTree"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3">
+                <div class="card-hover-shadow-2x mb-3 card">
+                    <div class="card-header-tab card-header">
+                        <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
+                            <i class="header-icon lnr-user icon-gradient bg-night-fade"> </i>
+                            사용자 목록
+                        </div>
+                    </div>
+                    <div name="userListDiv" class="scroll-area-lg" style="height:calc(100vh - 450px)">
+                        <ul class="todo-list-wrapper list-group list-group-flush">
+                            <li class="list-group-item">
+                                <div class="todo-indicator bg-warning"></div>
+                                <div class="widget-content p-0">
+                                    <div class="widget-content-wrapper">
+                                        <div class="widget-content-left mr-2">
+                                            <div class="custom-checkbox custom-control">
+                                                <input type="checkbox" class="custom-control-input" id="id_1">
+                                                <label class="custom-control-label" for="id_1">&nbsp;</label>
+                                            </div>
+                                        </div>
+                                        <div class="widget-content-left">
+                                            부서명
+                                        </div>
+                                        <div class="widget-content-left m-l-10">
+                                            사용자명
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-1">
+                <button onclick="_selectAccessor.fnAddAccessor()" class="btn btn-md btn-info" style="display: block; margin-left: 35px">추가</button>
+                <button onclick="_selectAccessor.fnRemoveAccessor()" class="btn btn-md btn-red" style="margin-top: 5px; display: block; margin-left: 35px">삭제</button>
+            </div>
+            <div class="col-lg-4">
+                <div class="card-hover-shadow-2x mb-3 card">
+                    <div class="card-header-tab card-header">
+                        <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
+                            <i class="header-icon lnr-pushpin icon-gradient bg-night-fade"> </i>
+                            선택된 대상 목록
+                        </div>
+                    </div>
+                    <div name="accessorListDiv" class="p-0 card-body" style="height:calc(100vh - 450px)">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 하단 버튼 부분 -->
+        <div class="d-block text-right card-footer" style="margin-right: 20px">
+            <button onclick="_selectAccessor.evtSubmitClick()" class="btn btn-sm btn-primary">확인</button>
+            <button onclick="_selectAccessor.evtCancelClick()" class="btn btn-sm btn-default">취소</button>
+        </div>
+    </div>
+</div>
+
+
+<!--<script src="./page/group/selectAccessor.js?t=<?=time()?>"/>-->
+<script>
+    // 스크립트 로드 후 콜백을 전달한다
+    function loadScript(callback) {
+        $.getScript("/enixClever/manage/group/selectAccessor.js", callback);
+    }
+</script>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.enixone.enixClever.cms.was.dao.UrlLinkDao">
+
+    <!-- URL 링크 정보 조회 -->
+    <select id="selectLinkInfo" resultMap="commonSql.UrlLink">
+        SELECT
+            L.LINK_ID, L.LINK_NAME, L.CREATE_DATE, L.EXPIRE_DATE, L.READ_LIMIT, L.READ_COUNT,
+            L.DOC_ID, (SELECT DOC_NAME FROM EC_DOCUMENT WHERE DOC_ID = L.DOC_ID) AS DOC_NAME,
+            L.LINK_STATUS, (SELECT CODE_NAME FROM EC_CODE WHERE CODE_GROUP = 'URL_LINK' AND CODE = L.LINK_STATUS) AS LINK_STATUS_NAME,
+            L.CREATOR_ID, (SELECT USER_NAME FROM EC_USER WHERE USER_KEY = L.CREATOR_ID) AS CREATOR_NAME
+        FROM
+            EC_DOCUMENT_LINK L
+        WHERE
+            L.LINK_ID = #{linkId}
+    </select>
+
+    <!-- URL 링크 목록 조회 -->
+    <select id="selectLinkList" resultMap="commonSql.UrlLink">
+        SELECT *
+        FROM (
+            SELECT
+                <include refid="commonSql.pagingSelect"/>
+                L.LINK_ID, L.LINK_NAME, L.CREATE_DATE, L.EXPIRE_DATE, L.READ_LIMIT, L.READ_COUNT,
+                L.DOC_ID, (SELECT DOC_NAME FROM EC_DOCUMENT WHERE DOC_ID = L.DOC_ID) AS DOC_NAME,
+                L.LINK_STATUS, (SELECT CODE_NAME FROM EC_CODE WHERE CODE_GROUP = 'URL_LINK' AND CODE = L.LINK_STATUS) AS LINK_STATUS_NAME,
+                L.CREATOR_ID, (SELECT USER_NAME FROM EC_USER WHERE USER_KEY = L.CREATOR_ID) AS CREATOR_NAME
+            FROM
+                EC_DOCUMENT_LINK L
+            WHERE
+                L.CREATOR_ID = #{userKey}
+        ) LIST
+        <include refid="commonSql.pagingWhere"/>
+    </select>
+
+    <!-- URL LINK 생성 -->
+    <insert id="insertUrlLink" parameterType="UrlLink">
+        INSERT INTO EC_DOCUMENT_LINK
+        (LINK_ID, CREATOR_ID, DOC_ID, LINK_NAME, CREATE_DATE, EXPIRE_DATE, READ_LIMIT, READ_COUNT, LINK_STATUS)
+        VALUES
+        (#{linkId}, #{creatorId}, #{docId}, #{linkName}, GETDATE(), #{expireDate}, #{readLimit}, 0, 'ACTIVE')
+    </insert>
+
+    <update id="resetReadCount">
+        UPDATE EC_DOCUMENT_LINK
+        SET READ_COUNT = 0
+        WHERE
+            LINK_ID = #{linkId}
+    </update>
+
+    <update id="increaseReadCount">
+        UPDATE EC_DOCUMENT_LINK
+        SET READ_COUNT = READ_COUNT + 1
+        WHERE
+            LINK_ID = #{linkId}
+    </update>
+
+    <update id="expandExpired">
+        UPDATE EC_DOCUMENT_LINK
+        SET EXPIRE_DATE = #{expireDate}
+        WHERE
+            LINK_ID = #{linkId}
+    </update>
+</mapper>

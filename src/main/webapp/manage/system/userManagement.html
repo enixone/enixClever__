@@ -1,0 +1,35 @@
+<div class="sys-bodyWrap">
+	<div class="frm-body-full">
+		<!-- 상단 -->
+		<div class="">
+			<div class="frm-title-wrap">
+				<div class="frm-title">사용자 관리</div>
+			</div>		
+			<div class="btnGroup"> 
+				<button class="btn btn-sm btn-line" onclick="evtCreateUserPopup()">등록</button>
+				<button class="btn btn-sm btn-line" onclick="fnSelectActive()">정상사용자 목록</button>
+				<button class="btn btn-sm btn-line" onclick="fnSelectPassive()">등록대기자 목록</button>
+				<button class="btn btn-sm btn-line" onclick="fnSelectDelete()">삭제사용자 목록</button>
+				<div class="Usersearch">
+					<input type="text" id="keyword" name="keyword" class="Usersearch-input" placeholder="성명/직책을 검색하세요" onkeyup="evtSearchList(event.keyCode, this.value);" autocomplete="off"/>
+					<button type="button" class="btn btn-sm btn-line" onclick="fnSearchUserList('userName', this.value);">검색</button>
+				</div>
+			</div>
+		</div>
+	
+		<!-- 하단 -->
+		<!-- 페이지리스트 테이블 -->
+		<div name="selectDataDiv">
+			<table id="userListTable" class="table-list">
+			</table>
+		</div>
+		<!-- 페이지 네비게이션 -->
+		<div id="userListPagination" class="PageArea" style="position: relative; border-top: none;"></div>
+	</div>
+</div>
+
+<script> 
+$(document).ready(function() {
+	$.getScript("/enixClever/manage/system/userManagement.js");
+});
+</script>

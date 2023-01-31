@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.enixone.enixClever.cms.was.dao.FolderDao">
+
+    <!--
+    ============================
+    =   EC_FOLDER 관련 쿼리
+    ============================
+    -->
+    <!-- 전체 문서함의 최상위 루트 폴더 목록 조회 -->
+    <select id="selectRootFolderList" resultMap="commonSql.Folder">
+        SELECT
+            FOLDER_ID, FOLDER_NAME, PARENT_FOLDER_ID, IS_GROUP_ONLY, IS_SYSTEM,
+            STATUS_CODE, TYPE_CODE, CREATOR_ID, CREATE_DATE, UPDATOR_ID, UPDATE_DATE,
+            DELETOR_ID, DELETE_DATE, (SELECT BOX_ID FROM EC_BOX_FOLDER_MAPPING WHERE FOLDER_ID = F.FOLDER_ID) AS BOX_ID,
+            PERMISSION_ID, (SELECT PERMISSION_NAME FROM EC_PERMISSION WHERE PERMISSION_ID = F.PERMISSION_ID) AS PERMISSION_NAME,
+            (SELECT COUNT(*) FROM EC_FOLDER WHERE PARENT_FOLDER_ID = F.FOLDER_ID) AS CHILD_COUNT
+        FROM EC_FOLDER F
+        WHERE PARENT_FOLDER_ID = '_TOP'
+            AND FOLDER_ID IN (
+                SELECT FOLDER_ID FROM EC_BOX_FOLDER_MAPPING WHERE BOX_ID = #{boxId}
+            )
+
+        <trim prefix="AND (" suffix=")" prefixOverrides="OR" >
+            <if test="permissionList != null and permissionList.size > 0">
+                PERMISSION_ID IN
+                <foreach collection="permissionList" item="item" index="index" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <!-- 전사문서함에서 부서 폴더 조회를 위한 플래그 -->
+            <if test = "@com.enixone.enixClever.cms.was.utils.CommonUtil@equal(isSystem, 'Y')">
+                OR F.IS_SYSTEM = 'Y'
+            </if>
+        </trim>
+        ORDER BY F.IS_SYSTEM, F.FOLDER_NAME ASC
+    </select>
+
+    <!-- 문서함 루트 폴더의 권한 아이디를 목록 조회한다 -->
+    <select id="selectRootFolderPermissionIdList" resultType="String">
+        SELECT PERMISSION_ID
+        FROM EC_FOLDER F
+        WHERE PARENT_FOLDER_ID = '_TOP'
+            AND FOLDER_ID IN (
+                SELECT FOLDER_ID FROM EC_BOX_FOLDER_MAPPING WHERE BOX_ID = #{boxId}
+            )
+        GROUP BY PERMISSION_ID
+    </select>
+
+    <!-- 자식 폴더의 권한 아이디를 목록 조회한다 -->
+    <select id="selectChildFolderPermissionIdList" resultType="String">
+        SELECT PERMISSION_ID
+        FROM EC_FOLDER
+        WHERE PARENT_FOLDER_ID = #{parentFolderId}
+        GROUP BY PERMISSION_ID
+    </select>
+
+    <!-- 내가 속한 부서 루트 목록 조회 -->
+    <select id="selectMyGroupFolderList" resultMap="commonSql.Folder">
+        SELECT
+            FOLDER_ID, FOLDER_NAME, PARENT_FOLDER_ID, IS_GROUP_ONLY, IS_SYSTEM,
+            STATUS_CODE, TYPE_CODE, CREATOR_ID, CREATE_DATE, UPDATOR_ID, UPDATE_DATE,
+            DELETOR_ID, DELETE_DATE, (SELECT BOX_ID FROM EC_BOX_FOLDER_MAPPING WHERE FOLDER_ID = F.FOLDER_ID) AS BOX_ID,
+            PERMISSION_ID, (SELECT PERMISSION_NAME FROM EC_PERMISSION WHERE PERMISSION_ID = F.PERMISSION_ID) AS PERMISSION_NAME,
+            (SELECT COUNT(*) FROM EC_FOLDER WHERE PARENT_FOLDER_ID = F.FOLDER_ID) AS CHILD_COUNT
+        FROM EC_FOLDER F
+        WHERE FOLDER_ID IN (
+            SELECT AD.GROUP_ID
+            FROM EC_GROUP_ASSIGN AD
+            INNER JOIN EC_BOX_FOLDER_MAPPING MF ON MF.BOX_ID = #{boxId} AND AD.GROUP_ID = MF.FOLDER_ID
+            WHERE AD.USER_KEY = #{userKey}
+        );
+    </select>
+
+    <!-- 하위 폴더 목록 조회 -->
+    <select id="selectFolderListByParentId" resultMap="commonSql.Folder">
+        SELECT
+        FOLDER_ID, FOLDER_NAME, IS_GROUP_ONLY, IS_SYSTEM,
+        STATUS_CODE, TYPE_CODE, CREATOR_ID, CREATE_DATE, UPDATOR_ID, UPDATE_DATE,
+        DELETOR_ID, DELETE_DATE, (SELECT BOX_ID FROM EC_BOX_FOLDER_MAPPING WHERE FOLDER_ID = F.FOLDER_ID) AS BOX_ID,
+        PARENT_FOLDER_ID, (SELECT FOLDER_NAME FROM EC_FOLDER WHERE FOLDER_ID = F.PARENT_FOLDER_ID) AS
+        PARENT_FOLDER_NAME,
+        PERMISSION_ID, (SELECT PERMISSION_NAME FROM EC_PERMISSION WHERE PERMISSION_ID = F.PERMISSION_ID) AS
+        PERMISSION_NAME,
+        (SELECT COUNT(*) FROM EC_FOLDER WHERE PARENT_FOLDER_ID = F.FOLDER_ID) AS CHILD_COUNT
+        FROM EC_FOLDER F
+        WHERE PARENT_FOLDER_ID = #{parentFolderId}
+        <trim prefix="AND (" suffix=")" prefixOverrides="OR" >
+            <if test="permissionList != null and permissionList.size > 0">
+                PERMISSION_ID IN
+                <foreach collection="permissionList" item="item" index="index" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <!-- 전사문서함에서 부서 폴더 조회를 위한 플래그 -->
+            <if test = "@com.enixone.enixClever.cms.was.utils.CommonUtil@equal(isSystem, 'Y')">
+                OR F.IS_SYSTEM = 'Y'
+            </if>
+            <!-- 전사문서함에서 부서 폴더 조회를 위한 플래그 -->
+            <if test = "@com.enixone.enixClever.cms.was.utils.CommonUtil@equal(showGroupOnlyFolders, 'N')">
+                OR F.IS_GROUP_ONLY = 'N'
+            </if>
+        </trim>
+        ORDER BY F.IS_SYSTEM, F.FOLDER_NAME ASC
+    </select>
+    
+    <!-- 형제 폴더 중 동일 폴더명이 몇개있는지 조회한다 -->
+    <select id="countDuplicateNameFolder" resultType="int">
+        SELECT COUNT(*)
+        FROM EC_FOLDER
+        WHERE
+            PARENT_FOLDER_ID = #{parentFolderId}
+        AND FOLDER_NAME = #{folderName}
+        <if test = "@com.enixone.enixClever.cms.was.utils.CommonUtil@notEmpty(folderId)">
+        AND FOLDER_ID != #{folderId}
+        </if>
+    </select>
+
+    <!-- 하위 폴더 갯수 조회 -->
+    <select id="countChildFolder" resultType="int">
+        SELECT COUNT(*)
+        FROM EC_FOLDER
+        WHERE PARENT_FOLDER_ID = #{parentFolderId}
+    </select>
+
+    <!-- 폴더 상세 정보 조회 -->
+    <select id="selectFolderInfo" resultMap="commonSql.Folder">
+        SELECT
+            FOLDER_ID, FOLDER_NAME, IS_GROUP_ONLY, IS_SYSTEM,
+            CREATOR_ID, CREATE_DATE, UPDATOR_ID, UPDATE_DATE,
+            STATUS_CODE, (SELECT CODE_NAME FROM EC_CODE WHERE CODE_GROUP = 'DOCUMENT_STATUS' AND CODE = STATUS_CODE) AS STATUS_CODE_NAME,
+            TYPE_CODE, (SELECT CODE_NAME FROM EC_CODE WHERE CODE_GROUP = 'FOLDER_TYPE' AND CODE = TYPE_CODE) AS TYPE_CODE_NAME,
+            DELETOR_ID, DELETE_DATE, (SELECT BOX_ID FROM EC_BOX_FOLDER_MAPPING WHERE FOLDER_ID = F.FOLDER_ID) AS BOX_ID,
+            PARENT_FOLDER_ID, (SELECT FOLDER_NAME FROM EC_FOLDER WHERE FOLDER_ID = F.PARENT_FOLDER_ID) AS PARENT_FOLDER_NAME,
+            PERMISSION_ID, (SELECT PERMISSION_NAME FROM EC_PERMISSION WHERE PERMISSION_ID = F.PERMISSION_ID) AS PERMISSION_NAME,
+            (SELECT COUNT(*) FROM EC_FOLDER WHERE PARENT_FOLDER_ID = F.FOLDER_ID) AS CHILD_COUNT,
+            (SELECT COUNT(*) FROM EC_FOLDER_DOCUMENT_MAPPING WHERE FOLDER_ID = F.FOLDER_ID) AS DOC_COUNT
+        FROM EC_FOLDER F
+        WHERE FOLDER_ID = #{folderId}
+    </select>
+
+    <!-- 문서의 전체 폴더 경로 조회 -->
+    <select id="selectFolderInfoByDocId" resultMap="commonSql.Folder">
+        WITH CTE_FOLDER(FIRST_FOLDER_ID, FOLDER_ID, PARENT_FOLDER_ID, FOLDER_NAME, FULL_PATH) AS
+        (
+            SELECT FOLDER_ID, FOLDER_ID, PARENT_FOLDER_ID, FOLDER_NAME, FOLDER_NAME
+            FROM EC_FOLDER
+            WHERE FOLDER_ID IN (SELECT FOLDER_ID FROM EC_FOLDER_DOCUMENT_MAPPING WHERE DOC_ID = #{docId})
+            UNION ALL
+            SELECT C.FIRST_FOLDER_ID, B.FOLDER_ID, B.PARENT_FOLDER_ID, B.FOLDER_NAME, C.FULL_PATH
+            FROM EC_FOLDER B
+            INNER JOIN CTE_FOLDER C ON B.FOLDER_ID = C.PARENT_FOLDER_ID
+        )
+        SELECT A.FIRST_FOLDER_ID AS FOLDER_ID, A.FULL_PATH,
+            B.FOLDER_NAME, B.PARENT_FOLDER_ID, B.PERMISSION_ID, B.TYPE_CODE,
+            B.STATUS_CODE, (SELECT EC.CODE_NAME FROM EC_CODE EC WHERE EC.CODE_GROUP = 'DOCUMENT_STATUS' AND EC.CODE = B.STATUS_CODE) AS STATUS_CODE_NAME,
+            B.CREATOR_ID, B.CREATE_DATE, (SELECT USER_NAME FROM EC_USER WHERE USER_KEY = B.CREATOR_ID) AS CREATOR_NAME,
+            B.UPDATOR_ID, B.UPDATE_DATE, (SELECT USER_NAME FROM EC_USER WHERE USER_KEY = B.UPDATOR_ID) AS UPDATOR_NAME,
+            B.DELETOR_ID, B.DELETE_DATE, (SELECT USER_NAME FROM EC_USER WHERE USER_KEY = B.DELETOR_ID) AS DELETOR_NAME,
+            (SELECT COUNT(*) FROM EC_FOLDER WHERE PARENT_FOLDER_ID = B.FOLDER_ID) AS CHILD_COUNT
+        FROM CTE_FOLDER A
+        INNER JOIN EC_FOLDER B ON A.FIRST_FOLDER_ID = B.FOLDER_ID
+        WHERE A.PARENT_FOLDER_ID = '_TOP';
+    </select>
+
+    <!-- 폴더 등록 -->
+    <insert id="insertFolder" parameterType="Folder">
+        INSERT INTO EC_FOLDER
+        (
+            FOLDER_ID, FOLDER_NAME, PARENT_FOLDER_ID, CHILD_COUNT, PERMISSION_ID, STATUS_CODE,
+            IS_SYSTEM, IS_GROUP_ONLY, TYPE_CODE, CREATOR_ID, CREATE_DATE
+        )
+        VALUES
+        (
+            #{folderId}, #{folderName}, #{parentFolderId}, 0, #{permissionId}, #{statusCode},
+            #{isSystem}, #{isGroupOnly}, #{typeCode}, #{creatorId}, GETDATE()
+        )
+    </insert>
+
+    <!-- 폴더 수정 -->
+    <update id="updateFolder" parameterType="Folder">
+        UPDATE EC_FOLDER
+        <trim prefix="SET" suffixOverrides=",">
+            <if test = "@com.enixone.enixClever.cms.was.utils.CommonUtil@notEmpty(folderName)"> FOLDER_NAME = #{folderName},</if>
+            <if test = "@com.enixone.enixClever.cms.was.utils.CommonUtil@notEmpty(permissionId)"> PERMISSION_ID = #{permissionId},</if>
+            <if test = "@com.enixone.enixClever.cms.was.utils.CommonUtil@notEmpty(statusCode)"> STATUS_CODE = #{statusCode},</if>
+            <if test = "@com.enixone.enixClever.cms.was.utils.CommonUtil@notEmpty(typeCode)"> TYPE_CODE = #{typeCode},</if>
+            <if test = "@com.enixone.enixClever.cms.was.utils.CommonUtil@notEmpty(isGroupOnly)"> IS_GROUP_ONLY = #{isGroupOnly},</if>
+            <if test = "@com.enixone.enixClever.cms.was.utils.CommonUtil@notEmpty(isSystem)"> IS_SYSTEM = #{isSystem},</if>
+            UPDATOR_ID = #{updatorId},
+            UPDATE_DATE = GETDATE(),
+        </trim>
+        WHERE
+        FOLDER_ID = #{folderId}
+    </update>
+
+    <!-- 폴더 이름 변경 -->
+    <update id="updateFolderName" parameterType="Folder">
+        UPDATE EC_FOLDER
+        SET
+            FOLDER_NAME = #{folderName},
+            UPDATOR_ID = #{updatorId},
+            UPDATE_DATE = GETDATE()
+        WHERE
+        FOLDER_ID = #{folderId}
+    </update>
+
+    <!-- 자식 폴더 수 변경 -->
+    <update id="updateChildCount">
+        UPDATE EC_FOLDER
+        SET CHILD_COUNT = #{childCount}
+        WHERE
+        FOLDER_ID = #{folderId}
+    </update>
+
+    <!-- 폴더 삭제 -->
+    <delete id="deleteFolder">
+        DELETE FROM EC_FOLDER
+        WHERE
+        FOLDER_ID = #{folderId}
+    </delete>
+
+    <!--
+    ============================
+    =   EC_FOLDER_DOCUMENT_MAPPING 관련 쿼리
+    ============================
+    -->
+
+    <!-- 문서함 폴더 맵핑 등록 -->
+    <insert id="insertMappingFolderDoc">
+        INSERT INTO EC_FOLDER_DOCUMENT_MAPPING
+        (FOLDER_ID, DOC_ID, IS_LAST_DOC)
+        VALUES
+        (#{folderId}, #{docId}, 'Y')
+    </insert>
+
+    <!-- 구버전 문서로 수정 -->
+    <update id="updateOldVersionDoc">
+        UPDATE EC_FOLDER_DOCUMENT_MAPPING
+        SET IS_LAST_DOC = 'N'
+        WHERE DOC_ID = #{docId}
+    </update>
+
+    <!--
+    ======================================
+    =   EC_BOOKMARK_FOLDER 관련 쿼리
+    ======================================
+    -->
+
+    <!-- 즐겨찾는 폴더 추가 -->
+    <insert id="insertBookmarkFolder" parameterType="BookmarkFolder">
+        INSERT INTO EC_FOLDER_BOOKMARK
+        (BOOKMARK_ID, USER_KEY, FOLDER_ID, CREATE_DATE)
+        VALUES
+        (#{bookmarkId}, #{userKey}, #{folderId}, GETDATE())
+    </insert>
+
+    <!-- 북마크 폴더 삭제 -->
+    <delete id="deleteBookmarkFolder">
+        DELETE FROM EC_FOLDER_BOOKMARK
+        WHERE
+        USER_KEY = #{userKey}
+        AND FOLDER_ID = #{folderId}
+    </delete>
+
+    <!-- 사용자가의 북마크폴더 정보를 조회한다 -->
+    <select id="selectBookmarkFolderInfo" resultMap="commonSql.Folder">
+        SELECT
+            F.FOLDER_ID, F.FOLDER_NAME, F.PARENT_FOLDER_ID, F.PERMISSION_ID,
+            F.STATUS_CODE, F.TYPE_CODE, F.CREATOR_ID, F.CREATE_DATE, F.UPDATOR_ID, F.UPDATE_DATE,
+            F.DELETOR_ID, F.DELETE_DATE,
+            (SELECT COUNT(*) FROM EC_FOLDER WHERE PARENT_FOLDER_ID = F.FOLDER_ID) AS CHILD_COUNT,
+            (SELECT COUNT(*) FROM EC_FOLDER_DOCUMENT_MAPPING WHERE FOLDER_ID = F.FOLDER_ID) AS DOC_COUNT
+        FROM EC_FOLDER F
+        INNER JOIN EC_FOLDER_BOOKMARK BF ON F.FOLDER_ID = BF.FOLDER_ID
+            AND BF.USER_KEY = #{userKey}
+            AND BF.FOLDER_ID = #{folderId}
+    </select>
+
+    <!-- 사용자의 전체 북마크 폴더목록을 조회한다 -->
+    <select id="selectBookmarkFolderByUserKey" resultMap="commonSql.Folder">
+        SELECT
+            F.FOLDER_ID, F.FOLDER_NAME, F.PARENT_FOLDER_ID, F.PERMISSION_ID,
+            F.STATUS_CODE, F.TYPE_CODE, F.CREATOR_ID, F.CREATE_DATE, F.UPDATOR_ID, F.UPDATE_DATE,
+            F.DELETOR_ID, F.DELETE_DATE,
+            (SELECT COUNT(*) FROM EC_FOLDER WHERE PARENT_FOLDER_ID = F.FOLDER_ID) AS CHILD_COUNT,
+            (SELECT COUNT(*) FROM EC_FOLDER_DOCUMENT_MAPPING WHERE FOLDER_ID = F.FOLDER_ID) AS DOC_COUNT
+        FROM EC_FOLDER F
+        INNER JOIN EC_FOLDER_BOOKMARK BF ON F.FOLDER_ID = BF.FOLDER_ID AND BF.USER_KEY = #{userKey}
+    </select>
+    
+    
+    <!-- 전체 폴더 조회 -->
+    <select id="selectFolderListByBoxId" resultMap="commonSql.Folder">
+        SELECT * FROM EC_FOLDER
+        <if test = "folderName != null"> WHERE FOLDER_NAME LIKE '%' + #{folderName} + '%' ORDER BY FOLDER_NAME ASC</if>
+    </select> 
+    
+    
+</mapper>

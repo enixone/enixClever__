@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.enixone.enixClever.cms.was.dao.RoleDao">
+
+    <!--============================
+    =   EC_ROLE 관련 쿼리
+    ============================-->
+
+    <!-- 역할의 목록 조회 -->
+    <select id="selectRoleList" resultMap="commonSql.Role">
+        SELECT
+            ROLE_ID, ROLE_NAME, APPLY_FOLDERS, APPLY_DOCS,
+            APPLY_READ, APPLY_CREATE, APPLY_UPDATE, APPLY_DELETE, APPLY_LIST_VIEW, APPLY_PERMISSION, APPLY_ADMIN,
+            CREATOR_ID, CREATE_DATE, (SELECT USER_NAME FROM EC_USER WHERE USER_KEY = CREATOR_ID) AS CREATOR_NAME,
+            UPDATOR_ID, UPDATE_DATE, (SELECT USER_NAME FROM EC_USER WHERE USER_KEY = UPDATOR_ID) AS UPDATOR_NAME
+        FROM
+            EC_ROLE
+    </select>
+    
+    <!-- 역할의 목록 검색 autoCompleate에서 사용 -->
+    <select id="selectRoleListByGroupName" resultMap="commonSql.Role">
+        SELECT
+            ROLE_ID, ROLE_NAME, APPLY_FOLDERS, APPLY_DOCS,
+            APPLY_READ, APPLY_CREATE, APPLY_UPDATE, APPLY_DELETE, APPLY_LIST_VIEW, APPLY_PERMISSION, APPLY_ADMIN,
+            CREATOR_ID, CREATE_DATE, (SELECT USER_NAME FROM EC_USER WHERE USER_KEY = CREATOR_ID) AS CREATOR_NAME,
+            UPDATOR_ID, UPDATE_DATE, (SELECT USER_NAME FROM EC_USER WHERE USER_KEY = UPDATOR_ID) AS UPDATOR_NAME
+        FROM
+            EC_ROLE
+        <if test = "roleName != null"> WHERE ROLE_NAME LIKE '%' + #{roleName} + '%' ORDER BY ROLE_NAME ASC</if>
+    </select>
+
+    <!-- 역할의 목록 조회 (페이징) -->
+    <select id="selectRoleListPage" resultMap="commonSql.Role">
+        SELECT *
+        FROM (
+            SELECT
+                <include refid="commonSql.pagingSelect"/>
+                ROLE_ID, ROLE_NAME, APPLY_FOLDERS, APPLY_DOCS,
+                APPLY_READ, APPLY_CREATE, APPLY_UPDATE, APPLY_DELETE, APPLY_LIST_VIEW, APPLY_PERMISSION, APPLY_ADMIN,
+                CREATOR_ID, CREATE_DATE, (SELECT USER_NAME FROM EC_USER WHERE USER_KEY = CREATOR_ID) AS CREATOR_NAME,
+                UPDATOR_ID, UPDATE_DATE, (SELECT USER_NAME FROM EC_USER WHERE USER_KEY = UPDATOR_ID) AS UPDATOR_NAME
+            FROM
+                EC_ROLE
+        ) LIST
+        <include refid="commonSql.pagingWhere"/>
+    </select>
+
+    <!-- 역할의 상세정보 조회 -->
+    <select id="selectRoleInfo" resultMap="commonSql.Role">
+        SELECT
+            ROLE_ID, ROLE_NAME, APPLY_FOLDERS, APPLY_DOCS,
+            APPLY_READ, APPLY_CREATE, APPLY_UPDATE, APPLY_DELETE, APPLY_LIST_VIEW, APPLY_PERMISSION, APPLY_ADMIN,
+            CREATOR_ID, CONVERT(CHAR(10), CREATE_DATE, 23) AS CREATE_DATE, (SELECT USER_NAME FROM EC_USER WHERE USER_KEY = CREATOR_ID) AS CREATOR_NAME,
+            UPDATOR_ID, UPDATE_DATE, (SELECT USER_NAME FROM EC_USER WHERE USER_KEY = UPDATOR_ID) AS UPDATOR_NAME
+        FROM
+            EC_ROLE
+        WHERE
+            ROLE_ID = #{roleId}
+    </select>
+    
+    <!-- 역할/직책으로 검색 -->
+	<select id="searchRoleList" resultMap="commonSql.User">
+     	SELECT
+			ROLE_ID, ROLE_NAME
+  		FROM EC_ROLE
+  		WHERE ROLE_NAME LIKE '%${roleName}%' 
+  	</select>
+
+    <!-- 사용자의 역할 상세정보 조회 -->
+    <select id="selectRoleInfoByUserKey" resultMap="commonSql.Role">
+        SELECT
+            ROLE_ID, ROLE_NAME, APPLY_FOLDERS, APPLY_DOCS,
+            APPLY_READ, APPLY_CREATE, APPLY_UPDATE, APPLY_DELETE, APPLY_LIST_VIEW, APPLY_PERMISSION, APPLY_ADMIN,
+            CREATOR_ID, CREATE_DATE, (SELECT USER_NAME FROM EC_USER WHERE USER_KEY = CREATOR_ID) AS CREATOR_NAME,
+            UPDATOR_ID, UPDATE_DATE, (SELECT USER_NAME FROM EC_USER WHERE USER_KEY = UPDATOR_ID) AS UPDATOR_NAME
+        FROM
+            EC_ROLE
+        WHERE
+            ROLE_ID IN (SELECT ROLE_ID FROM EC_USER WHERE USER_KEY = #{userKey})
+    </select>
+
+    <!-- 역할 추가 -->
+    <insert id="insertRole" parameterType="Role">
+        INSERT INTO EC_ROLE
+        (
+            ROLE_ID, ROLE_NAME, APPLY_FOLDERS, APPLY_DOCS,
+            APPLY_READ, APPLY_CREATE, APPLY_UPDATE, APPLY_DELETE, APPLY_LIST_VIEW, APPLY_PERMISSION, APPLY_ADMIN,
+            CREATOR_ID, CREATE_DATE
+        )
+        VALUES
+        (
+            #{roleId}, #{roleName}, #{applyFolders}, #{applyDocs}, #{read}, #{create}, #{update},
+            #{delete}, #{listView}, #{permission}, #{admin}, #{creatorId}, GETDATE()
+        )
+    </insert>
+
+    <!-- 역할 수정 -->
+    <update id="updateRole" parameterType="Role">
+        UPDATE EC_ROLE
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="@com.enixone.enixClever.cms.was.utils.CommonUtil@notEmpty(roleName)"> ROLE_NAME = #{roleName},</if>
+            <if test="@com.enixone.enixClever.cms.was.utils.CommonUtil@notEmpty(applyFolders)"> APPLY_FOLDERS = #{applyFolders},</if>
+            <if test="@com.enixone.enixClever.cms.was.utils.CommonUtil@notEmpty(applyDocs)"> APPLY_DOCS = #{applyDocs},</if>
+            <if test="@com.enixone.enixClever.cms.was.utils.CommonUtil@notEmpty(read)"> APPLY_READ = #{read},</if>
+            <if test="@com.enixone.enixClever.cms.was.utils.CommonUtil@notEmpty(create)"> APPLY_CREATE = #{create},</if>
+            <if test="@com.enixone.enixClever.cms.was.utils.CommonUtil@notEmpty(update)"> APPLY_UPDATE = #{update},</if>
+            <if test="@com.enixone.enixClever.cms.was.utils.CommonUtil@notEmpty(delete)"> APPLY_DELETE = #{delete},</if>
+            <if test="@com.enixone.enixClever.cms.was.utils.CommonUtil@notEmpty(listView)"> APPLY_LIST_VIEW = #{listView},</if>
+            <if test="@com.enixone.enixClever.cms.was.utils.CommonUtil@notEmpty(permission)"> APPLY_PERMISSION = #{permission},</if>
+            <if test="@com.enixone.enixClever.cms.was.utils.CommonUtil@notEmpty(admin)"> APPLY_ADMIN = #{admin},</if>
+            UPDATOR_ID = #{updatorId},
+            UPDATE_DATE = GETDATE()
+        </trim>
+        WHERE ROLE_ID = #{roleId}
+    </update>
+
+    <!-- 역할 삭제 -->
+    <delete id="deleteRole">
+        DELETE FROM EC_ROLE
+        WHERE ROLE_ID = #{roleId}
+    </delete>
+
+    <!-- 역할이 할당된 사용자 수 조회 -->
+    <select id="countAssignUsers" resultType="int">
+        SELECT COUNT(*) AS TOTAL_COUNT
+        FROM EC_USER
+        WHERE ROLE_ID = #{roleId}
+    </select>
+
+	
+</mapper>

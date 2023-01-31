@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.enixone.enixClever.cms.was.dao.PermissionDao">
+
+
+    <!--============================
+    =   EC_PERMISSION 관련 쿼리
+    ============================-->
+
+    <!-- 권한 목록 조회 -->
+    <select id="selectPermissionList" resultMap="commonSql.Permission">
+        SELECT P.PERMISSION_ID, P.PERMISSION_NAME, P.IS_SYSTEM,
+            P.OWNER_ID,
+            CASE
+                WHEN P.OWNER_TYPE = 'GROUP' THEN G.GROUP_NAME
+                ELSE U.USER_NAME
+            END AS OWNER_NAME,
+            P.OWNER_TYPE, (SELECT CODE_NAME FROM EC_CODE WHERE CODE_GROUP = 'ASSIGN_TYPE' AND CODE = P.OWNER_TYPE) AS OWNER_TYPE_NAME,
+            P.CREATOR_ID, CONVERT(CHAR(16), P.CREATE_DATE, 20) AS CREATE_DATE, (SELECT USER_NAME FROM EC_USER WHERE USER_KEY = CREATOR_ID) AS CREATOR_NAME,
+            P.UPDATOR_ID, P.UPDATE_DATE, (SELECT USER_NAME FROM EC_USER WHERE USER_KEY = UPDATOR_ID) AS UPDATOR_NAME,
+            CONVERT(CHAR(16), P.LAST_ASSIGN_DATE, 20) AS LAST_ASSIGN_DATE
+        FROM EC_PERMISSION P
+        LEFT OUTER JOIN EC_GROUP G ON P.OWNER_ID = G.GROUP_ID
+        LEFT OUTER JOIN EC_USER U ON P.OWNER_ID = U.USER_KEY
+        ORDER BY P.LAST_ASSIGN_DATE DESC, P.PERMISSION_NAME ASC
+    </select>
+
+    <!-- 권한 목록 조회 (페이지) -->
+    <select id="selectPermissionListPage" resultMap="commonSql.Permission">
+        SELECT *
+        FROM (
+            SELECT
+            <include refid="commonSql.pagingSelect"/>
+            P.PERMISSION_ID, P.PERMISSION_NAME, P.IS_SYSTEM,
+                P.OWNER_ID,
+                CASE
+                    WHEN P.OWNER_TYPE = 'GROUP' THEN G.GROUP_NAME
+                    ELSE U.USER_NAME
+                END AS OWNER_NAME,
+                P.OWNER_TYPE, (SELECT CODE_NAME FROM EC_CODE WHERE CODE_GROUP = 'ASSIGN_TYPE' AND CODE = P.OWNER_TYPE) AS OWNER_TYPE_NAME,
+                P.CREATOR_ID, P.CREATE_DATE, (SELECT USER_NAME FROM EC_USER WHERE USER_KEY = CREATOR_ID) AS CREATOR_NAME,
+                P.UPDATOR_ID, P.UPDATE_DATE, (SELECT USER_NAME FROM EC_USER WHERE USER_KEY = UPDATOR_ID) AS UPDATOR_NAME
+            FROM EC_PERMISSION P
+            LEFT OUTER JOIN EC_GROUP G ON P.OWNER_ID = G.GROUP_ID
+            LEFT OUTER JOIN EC_USER U ON P.OWNER_ID = U.USER_KEY
+        ) LIST
+        <include refid="commonSql.pagingWhere"/>
+    </select>
+
+    <select id="selectPermissionInfo" resultMap="commonSql.Permission">
+        SELECT P.PERMISSION_ID, P.PERMISSION_NAME, P.IS_SYSTEM,
+            P.OWNER_ID,
+            CASE
+                WHEN P.OWNER_TYPE = 'GROUP' THEN G.GROUP_NAME
+                ELSE U.USER_NAME
+            END AS OWNER_NAME,
+            P.OWNER_TYPE, (SELECT CODE_NAME FROM EC_CODE WHERE CODE_GROUP = 'ASSIGN_TYPE' AND CODE = P.OWNER_TYPE) AS OWNER_TYPE_NAME,
+            P.CREATOR_ID, CONVERT(CHAR(10), P.CREATE_DATE, 23) AS CREATE_DATE, (SELECT USER_NAME FROM EC_USER WHERE USER_KEY = CREATOR_ID) AS CREATOR_NAME,
+            P.UPDATOR_ID, P.UPDATE_DATE, (SELECT USER_NAME FROM EC_USER WHERE USER_KEY = UPDATOR_ID) AS UPDATOR_NAME
+        FROM EC_PERMISSION P
+        LEFT OUTER JOIN EC_GROUP G ON P.OWNER_ID = G.GROUP_ID
+        LEFT OUTER JOIN EC_USER U ON P.OWNER_ID = U.USER_KEY
+        WHERE P.PERMISSION_ID = #{permissionId}
+    </select>
+
+    <!-- 권한 등록 -->
+    <insert id="insertPermission" parameterType="Permission">
+        INSERT INTO EC_PERMISSION
+        (PERMISSION_ID, PERMISSION_NAME, OWNER_ID, OWNER_TYPE, IS_SYSTEM, CREATOR_ID, CREATE_DATE)
+        VALUES
+        (#{permissionId}, #{permissionName}, #{ownerId}, #{ownerType}, #{isSystem}, #{creatorId}, GETDATE())
+    </insert>
+
+    <!-- 권한 수정 -->
+    <update id="updatePermission" parameterType="Permission">
+        UPDATE EC_PERMISSION
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="@com.enixone.enixClever.cms.was.utils.CommonUtil@notEmpty(permissionName)"> PERMISSION_NAME = #{permissionName},</if>
+            <if test="@com.enixone.enixClever.cms.was.utils.CommonUtil@notEmpty(isSystem)"> IS_SYSTEM = #{isSystem},</if>
+            <if test="@com.enixone.enixClever.cms.was.utils.CommonUtil@notEmpty(ownerId)"> OWNER_ID = #{ownerId},</if>
+            <if test="@com.enixone.enixClever.cms.was.utils.CommonUtil@notEmpty(ownerType)"> OWNER_TYPE = #{ownerType},</if>
+            UPDATOR_ID = #{updatorId},
+            UPDATE_DATE = GETDATE()
+        </trim>
+        WHERE PERMISSION_ID = #{permissionId}
+    </update>
+    
+    <!-- 권한 마지막 사용일 적용 -->
+    <update id="updateLastAssignDate" parameterType="Permission">
+        UPDATE EC_PERMISSION
+        	SET LAST_ASSIGN_DATE = GETDATE()
+        WHERE PERMISSION_ID = #{permissionId}
+    </update>
+    
+    <!-- 권한 이름 변경 -->
+    <update id="updatePermissionName">
+        UPDATE EC_PERMISSION
+        SET
+            PERMISSION_NAME = #{permissionName}
+        WHERE PERMISSION_ID = #{permissionId}
+    </update>
+
+    <!-- 권한 삭제 -->
+    <delete id="deletePermission">
+        DELETE FROM EC_PERMISSION
+        WHERE PERMISSION_ID = #{permissionId}
+    </delete>
+
+    <!-- 사용 가능한 권한 목록 조회 -->
+    <select id="selectAvailablePermission" resultMap="commonSql.Permission">
+        SELECT P.PERMISSION_ID, P.PERMISSION_NAME, P.IS_SYSTEM,
+            P.OWNER_ID,
+            CASE
+                WHEN P.OWNER_TYPE = 'GROUP' THEN G.GROUP_NAME
+                ELSE U.USER_NAME
+            END AS OWNER_NAME,
+            P.OWNER_TYPE, (SELECT CODE_NAME FROM EC_CODE WHERE CODE_GROUP = 'ASSIGN_TYPE' AND CODE = P.OWNER_TYPE) AS OWNER_TYPE_NAME,
+            P.CREATOR_ID, P.CREATE_DATE, (SELECT USER_NAME FROM EC_USER WHERE USER_KEY = CREATOR_ID) AS CREATOR_NAME,
+            P.UPDATOR_ID, P.UPDATE_DATE, (SELECT USER_NAME FROM EC_USER WHERE USER_KEY = UPDATOR_ID) AS UPDATOR_NAME,
+            CONVERT(CHAR(16), P.LAST_ASSIGN_DATE, 20) AS LAST_ASSIGN_DATE
+        FROM EC_PERMISSION P
+        LEFT OUTER JOIN EC_GROUP G ON P.OWNER_ID = G.GROUP_ID
+        LEFT OUTER JOIN EC_USER U ON P.OWNER_ID = U.USER_KEY
+        WHERE P.OWNER_ID = #{targetId} OR P.OWNER_ID IN (
+            SELECT GROUP_ID FROM EC_GROUP_ASSIGN WHERE USER_KEY = #{targetId}
+        )
+        ORDER BY P.LAST_ASSIGN_DATE DESC, P.PERMISSION_NAME ASC;
+    </select>
+
+    <!-- 권한을 사용중인 폴더 갯수 조회 -->
+    <select id="countAssignFolders" resultType="int">
+        SELECT COUNT(*) AS TOTAL_COUNT
+        FROM EC_FOLDER
+        WHERE PERMISSION_ID = #{permissionId} AND IS_SYSTEM != 'Y'
+    </select>
+
+    <!-- 권한을 사용중인 폴더 갯수 조회 -->
+    <select id="countAssignDocs" resultType="int">
+        SELECT COUNT(*) AS TOTAL_COUNT
+        FROM EC_DOCUMENT
+        WHERE PERMISSION_ID = #{permissionId}
+    </select>
+
+
+    <!--============================
+    =   EC_PERMISSION_ASSIGN 관련 쿼리
+    ============================-->
+
+    <!-- 권한의 모든 대상 목록 조회 -->
+    <select id="selectAssignListByPermissionId" resultMap="commonSql.AssignPermission">
+        SELECT
+            PERMISSION_ID, TARGET_ID,
+            CASE
+                WHEN TARGET_TYPE = 'GROUP' THEN (SELECT GROUP_NAME FROM EC_GROUP WHERE GROUP_ID = TARGET_ID)
+				WHEN TARGET_TYPE = 'ROLE' THEN (SELECT ROLE_NAME FROM EC_ROLE WHERE ROLE_ID = TARGET_ID)
+				ELSE (SELECT USER_NAME FROM EC_USER WHERE USER_KEY = TARGET_ID)
+            END AS TARGET_NAME,
+            TARGET_TYPE, (SELECT CODE_NAME FROM EC_CODE WHERE CODE_GROUP = 'ASSIGN_TYPE' AND CODE = TARGET_TYPE) AS TARGET_TYPE_NAME,
+            APPLY_READ, 
+            APPLY_CREATE, 
+            APPLY_UPDATE, 
+            APPLY_DELETE, 
+            APPLY_LIST_VIEW, 
+            APPLY_PERMISSION, 
+            APPLY_DOWNLOAD,
+            APPLY_EDIT,
+            APPLY_PRINT
+        FROM
+            EC_PERMISSION_ASSIGN
+        WHERE
+            PERMISSION_ID = #{permissionId}
+        ORDER BY 
+			TARGET_TYPE DESC,
+			CASE WHEN TARGET_ID = '_ALL' THEN TARGET_ID ELSE TARGET_NAME END
+    </select>
+
+    <!-- 권한 대상 추가 -->
+    <insert id="insertAssignPermission" parameterType="AssignPermission">
+        INSERT INTO EC_PERMISSION_ASSIGN
+        (
+            PERMISSION_ID, TARGET_ID, TARGET_NAME ,TARGET_TYPE, APPLY_READ, APPLY_CREATE, APPLY_UPDATE,
+            APPLY_DELETE, APPLY_LIST_VIEW, APPLY_PERMISSION, APPLY_DOWNLOAD, APPLY_EDIT, APPLY_PRINT
+        )
+        VALUES
+        (
+            #{permissionId}, #{targetId}, #{targetName} ,#{targetType}, #{read}, #{create}, #{update},
+            #{delete}, #{listView}, #{permission}, #{download}, #{edit}, #{print}
+        )
+    </insert>
+
+    <!-- 권한 대상 수정 -->
+    <update id="updateAssignPermission" parameterType="AssignPermission">
+        UPDATE EC_PERMISSION_ASSIGN
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="@com.enixone.enixClever.cms.was.utils.CommonUtil@notEmpty(read)"> APPLY_READ = #{read},</if>
+            <if test="@com.enixone.enixClever.cms.was.utils.CommonUtil@notEmpty(create)"> APPLY_CREATE = #{create},</if>
+            <if test="@com.enixone.enixClever.cms.was.utils.CommonUtil@notEmpty(update)"> APPLY_UPDATE = #{update},</if>
+            <if test="@com.enixone.enixClever.cms.was.utils.CommonUtil@notEmpty(delete)"> APPLY_DELETE = #{delete},</if>
+            <if test="@com.enixone.enixClever.cms.was.utils.CommonUtil@notEmpty(listView)"> APPLY_LIST_VIEW = #{listView},</if>
+            <if test="@com.enixone.enixClever.cms.was.utils.CommonUtil@notEmpty(permission)"> APPLY_PERMISSION = #{permission},</if>
+            <if test="@com.enixone.enixClever.cms.was.utils.CommonUtil@notEmpty(download)"> APPLY_DOWNLOAD = #{download},</if>
+            <if test="@com.enixone.enixClever.cms.was.utils.CommonUtil@notEmpty(edit)"> APPLY_EDIT = #{edit},</if>
+            <if test="@com.enixone.enixClever.cms.was.utils.CommonUtil@notEmpty(print)"> APPLY_PRINT = #{print},</if>
+        </trim>
+        WHERE PERMISSION_ID = #{permissionId}
+          AND TARGET_ID = #{targetId}
+    </update>
+
+    <!-- 권한 대상 삭제 -->
+    <delete id="deleteAssignPermission">
+        DELETE FROM EC_PERMISSION_ASSIGN
+        WHERE
+            PERMISSION_ID = #{permissionId}
+            AND TARGET_ID = #{targetId}
+        </delete>
+
+    <!-- 권한의 모든 대상 삭제 -->
+    <delete id="deleteAssignListByPermission">
+        DELETE FROM EC_PERMISSION_ASSIGN
+        WHERE
+            PERMISSION_ID = #{permissionId}
+    </delete>
+
+    <!-- 사용자의 권한을 계산하여 결과를 조회한다 -->
+    <select id="getUserPermission" resultMap="commonSql.AssignPermission">
+        SELECT
+            '${permissionId}' AS PERMISSION_ID,
+            MAX(APPLY_READ) AS APPLY_READ,
+            MAX(APPLY_CREATE) AS APPLY_CREATE,
+            MAX(APPLY_UPDATE) AS APPLY_UPDATE,
+            MAX(APPLY_DELETE) AS APPLY_DELETE,
+            MAX(APPLY_LIST_VIEW) AS APPLY_LIST_VIEW,
+            MAX(APPLY_PERMISSION) AS APPLY_PERMISSION,
+            MAX(APPLY_DOWNLOAD) AS APPLY_DOWNLOAD,
+            MAX(APPLY_EDIT) AS APPLY_EDIT,
+            MAX(APPLY_PRINT) AS APPLY_PRINT
+        FROM EC_PERMISSION P
+        INNER JOIN EC_PERMISSION_ASSIGN AP ON P.PERMISSION_ID = AP.PERMISSION_ID
+        WHERE
+        P.PERMISSION_ID = #{permissionId} AND
+        (
+            <!-- 사용자의 부서나, 사용자 본인이 권한의 소유자일 경우 -->
+            (
+                P.OWNER_TYPE = 'GROUP' AND P.OWNER_ID IN (SELECT GROUP_ID FROM EC_GROUP_ASSIGN WHERE USER_KEY = #{userKey})
+                OR
+                P.OWNER_TYPE = 'USER' AND P.OWNER_ID = #{userKey}
+            )
+            OR
+             <!-- 대상이 사용자의 부서나, 사용자 본인일 경우 -->
+            (
+                AP.TARGET_TYPE = 'GROUP' AND AP.TARGET_ID IN (SELECT GROUP_ID FROM EC_GROUP_ASSIGN WHERE USER_KEY = #{userKey})
+                OR
+                AP.TARGET_TYPE = 'USER' AND AP.TARGET_ID = #{userKey}
+            )
+        )
+    </select>
+
+</mapper>

@@ -1,0 +1,21 @@
+<div class="navigation_docubox active height100">
+	<div class="navigation-docubox-btnarea">
+		<div class="navigation-title"><a href="javascript:createDocument();"><img src="/enixClever/assets/images/icon_pen.png" class="pdR10">새문서 등록</a></div>
+	</div>
+	<div class="navigation-wrap-docubox cont-body-scroll">
+		<div id="groupBoxTree">
+		</div>
+</div>
+
+<!-- Fancytree -->
+<link rel="stylesheet" href="/enixClever/plugins/jquery-contextmenu/jquery.contextMenu.css">
+<link href="/enixClever/plugins/fancytree/skin-win8/ui.fancytree.css" rel="stylesheet">
+
+<script src="/enixClever/plugins/fancytree/jquery.fancytree-all.js"></script>
+<script src="/enixClever/plugins/fancytree/modules/jquery.fancytree.contextMenu.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $.getScript("/enixClever/cms/menu/boxTarget.js");
+    });
+</script>

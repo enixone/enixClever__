@@ -1,0 +1,80 @@
+<div class="sys-full-frm">
+	<div class="sys-frm-body-full">
+		<!-- 상단 -->
+		<div class="">
+			<div class="frm-title-wrap">
+				<div class="frm-title">권한 관리</div>
+			</div>
+			<div class="btnGroup">
+				<button class="btn btn-sm btn-line" onclick="evtCreatePermissionPopup()">등록</button>
+               	<button class="btn btn-sm btn-line" onclick="evtModifyPermissionPopup()">수정</button>
+             	<button class="btn btn-sm btn-line-accent" onclick="evtDeletePermissionPopup()">삭제</button>
+			</div>
+		</div>
+	
+		<!-- 하단 -->
+		<div class="sys-contents-area">
+			<!-- 좌측 -->
+			<div class="sys-leftList" style="width: 45%">
+				<div style="padding-right: 15px">
+				<!-- 테이블 -->
+					<table id="permissionListTable" class="text-nowrap table-lg mb-0 table table-hover">
+					 </table>
+					 <!-- 페이지 -->
+					 <div id="permissionListPagination" class="PageArea" style="position: relative; border-top: none;"></div>
+					 <!-- 리스트가 없는 경우 화면 출력 -->
+					 <div id="noDataDiv" class="dataDivision">
+						<div id="noDataImage" class="noDataImage">
+							<img src="/enixClever/manage/assets/images/loading.gif">
+						</div>
+						<div id="noDataMessage" class="txt-message"></div>
+					</div>
+				</div>
+			</div>
+			<!-- 우측 -->
+			<div class="sys-divContent" style="left: 45%; right: 1%">
+				<div class="sys-viewWrap">
+					<form name="permissionDetailForm">
+                        <table class="table-list">
+                        	<colgroup>
+                        		<col width="16%">
+                        		<col width="34%">
+                        		<col width="16%">
+                        		<col width="34%">
+                        	</colgroup>
+                        	<thead>
+								<tr> 
+									<th>명칭</th>
+									<td colspan="3"><input name="permissionName" type="text" class="sysTableinput" readonly></td>
+								</tr>
+								<tr> 
+									<th>소유자</th>
+									<td><input name="ownerName" type="text" class="sysTableinput" readonly></td>
+									<th>구분</th>
+									<td><input name="ownerType" type="text" class="sysTableinput" readonly></td>
+								</tr>
+								<tr> 
+									<th>생성자</th>
+									<td><input name="creatorName" type="text" class="sysTableinput" readonly></td>
+								</tr>
+								<tr> 
+									<th>생성일</th>
+									<td><input name="createDate" type="text" class="sysTableinput" readonly></td>
+								</tr>
+							</thead>
+						</table>
+							<div class="table-responsive" style="margin-top: 10px">
+								<table name="accessorListTable" border="0">
+								</table>	
+							</div>
+		            </form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>	         
+<script>
+	$(document).ready(function() {
+		$.getScript("/enixClever/manage/system/permissionManagement.js");
+	});
+</script>

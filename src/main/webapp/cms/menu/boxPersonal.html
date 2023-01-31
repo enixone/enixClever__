@@ -1,0 +1,24 @@
+<link rel="stylesheet" href="/enixClever/plugins/jstree/dist/themes/default/style.min.css" />
+
+<style>
+	.jsTreeCss { overflow:auto; border:1px solid silver; min-height:300px; width:250px;}
+</style>
+
+<div class="navigation_docubox active height100">
+	<div class="navigation-docubox-btnarea">
+		<div class="navigation-title"><a href="javascript:createDocument();"><img src="/enixClever/assets/images/icon_pen.png" class="pdR10">새문서 등록</a></div>
+	</div>
+	<div id="personalBoxTree"  class="jsTreeCss">
+	</div>
+</div>
+
+<script src="/enixClever/plugins/jstree/dist/jstree.min.js"></script>
+<link rel="stylesheet" href="/enixClever/plugins/jstree/themes/default/style.min.css" />
+	
+
+
+<script>
+    $(document).ready(function () {
+        $.getScript("/enixClever/cms/menu/boxPersonal.js");
+    });
+</script>

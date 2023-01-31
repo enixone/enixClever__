@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.enixone.enixClever.cms.was.dao.DocumentReClassficationDao">
+
+    <insert id="createReclassfication" parameterType="DocumentReClassfication">
+		INSERT INTO EC_DOCUMENT_RECLASSFICATION
+		(
+			RECLASS_ID
+           ,DOC_ID
+           ,WORKFLOW_ID
+           ,SECURITY_CODE
+           ,FOLDER_ID
+           ,EXPIRE_DATE
+           ,CREATOR_ID
+           ,CREATOR_NAME
+           ,CREATE_DATE
+        )			
+        VALUES
+       	(
+        	#{reclassId}, 
+        	#{docId}, 
+        	#{workflowId}, 
+        	#{securityCode}, 
+        	#{folderId}, 
+        	#{expireDate}, 
+        	#{creatorId}, 
+        	#{creatorName}, 
+        	GETDATE()
+       	)
+    </insert>
+</mapper>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <properties resource="resources/configuration.properties"/>
+    <typeAliases>
+        <typeAlias type="com.enixone.enixClever.cms.was.base.PaginationVO" alias="Pagination"/>
+        <typeAlias type="com.enixone.enixClever.cms.was.model.UserVO" alias="User"/>
+        <typeAlias type="com.enixone.enixClever.cms.was.model.FileVO" alias="File"/>
+        <typeAlias type="com.enixone.enixClever.cms.was.model.FolderVO" alias="Folder"/>
+        <typeAlias type="com.enixone.enixClever.cms.was.model.BookmarkFolderVO" alias="BookmarkFolder"/>
+        <typeAlias type="com.enixone.enixClever.cms.was.model.BoxVO" alias="Box"/>
+        <typeAlias type="com.enixone.enixClever.cms.was.model.DocumentVO" alias="Document"/>
+        <typeAlias type="com.enixone.enixClever.cms.was.model.DocumentReClassficationVO" alias="DocumentReClassfication"/>
+        <typeAlias type="com.enixone.enixClever.cms.was.model.DocumentBookmarkVO" alias="DocumentBookmark"/>
+        <typeAlias type="com.enixone.enixClever.cms.was.model.ChangeOwnerVO" alias="ChangeOwner"/>
+        <typeAlias type="com.enixone.enixClever.cms.was.model.WorkFlowVO" alias="WorkFlow"/>
+        <typeAlias type="com.enixone.enixClever.cms.was.model.GroupVO" alias="Group"/>
+        <typeAlias type="com.enixone.enixClever.cms.was.model.AssignPermissionVO" alias="AssignPermission"/>
+        <typeAlias type="com.enixone.enixClever.cms.was.model.PermissionVO" alias="Permission"/>
+        <typeAlias type="com.enixone.enixClever.cms.was.model.RoleVO" alias="Role"/>
+         <typeAlias type="com.enixone.enixClever.cms.was.model.CodeVO" alias="Code"/>
+        <typeAlias type="com.enixone.enixClever.cms.was.model.AssignDeptVO" alias="AssignDept"/>
+        <typeAlias type="com.enixone.enixClever.cms.was.model.TypeVO" alias="Type"/>
+        <typeAlias type="com.enixone.enixClever.cms.was.model.TypeItemVO" alias="TypeItem"/>
+        <typeAlias type="com.enixone.enixClever.cms.was.model.DocumentTypeItemVO" alias="DocumentTypeItem"/>
+        <typeAlias type="com.enixone.enixClever.cms.was.model.UrlLinkVO" alias="UrlLink"/>
+        <typeAlias type="com.enixone.enixClever.cms.was.model.DocumentHistoryVO" alias="DocumentHistory"/>
+        <typeAlias type="com.enixone.enixClever.cms.was.model.statistics.ActorStats" alias="ActorStats"/>
+        <typeAlias type="com.enixone.enixClever.cms.was.model.statistics.TypeStats" alias="TypeStats"/>
+        <typeAlias type="com.enixone.enixClever.cms.was.model.statistics.DocumentTrace" alias="DocumentTrace"/>
+    </typeAliases>
+
+    <mappers>
+        <mapper resource="mybatis/mapper/${db.dbms}/Box.xml"/>
+        <mapper resource="mybatis/mapper/${db.dbms}/Document.xml"/>
+        <mapper resource="mybatis/mapper/${db.dbms}/DocumentBookmark.xml"/>
+        <mapper resource="mybatis/mapper/${db.dbms}/DocumentReClassfication.xml"/>
+        <mapper resource="mybatis/mapper/${db.dbms}/Common.xml"/>
+        <mapper resource="mybatis/mapper/${db.dbms}/Code.xml"/>
+        <mapper resource="mybatis/mapper/${db.dbms}/User.xml"/>
+        <mapper resource="mybatis/mapper/${db.dbms}/File.xml"/>
+        <mapper resource="mybatis/mapper/${db.dbms}/Folder.xml"/>
+        <mapper resource="mybatis/mapper/${db.dbms}/Group.xml"/>
+        <mapper resource="mybatis/mapper/${db.dbms}/Permission.xml"/>
+        <mapper resource="mybatis/mapper/${db.dbms}/Role.xml"/>
+        <mapper resource="mybatis/mapper/${db.dbms}/Type.xml"/>
+        <mapper resource="mybatis/mapper/${db.dbms}/MyPrivate.xml"/>
+        <mapper resource="mybatis/mapper/${db.dbms}/Statistics.xml"/>
+        <mapper resource="mybatis/mapper/${db.dbms}/UrlLink.xml"/>
+        <mapper resource="mybatis/mapper/${db.dbms}/ChangeOwner.xml"/>
+        <mapper resource="mybatis/mapper/${db.dbms}/WorkFlow.xml"/>
+        <mapper resource="mybatis/mapper/${db.dbms}/DocumentHistory.xml"/>
+    </mappers>
+</configuration>

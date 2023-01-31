@@ -1,0 +1,47 @@
+
+<!-- 폴더선택 -->
+<div id="defaultModal1" class="modal">
+	<div class="modal-title">
+		저장할 위치를 선택해 주세요.
+		<div class="modal-btnGrp">
+			<a href="#" class="modal-close"><img src="/enixClever/assets/images/modal_cancel.png" alt=""></a>
+		</div>
+	</div>
+	<div class="modal-body"> 
+		<div class="modal_info_area">
+			<div class="info_copy">
+				<div class="tabs">
+					<a href="#" class="active">부서공유함</a>
+					<a href="#">공통공유함</a>
+				</div>
+				<div class="docubox_menu">
+					<div class="treeBox" id="groupBoxTree">
+					</div>
+					<!--div class="treeBox" id="emptyTreeMessage">
+					</div-->
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<a href="#" class="modal-save-btn" onclick="evtSubmitClick()">확인</a>
+		<a href="#" class="modal-cancle-btn" onclick="evtCancelClick()">취소</a>
+	</div>
+</div>
+
+<!-- Fancytree -->
+<link rel="stylesheet" href="/enixClever/plugins/jquery-contextmenu/jquery.contextMenu.css">
+<link href="/enixClever/plugins/fancytree/skin-win7/ui.fancytree.css" rel="stylesheet">
+
+<script src="/enixClever/plugins/fancytree/jquery.fancytree-all.js"></script>
+<script src="/enixClever/plugins/fancytree/modules/jquery.fancytree.contextMenu.js"></script>
+
+<script>
+    // 스크립트 로드 후 콜백을 전달한다
+    function loadScript(callback) {
+		$.getScript("/enixClever/cms/common/selectFolder.js");
+    }
+</script>
+
+
+

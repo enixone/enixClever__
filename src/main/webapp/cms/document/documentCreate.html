@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="subject" content="enixClever">
+<meta name="author" content="enixClever">
+<meta name="publisher" content="enixClever">
+<meta name="description" content="enixClever">
+<meta name="keywords" content="enixClever, 전자적비밀관리 시스템">
+<link rel="shortcut icon" type="image/x-icon" href="/enixClever/assets/images/favicon.ico" />
+<title>전자적 비밀관리(enixClever)</title>
+<link rel="stylesheet" type="text/css" href="/enixClever/assets/css/common.css">
+<link rel="stylesheet" type="text/css" href="/enixClever/assets/css/layout.css">
+<link rel="stylesheet" type="text/css" href="/enixClever/assets/css/modal.css">
+
+<link rel="stylesheet" type="text/css" href="/enixClever/plugins/plupload/jquery.plupload.queue/css/jquery.plupload.queue.css">
+</head>
+
+<body>
+<div id="wrap">
+	<div class="container-pop">
+		<div class="row">
+			<div id="btnGroup-pop" class="btnGroup-pop" style="background:#228B22;"> 
+				<a href="#" onclick="_docCreate.evtSubmitClick('ACTIVE')"><button class="btn btn-sm btn-line-none">등록</button></a>
+				<a href="#" onclick="_docCreate.evtSubmitClick('TEMP_SAVE')"><button class="btn btn-sm btn-line-none">임시저장</button></a>
+				<a href="#" onclick="window.close();"><button class="btn btn-sm btn-line-none">취소</button></a>
+			</div>
+		
+			<div class="frm-body-full"> 
+			<div id="write_info_area"  class="write_info_area">
+			<div id="secretImageTop" class="secretImage"><img src='/enixClever/assets/images/icon_secret_S3.png'></div>
+			<form name="documentCreateForm">
+			<input type="hidden" name="statusCode">
+			<input type="hidden" name="actorId" id="actorId">
+			<input type="hidden" name="creatorMessage" id="creatorMessage">
+				<input type="text" class="docName" name="docName" id="docName" tabindex="3" placeholder="문서제목을 입력하세요" style="width: 99%;" value="">
+				<table class="table-list" border="0">
+				<colgroup>
+					<col width="150px">
+					<col width="300px">
+					<col width="150px">
+					<col width="300px">
+				</colgroup>
+				<thead>
+					<tr>
+						<th class="text-center">저장경로</th> 
+						<td class="text-left" colspan="3">
+							<input type="text" name="folderName" id="folderName" class="tf_subject" placeholder="저장위치를 선택하세요"  style="width: 85%;" onClick="document.documentCreateForm.folderId.value = '';this.value='';" onchange="">
+							<input type="hidden" name="folderId" id="folderId" class="tf_subject" style="width: 85%;" value="74A000000001"><a href="#" onclick="_docCreate.evtSelectFolder();" class="btn_txtbt">저장위치</a>
+						</td>
+					</tr>
+					<tr>
+						<th class="text-center">보안등급</th>
+						<td class="text-left" colspan="3">
+							<div class="rDefault">
+								<input type="radio" name="securityCode" id="secuMF" value="S0"  onclick="displayImage(this);"/>
+								<label for="secuMF">평문</label>	
+								<input type="radio" name="securityCode" id="secu2G" value="S2" onclick="displayImage(this);"/>
+								<label for="secu2G" class="txt-red">Ⅱ급비밀</label>	
+								<input type="radio" name="securityCode" id="secu3G"  value="S3"  onclick="displayImage(this);" checked/>
+								<label for="secu3G" class="txt-red">Ⅲ급비밀</label>
+							</div>
+						</td>
+					</tr>
+					<tr id="divExpireCode" style="display:none;"> 
+						<th>보존연한</th>
+						<td class="text-left" colspan="3">
+							<div class="rDefault">
+								<input type="radio" name="expireCode" id="expire1Year" value="1YEAR" />
+								<label for="expire1Year">1년</label>	
+								<input type="radio" name="expireCode" id="expire3Year" value="3YEAR" />
+								<label for="expire3Year">3년</label>	
+								<input type="radio" name="expireCode" id="expire5Year" value="5YEAR" />
+								<label for="expire5Year">5년</label>	
+								<input type="radio" name="expireCode" id="expire10Year" value="10YEAR" checked/>
+								<label for="expire10Year">10년</label>	
+								<input type="radio" name="expireCode" id="expire99Year" value="UNLIMIT" />
+								<label for="expire99Year">영구</label>
+							</div>
+						</td>
+						
+					</tr>
+					<tr id="divApproval">
+						<th>예고문</th>
+						<td class="text-left" colspan="3">
+							<input type="text" name="expireDate" id="expireDate" class="tf_subject" tabindex="3" size="8" value="2028-12-12" readonly>
+						</td>
+					</tr> 
+					<tr>
+						<th class="text-center">문서유형</th>
+						<td class="text-left" colspan="3">
+							<div class="rDefault" name="docTypeId" id="docTypeId">
+							</div>
+						</td> 
+					</tr>
+					<tr height="80">
+						<th class="text-center">요약정보<BR/>(원본근거)</th> 
+						<td class="text-left" colspan="3">
+							<textarea name="description" class="textarea" placeholder="문서의 요약정보를 입력해 주세요"></textarea>					
+						</td>
+					</tr>
+					<tr>
+						<th class="text-center">접근권한</th> 
+						<td class="text-left" colspan="3" style="vertical-align:top;">
+							<div style="padding-bottom:10px;">
+								<input type="text" name="permissionName" id="permissionName"  placeholder="문서 권한을 입력하세요" style="width: 85%;font-weight:600;" >
+								<input type="hidden" name="permissionId" id="permissionId"><a href="#" onclick="_docCreate.evtSelectPermission();" class="btn_txtbt">권한선택</a>
+							</div>
+							<div name="selectPermissionDiv" class="divScrollBox" style="height:120px">
+								<table border="0" width="100%" class="permission-table" name="permissionListTable">
+								</table>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<th class="text-center">붙임파일</th> 
+						<td class="text-left" colspan="3">
+							<div name="fileUpload"></div>
+						</td>
+					</tr>
+				</thead>
+			</table>
+			<div id="secretImageBottom" class="secretImage"><img src='/enixClever/assets/images/icon_secret_S3.png'></div>
+			</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+
+
+<script type="text/javascript" src="/enixClever/plugins/jquery/js/jquery.min.js"></script>
+<script type="text/javascript" src="/enixClever/plugins/jquery-ui/js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="/enixClever/plugins/jquery.cookie/js/jquery.cookie.js"></script>
+<script type="text/javascript" src="/enixClever/plugins/jquery-contextmenu/jquery.contextMenu.js"></script>
+<script type="text/javascript" src="/enixClever/plugins/jquery-fileDownload/jquery.fileDownload.js"></script>
+
+
+<script type="text/javascript" src="/enixClever/plugins/plupload/plupload.full.min.js"></script>
+<script type="text/javascript" src="/enixClever/plugins/plupload/jquery.plupload.queue/jquery.plupload.queue.js"></script>
+<script type="text/javascript" src="/enixClever/plugins/plupload/i18n/ko.js" type="text/javascript"></script>
+
+<script type="text/javascript" src="/enixClever/plugins/sweetalert2/sweetalert2.all.js"></script>
+
+<script type="text/javascript" src="/enixClever/assets/javascript/dafault.js"></script>
+<script type="text/javascript" src="/enixClever/assets/javascript/common.js"></script>
+<script type="text/javascript" src="/enixClever/assets/javascript/enixAccessorList.js"></script>
+<script type="text/javascript" src="/enixClever/assets/javascript/enixFileList.js"></script>
+<script type="text/javascript" src="/enixClever/assets/javascript/enixForms.js"></script>
+<script type="text/javascript" src="/enixClever/assets/javascript/enixList.js"></script>
+<script type="text/javascript" src="/enixClever/assets/javascript/enixTable.js"></script>
+<script type="text/javascript" src="/enixClever/assets/javascript/ecSecurityCardTable.js"></script>
+<script type="text/javascript" src="/enixClever/assets/javascript/util.js"></script>
+
+<script type="text/javascript" src="/enixClever/assets/javascript/autocomplete.js"></script>
+
+<link rel="stylesheet" type="text/css" href="/enixClever/plugins/flatpickr/flatpickr.min.css">
+<script type="text/javascript" src="/enixClever/plugins/flatpickr/flatpickr.min.js"></script>
+<script type="text/javascript" src="/enixClever/plugins/flatpickr/ko.js"></script>
+
+
+
+<script>
+$(document).ready(function () {
+    $.getScript("/enixClever/cms/document/documentCreate.js");
+});
+
+
+var fp = flatpickr(document.getElementById("expireDate"), {
+	'monthSelectorType' : 'static',
+	"locale": "ko" 
+});
+
+fp.setDate(getToday(10));
+
+</script>
+
+</html>
+

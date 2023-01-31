@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.enixone.enixClever.cms.was.dao.TypeDao">
+
+    <!--============================
+    =   EC_TYPE 관련 쿼리
+    ============================-->
+
+    <!-- 속성 목록 조회 -->
+    <select id="selectTypeList" resultMap="commonSql.Type">
+        SELECT
+            TYPE_ID, TYPE_NAME, IS_BASE_TYPE
+        FROM
+            EC_TYPE
+        ORDER BY IDX ASC
+    </select> 
+
+    <!-- 속성 목록 조회 (페이징) -->
+    <select id="selectTypeListPage" resultMap="commonSql.Type">
+        SELECT *
+        FROM (
+            SELECT
+                <include refid="commonSql.pagingSelect"/>
+                TYPE_ID, TYPE_NAME, IS_BASE_TYPE
+            FROM
+                EC_TYPE
+        ) LIST
+        <include refid="commonSql.pagingWhere"/>
+    </select>
+
+    <!-- 속성 상세정보 조회 -->
+    <select id="selectTypeInfo" resultMap="commonSql.Type">
+        SELECT
+            TYPE_ID, TYPE_NAME, IS_BASE_TYPE
+        FROM
+            EC_TYPE
+        WHERE
+            TYPE_ID = #{typeId}
+    </select>
+
+    <!-- 속성 추가 -->
+    <insert id="insertType" parameterType="Type">
+        INSERT INTO EC_TYPE
+        (
+            TYPE_ID, TYPE_NAME, IS_BASE_TYPE
+        )
+        VALUES
+        (
+            #{typeId}, #{typeName}, #{isBaseType}
+        )
+    </insert>
+
+    <!-- 속성 수정 -->
+    <update id="updateType" parameterType="Type">
+        UPDATE EC_TYPE
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="@com.enixone.enixClever.cms.was.utils.CommonUtil@notEmpty(typeId)"> TYPE_ID = #{typeId},</if>
+            <if test="@com.enixone.enixClever.cms.was.utils.CommonUtil@notEmpty(typeName)"> TYPE_NAME = #{typeName},</if>
+            <if test="@com.enixone.enixClever.cms.was.utils.CommonUtil@notEmpty(isBaseType)"> IS_BASE_TYPE = #{isBaseType},</if>
+        </trim>
+        WHERE TYPE_ID = #{oldTypeId}
+    </update>
+
+    <!-- 속성 삭제 -->
+    <delete id="deleteType">
+        DELETE FROM EC_TYPE
+        WHERE TYPE_ID = #{typeId}
+    </delete>
+
+
+    <!--============================
+    =   EC_TYPE_ITEM 관련 쿼리
+    ============================-->
+
+    <!-- 속성 목록 조회 -->
+    <select id="selectTypeItemList" resultMap="commonSql.TypeItem">
+        SELECT
+            TYPE_ID, ITEM_ID, ITEM_NAME, SORT_NO
+        FROM
+            EC_TYPE_ITEM
+        WHERE
+            TYPE_ID = #{typeId}
+    </select>
+
+    <!-- 속성 상세정보 조회 -->
+    <select id="selectTypeItemInfo" resultMap="commonSql.TypeItem">
+        SELECT
+            TYPE_ID, ITEM_ID, ITEM_NAME, SORT_NO
+        FROM
+            EC_TYPE_ITEM
+        WHERE
+            TYPE_ID = #{typeId} AND ITEM_ID = #{itemId}
+    </select>
+
+    <!-- 속성 추가 -->
+    <insert id="insertTypeItem" parameterType="TypeItem">
+        INSERT INTO EC_TYPE_ITEM
+        (
+            TYPE_ID, ITEM_ID, ITEM_NAME, SORT_NO
+        )
+        VALUES
+        (
+            #{typeId}, #{itemId}, #{itemName}, #{sortNo}
+        )
+    </insert>
+
+    <!-- 속성 수정 -->
+    <update id="updateTypeItem" parameterType="TypeItem">
+        UPDATE EC_TYPE_ITEM
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="@com.enixone.enixClever.cms.was.utils.CommonUtil@notEmpty(itemName)"> ITEM_NAME = #{itemName},</if>
+            <if test="@com.enixone.enixClever.cms.was.utils.CommonUtil@notEmpty(sortNo)"> SORT_NO = #{sortNo},</if>
+        </trim>
+        WHERE TYPE_ID = #{typeId} AND ITEM_ID = #{itemId}
+    </update>
+
+    <!-- 속성 삭제 -->
+    <delete id="deleteTypeItem">
+        DELETE FROM EC_TYPE_ITEM
+        WHERE TYPE_ID = #{typeId} AND ITEM_ID = #{itemId}
+    </delete>
+
+    <!-- 문서 유형의 전체 속성 삭제 -->
+    <delete id="deleteTypeItemByTypeId">
+        DELETE FROM EC_TYPE_ITEM
+        WHERE TYPE_ID = #{typeId}
+    </delete>
+
+
+    <!--============================
+    =   EC_DOC_TYPE_ITEM 관련 쿼리
+    ============================-->
+
+
+    <!-- 문서 속성 목록 조회 -->
+    <select id="selectDocumentTypeItemList" resultMap="commonSql.DocumentTypeItem">
+        SELECT
+            DOC_ID, TYPE_ID, ITEM_VALUE,
+            ITEM_ID, (SELECT ITEM_NAME FROM EC_TYPE_ITEM WHERE TYPE_ID = DTI.TYPE_ID AND ITEM_ID = DTI.ITEM_ID) AS ITEM_NAME
+        FROM
+            EC_DOCUMENT_TYPE_ITEMS DTI
+        WHERE DOC_ID = #{docId}
+    </select>
+
+
+    <!-- 문서 속성 목록 추가 -->
+    <insert id="insertDocumentTypeItem" parameterType="DocumentTypeItem">
+        INSERT INTO EC_DOCUMENT_TYPE_ITEMS
+        (
+            DOC_ID, TYPE_ID, ITEM_ID, ITEM_VALUE
+        )
+        VALUES
+        (
+            #{docId}, #{typeId}, #{itemId}, #{itemValue}
+        )
+    </insert>
+
+
+    <!-- 문서 속성 삭제 -->
+    <delete id="deleteDocumentTypeItem">
+        DELETE FROM EC_DOCUMENT_TYPE_ITEMS
+        WHERE DOC_ID = #{docId}
+    </delete>
+
+</mapper>

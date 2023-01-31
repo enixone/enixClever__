@@ -1,0 +1,80 @@
+<div id="" class="modalM">
+	<div class="modal-title">
+		역할 수정
+		</div>
+		<div class="modal-btnGrp">
+			<a href="#" class="modal-close"><img src="/enixClever/assets/images/modal_cancel.png" alt=""></a>
+		</div>
+		<div class="modal-body">
+			<div class="write_info_area">
+				<form name="roleModifyForm">
+					<input name="roleId" type="hidden"/>
+					<table border="0">
+						<tr> 
+							<th><font class="txt-red">*</font>역할 명</th>
+							<td><input type="text" name="roleName" id="Subject" tabindex="3" placeholder="역할명을 입력하세요" style="width:99%;"></td>
+						</tr>
+						<tr> 
+							<th><font class="txt-red">*</font>역할 설정</th>
+								<td>
+				                    <table name="accessorListTable" class="text-nowrap table-lg mb-0 table table-hover">
+				                    </table>
+								</td>
+						</tr>
+					</table>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<a href="#" onclick="_roleModify.evtSubmitClick()" class="modal-save-btn">확인</a>
+				<a href="#" onclick="_roleModify.evtCancelClick()" class="modal-cancle-btn">취소</a>
+			</div>
+		</div>
+</div>
+
+<script>
+    // 스크립트 로드 후 콜백을 전달한다
+    function loadScript(callback) {
+       $.getScript("./cms/role/roleModify.js", callback);
+    }
+</script>
+
+
+
+
+<!-- 
+<div class="card md-content">
+    <div class="card-body"><h5 class="card-title">역할 수정</h5>
+        <form name="roleModifyForm" >
+            <input name="roleId" type="hidden"/>
+            <div class="position-relative row form-group">
+                <label class="col-sm-2 col-form-label">역할 명</label>
+                <div class="col-sm-10">
+                    <input name="roleName" placeholder="역할 이름을 입력하세요" type="text" class="form-control">
+                </div>
+            </div>
+            <div class="position-relative row form-group">
+                <label class="col-sm-2 col-form-label">역할 설정</label>
+                <div class="col-sm-10">
+                    <table name="accessorListTable" class="text-nowrap table-lg mb-0 table table-hover">
+                    </table>
+                </div>
+            </div>
+        </form>
+
+        하단 버튼 부분
+        <div class="d-block text-right card-footer">
+            <button onclick="_roleModify.evtCancelClick()" class="mr-2 btn btn-link btn-sm">취소</button>
+            <button onclick="_roleModify.evtSubmitClick()" class="btn btn-success btn-lg">확인</button>
+        </div>
+    </div>
+</div>
+
+
+<script src="./cms/role/roleModify.js?t=<?=time()?>"/>
+<script>
+    // 스크립트 로드 후 콜백을 전달한다
+    function loadScript(callback) {
+        $.getScript("./cms/role/roleModify.js", callback);
+    }
+</script>
+ -->

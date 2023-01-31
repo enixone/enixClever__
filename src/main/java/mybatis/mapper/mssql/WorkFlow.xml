@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.enixone.enixClever.cms.was.dao.WorkFlowDao">
+    <!-- 워크플로드 등록 -->
+    <insert id="insertWorkFlow" parameterType="WorkFlow">
+        INSERT INTO EC_WORKFLOW
+        (WORKFLOW_ID,DOC_ID,WORKFLOW_TYPE,WORKFLOW_STATUS,WORKFLOW_OWNER,CREATOR_ID,CREATOR_NAME,CREATION_DATE,CREATOR_MESSAGE,IS_COMPLETED)
+        VALUES
+        (
+        	#{workflowId},
+			#{docId},    
+			#{workflowType},
+			#{workflowStatus},
+			#{workflowOwner},
+			#{creatorId},
+			#{creatorName},
+			GETDATE(),
+			#{creatorMessage, jdbcType=VARCHAR},
+			'0'
+		)
+    </insert>
+    
+    <!-- 워크플로우 처리(actor) 정보 업데이트 -->
+    <update id="updateWorkFlow">
+    	UPDATE EC_WORKFLOW
+		SET	WORKFLOW_STATUS = #{workflowStatus}, 
+			ACTOR_ID = #{actorId},
+			ACTOR_NAME = #{actorName},
+			ACTOR_MESSAGE = #{actorMessage},
+			ACTION_DATE = GETDATE(),
+		    COMPLETED_DATE = GETDATE(),
+		    IS_COMPLETED = 1
+		WHERE WORKFLOW_ID = #{workflowId};
+    </update>
+    
+    
+    <!-- 워크플로우 처리 후 문서 상태정보 업데이트 -->
+    <update id="updateDocumentStatus">
+    	UPDATE EC_DOCUMENT
+		SET	STATUS_CODE = #{documentStatus},
+			STATUS_CODE_NAME = (SELECT CODE_NAME FROM EC_CODE WHERE CODE_GROUP = 'DOCUMENT_STATUS' AND CODE = #{documentStatus})
+		WHERE DOC_ID = #{docId};
+    </update>
+    
+    
+    <!-- 결제대상 워크플로우 존재여부 조회 -->
+    <select id="getWorkFlowId" resultType="String">
+    	SELECT WORKFLOW_ID FROM EC_WORKFLOW
+		WHERE WORKFLOW_TYPE = #{workflowType} AND DOC_ID = #{docId} AND WORKFLOW_OWNER = #{userKey} AND IS_COMPLETED = '0'
+    </select>
+    
+    
+    <!-- 문서상세정보에서 결재대상 아이템을 가지고 온다.  -->
+    <select id="getWorkFlowApploval" resultMap="commonSql.WorkFlow">
+    	SELECT 
+			EW.WORKFLOW_ID,
+			EW.DOC_ID,
+			EW.WORKFLOW_TYPE,
+			(SELECT EC.CODE_NAME FROM EC_CODE EC WHERE EC.CODE_GROUP = 'WORKFLOW_TYPE' AND EC.CODE = EW.WORKFLOW_TYPE) AS WORKFLOW_TYPE_NAME,
+			EW.WORKFLOW_STATUS,
+			(SELECT EC.CODE_NAME FROM EC_CODE EC WHERE EC.CODE_GROUP = 'WORKFLOW_STATUS' AND EC.CODE = EW.WORKFLOW_STATUS) AS WORKFLOW_STATUS_NAME,
+			EW.CREATOR_ID,
+			CONCAT(EU.USER_NAME,' ',EU.POSITION_NAME,'/',EU.GROUP_NAME) AS CREATOR_INFO,
+			CONVERT(CHAR(16), EW.CREATION_DATE, 20) AS CREATION_DATE, 
+			EW.CREATOR_MESSAGE
+		FROM EC_WORKFLOW EW
+		INNER JOIN EC_USER EU ON EU.USER_KEY = EW.WORKFLOW_OWNER
+		WHERE DOC_ID = #{docId} AND WORKFLOW_OWNER = #{userKey}  AND IS_COMPLETED = '0'
+    </select>
+    
+    
+</mapper>
+

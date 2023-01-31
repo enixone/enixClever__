@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="subject" content="enixClever">
+<meta name="author" content="enixClever">
+<meta name="publisher" content="enixClever">
+<meta name="description" content="enixClever">
+<meta name="keywords" content="enixClever, 전자적비밀관리 시스템">
+<link rel="shortcut icon" type="image/x-icon" href="/enixClever/assets/images/favicon.ico" />
+<title>전자적 비밀관리(enixClever)</title>
+<link rel="stylesheet" type="text/css" href="/enixClever/assets/css/common.css">
+<link rel="stylesheet" type="text/css" href="/enixClever/assets/css/layout.css">
+<link rel="stylesheet" type="text/css" href="/enixClever/assets/css/modal.css">
+
+</head>
+
+<body>
+<div id="wrap"> 
+	<div id="header">
+		<div class="top">
+			<a href="/enixClever" class="logo-area"><img src="/enixClever/assets/images/logo.png" alt="에닉스클레버" /></a>
+		</div>
+	</div>
+	<!-- 좌측 영역 -->
+	<div class="container">
+		<!-- 좌측 메뉴 -->
+		<div class="navigation active" id=leftMenuDiv></div>
+		
+		<!-- 좌측 하단 영역 -->
+		<div id="bottom_capa">
+			<!--div class="progress1">
+				<div class="capatxt"><span>12.1GB</span> / 20GB</div>
+				<div class="capatxt_s"><a href="#">개인함현황</a></div>
+				<div class="barstick"><div class="barfill" style="width:50%;"></div></div>
+			</div-->
+			<div class="txtbt">
+				<a href="#"  onclick="fnUserConfig()"><span>환경설정</span></a><i></i>
+				<a href="#">도움말</a>
+				<a href="#" onclick="fnLogout()">로그아웃</a>
+			</div>
+		</div>
+	</div>
+	
+	<div class="container-wrap active">
+		<div id="topmenu">
+			<ul class="navi">
+				<li class="toplist on"><a href="#" onclick="evtGoMenu('myDocument')">내문서함<span class="close"></span></a></li>
+				<li class="toplist"><a href="#" onClick="evtGoMenu('boxGroup')">부서문서함<span class=""></span></a></li>
+				<li class="toplist"><a href="#" onClick="evtGoMenu('boxTarget')">표적분류함<span class=""></span></a></li>
+			</ul>
+		</div>
+		<div class="navi-group">
+			<div id="search">
+			</div>
+			<div id="adminBtn" class="adminBtn">
+				<a href="#" onclick="evtGoSystem()"><img src="/enixClever/assets/images/btn_setting.png" alt=""></a>
+			</div>
+			
+								
+		</div>
+		<div class="container-full" id="mainContentDiv">
+		</div>
+	</div>
+	
+</div>
+
+<!-- 사용자 프로필 영역 -->
+<div id="userProfileDiv" class="header-btn-lg pr-0">
+	<div name="userName" class="widget-heading">
+	</div>
+	<div name="groupName" class="widget-subheading">
+	</div>
+</div>
+
+</body>
+<script type="text/javascript" src="/enixClever/plugins/jquery/js/jquery.min.js"></script>
+<script type="text/javascript" src="/enixClever/plugins/jquery-ui/js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="/enixClever/plugins/jquery.cookie/js/jquery.cookie.js"></script>
+<script type="text/javascript" src="/enixClever/plugins/jquery-contextmenu/jquery.contextMenu.js"></script>
+<script type="text/javascript" src="/enixClever/plugins/jquery-fileDownload/jquery.fileDownload.js"></script>
+
+<script type="text/javascript" src="/enixClever/plugins/sweetalert2/sweetalert2.all.js"></script>
+
+<script type="text/javascript" src="/enixClever/assets/javascript/dafault.js"></script>
+<script type="text/javascript" src="/enixClever/assets/javascript/common.js"></script>
+<script type="text/javascript" src="/enixClever/assets/javascript/enixAccessorList.js"></script>
+<script type="text/javascript" src="/enixClever/assets/javascript/enixFileList.js"></script>
+<script type="text/javascript" src="/enixClever/assets/javascript/enixForms.js"></script>
+<script type="text/javascript" src="/enixClever/assets/javascript/enixList.js"></script>
+<script type="text/javascript" src="/enixClever/assets/javascript/enixTable.js"></script>
+<script type="text/javascript" src="/enixClever/assets/javascript/ecSecurityCardTable.js"></script>
+<script type="text/javascript" src="/enixClever/assets/javascript/util.js"></script>
+
+<script type="text/javascript" src="/enixClever/assets/javascript/autocomplete.js"></script>
+
+<script>
+$(document).ready(function () {
+    $.getScript("/enixClever/cms/index.js");
+});
+</script>
+</html>

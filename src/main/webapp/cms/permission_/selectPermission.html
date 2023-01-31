@@ -1,0 +1,45 @@
+<div name="selectPermissionDiv">
+	<div class="modal-title">
+		접근권한 목록
+		<div class="modal-btnGrp">
+			<a href="#" class="modal-close"><img src="/enixClever/assets/images/modal_cancel.png" alt=""></a>
+		</div>
+	</div>
+	<div class="modal-body">
+		<div class="modal_info_area">
+		<div class="info_access">
+			<dl>
+				<dt>권한목록</dt>
+				<dd>
+					<div class="cont-body-scroll height170 border-top1">
+						<table name="permissionListTable">
+
+                        </table>
+					</div>
+				</dd>
+			</dl>
+		</div>
+		<div class="info_access">
+			<dl>
+				<dt>적용대상</dt>
+				<dd>
+				<table name="accessorListTable" border="0" class="table-list table-hover"></table>
+				</dd>
+			</dl>
+		</div>
+	</div>
+	</div>
+	<div class="modal-footer">
+		<a href="#" onClick="_selectPermission.evtSubmitClick()" class="modal-save-btn">적용</a>
+		<a href="#" onClick="_selectPermission.evtCancelClick()" class="modal-cancle-btn">취소</a>
+		<a href="#" class="modal-newmake-btn rel-pop1">새로 만들기</a>
+	</div>
+</div>
+<!-- 접근권한 목록 end -->
+
+<script>
+    // 스크립트 로드 후 콜백을 전달한다
+    function loadScript(callback) {
+        $.getScript("/enixClever/cms/permission/selectPermission.js", callback);
+    }
+</script>

@@ -1,0 +1,144 @@
+<div id="" class="modalM">
+	<div class="modal-title">
+		사용자 등록
+		</div>
+		<div class="modal-btnGrp">
+			<a href="#" class="modal-close"><img src="/enixClever/assets/images/modal_cancel.png" alt=""></a>
+		</div>
+		<div class="modal-body">
+			<div class="write_info_area">
+				<form name="permissionModifyForm">
+						<table border="0">
+						<tr> 
+							<th><font class="txt-red">*</font>권한 명</th>
+							<td><input type="text" name="permissionName" id="Subject" tabindex="3" placeholder="권한 이름을 입력하세요" style="width: 99%;"></td>
+						</tr>
+						<tr> 
+							<th><font class="txt-red">*</font>시스템 권한</th>
+							<td>
+								<div class="custom-checkbox custom-control p-t-5">
+		                        	<input type="checkbox" name="isSystem" id="permissionIsSystem_create" class="custom-control-input">
+		                        	<label class="custom-control-label" for="permissionIsSystem_create"></label>
+		                    	</div>
+		                    </td>
+						</tr>
+						<tr> 
+							<th><font class="txt-red">*</font>소유자</th>
+							<td>
+								<div class="custom-radio custom-control float-left">
+			                        <input type="radio" id="permCreate_owner_me" name="ownerType" class="custom-control-input" value="USER" checked>
+			                        <label class="custom-control-label" for="permCreate_owner_me">내 소유</label>
+			                    </div>
+			                    <div class="custom-radio custom-control float-left m-l-20">
+			                        <input type="radio" id="permCreate_owner_group" name="ownerType" class="custom-control-input" value="GROUP">
+			                        <label class="custom-control-label" for="permCreate_owner_group">부서 소유</label>
+			                    </div>
+			                    <div class="offset-2 col-10 hidden" name="groupSelectDiv">
+				                    <i class="header-icon lnr-users "></i>
+				                    <label name="ownerName"></label>
+				                    <button type="button" onclick="_permCreate.evtSelectOwner()" class="m-l-10 btn-transition btn btn-outline-primary btn-sm">소유자 설정</button>
+				                </div>
+							</td>
+						</tr>
+					</table>
+					<div class="position-relative row form-group">
+		                <label class="col-sm-2 col-form-label">권한 할당</label>
+		                <div class="test-blockline">
+		                    <div class="float-right">
+		                        <button type="button" onclick="_permCreate.evtAddAccessor()" class="mb-2 mr-2 btn-transition btn btn-outline-primary">대상 추가</button>
+		                    </div>
+		                    <table name="accessorListTable" class="text-nowrap table-lg mb-0 table table-hover">
+		                    </table>
+		                    <div name="noDataMessage" class="text-danger text-center mt-2">
+		                        대상을 추가해야 합니다.
+		                    </div>
+		                </div>
+		            </div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<a href="#" onclick="_userCreate.evtSubmitClick()" class="modal-save-btn">확인</a>
+				<a href="#" onclick="_userCreate.evtCancelClick()" class="modal-cancle-btn">취소</a>
+			</div>
+		</div>
+</div>
+
+<script>
+    // 스크립트 로드 후 콜백을 전달한다
+    function loadScript(callback) {
+       $.getScript("./cms/permission/permissionModify.js", callback);
+    }
+</script>
+
+<!-- <div class="card md-content">
+    <div class="card-body">
+        <h5 class="card-title">권한 수정</h5>
+        <form name="permissionModifyForm" >
+            <input type="hidden" name="permissionId"/>
+            <input type="hidden" name="ownerId">
+            <div class="position-relative row form-group">
+                <label class="col-sm-2 col-form-label">권한 명</label>
+                <div class="test-blockline">
+                    <input name="permissionName" placeholder="권한 이름을 입력하세요" type="text" class="form-control">
+                </div>
+            </div>
+            <div class="position-relative row form-group">
+                <label class="col-sm-2 col-form-label">시스템 권한</label>
+                <div class="test-blockline">
+                    <div class="custom-checkbox custom-control p-t-5">
+                        <input type="checkbox" name="isSystem" id="permissionIsSystem_modify" class="custom-control-input">
+                        <label class="custom-control-label" for="permissionIsSystem_modify"></label>
+                    </div>
+                </div>
+            </div>
+            <div class="position-relative row form-group">
+                <label class="col-sm-2 col-form-label">소유자</label>
+                <div class="test-blockline">
+
+                    <div class="custom-radio custom-control float-left">
+                        <input type="radio" id="permCreate_owner_me" name="ownerType" class="custom-control-input" value="USER" checked>
+                        <label class="custom-control-label" for="permCreate_owner_me">내 소유</label>
+                    </div>
+                    <div class="custom-radio custom-control float-left m-l-20">
+                        <input type="radio" id="permCreate_owner_group" name="ownerType" class="custom-control-input" value="GROUP">
+                        <label class="custom-control-label" for="permCreate_owner_group">부서 소유</label>
+                    </div>
+                </div>
+                <div class="offset-2 col-10 hidden" name="groupSelectDiv">
+                    <i class="header-icon lnr-users "> </i>
+                    <label name="ownerName"></label>
+                    <button type="button" onclick="_permModify.evtSelectOwner()" class="m-l-10 btn-transition btn btn-outline-primary btn-sm">소유자 설정</button>
+
+                </div>
+            </div>
+            <div class="position-relative row form-group">
+                <label class="col-sm-2 col-form-label">권한 할당</label>
+                <div class="test-blockline">
+                    <div class="float-right">
+                        <button type="button" onclick="_permModify.evtAddAccessor()" class="mb-2 mr-2 btn-transition btn btn-outline-primary">대상 추가</button>
+                    </div>
+                    <table name="accessorListTable" class="text-nowrap table-lg mb-0 table table-hover">
+                    </table>
+                    <div name="noDataMessage" class="text-danger text-center mt-2">
+                        대상을 추가해야 합니다.
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        하단 버튼 부분
+        <div class="d-block text-right card-footer">
+            <button onclick="_permModify.evtCancelClick()" class="mr-2 btn btn-link btn-sm">취소</button>
+            <button onclick="_permModify.evtSubmitClick()" class="btn btn-success btn-lg">확인</button>
+        </div>
+    </div>
+</div>
+
+
+<script src="./cms/permission/permissionModify.js?t=<?=time()?>"/>
+<script>
+    // 스크립트 로드 후 콜백을 전달한다
+    function loadScript(callback) {
+        $.getScript("./cms/permission/permissionModify.js", callback);
+    }
+</script> -->

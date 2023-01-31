@@ -1,0 +1,72 @@
+
+<!-- 폴더선택 -->
+<div id="defaultModal1" class="modal">
+	<div class="modal-title">
+		환경설정
+		<div class="modal-btnGrp">
+			<a href="#"  onclick="evtCancelClick()" class="modal-close"><img src="/enixClever/assets/images/modal_cancel.png" alt=""></a>
+		</div>
+	</div>
+	<div class="modal-body"> 
+		<div class="modal_info_area" style="padding:0px 10px 0px 10px;">
+			<table class="table-list" border="0">
+				<colgroup>
+					<col width="100px">
+					<col width="*">
+				</colgroup>
+				<thead>
+					<tr>
+						<th class="text-center">문서함 목록</th> 
+						<td class="text-left">
+							<div class="rDefault">
+								<input type="radio" name="securityCode" id="secuMF" value="S0"  onclick="displayImage(this);" checked/>
+								<label for="secuMF">10개</label>
+								<input type="radio" name="securityCode" id="secuMF" value="S0"  onclick="displayImage(this);" checked/>
+								<label for="secuMF">15개</label>
+								<input type="radio" name="securityCode" id="secuMF" value="S0"  onclick="displayImage(this);" checked/>
+								<label for="secuMF">20개</label>
+								<input type="radio" name="securityCode" id="secuMF" value="S0"  onclick="displayImage(this);" checked/>
+								<label for="secuMF">30개</label>
+								<input type="radio" name="securityCode" id="secuMF" value="S0"  onclick="displayImage(this);" checked/>
+								<label for="secuMF">50개</label>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<th>대리결재자</th>
+						<td class="text-left">
+							<div class="rDefault">
+								<input type="hidden" name="actorId" id="actorId" class="tf_subject">
+								<input type="text" name="actorName" id="actorName" class="tf_subject" style="width:200px" readonly><a href="#" onclick="_workflowStep.evtSelectUser('actorId','actorName');" class="btn_txtbt">승인자 선택</a>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<th>전자서명파일</th>
+						<td class="text-left">
+							<div>
+								<input type="file" name="actorId" id="actorId" class="tf_subject"  style="width:300px" size="24">
+							</div>
+						</td>
+					</tr>
+				</thead>
+			</table>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<a href="#" class="modal-save-btn" onclick="evtSubmitClick()">확인</a>
+		<a href="#" class="modal-cancle-btn" onclick="evtCancelClick()">취소</a>
+	</div>
+</div>
+
+<!-- 폴더선택 end -->
+
+<script>
+    // 스크립트 로드 후 콜백을 전달한다
+    function loadScript(callback) {
+		$.getScript("/enixClever/cms/common/selectFolder.js");
+    }
+</script>
+
+
+

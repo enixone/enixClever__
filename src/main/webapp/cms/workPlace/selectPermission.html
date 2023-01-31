@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="subject" content="enixClever">
+<meta name="author" content="enixClever">
+<meta name="publisher" content="enixClever">
+<meta name="description" content="enixClever">
+<meta name="keywords" content="enixClever, 전자적비밀관리 시스템">
+<link rel="shortcut icon" type="image/x-icon" href="/enixClever/assets/images/favicon.ico" />
+<title>enixClever</title>
+<link rel="stylesheet" type="text/css" href="/enixClever/assets/css/common.css">
+<link rel="stylesheet" type="text/css" href="/enixClever/assets/css/layout.css">
+<link rel="stylesheet" type="text/css" href="/enixClever/assets/css/modal.css">
+
+<link rel="stylesheet" type="text/css" href="/enixClever/plugins/plupload/jquery.plupload.queue/css/jquery.plupload.queue.css">
+</head>
+
+<body>
+
+<!-- 폴더선택 -->
+<div id="defaultModal1" class="modal">
+	<div class="modal-title">
+		저장할 위치를 선택해 주세요.
+		<div class="modal-btnGrp">
+			<a href="#" class="modal-close"><img src="/enixClever/assets/images/modal_cancel.png" alt=""></a>
+		</div>
+	</div>
+	<div class="modal-body">
+		<div class="modal_info_area">
+			<div class="info_copy">
+				<div class="tabs">
+					<a href="#" class="active">부서공유함</a>
+					<a href="#">공통공유함</a>
+				</div>
+				<div class="docubox_menu">
+					<div class="treeBox" id="groupBoxTree">
+					</div>
+					<div class="treeBox" id="emptyTreeMessage">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<a href="#" class="modal-save-btn">확인</a>
+		<a href="#" class="modal-cancle-btn">취소</a>
+	</div>
+</div>
+
+<!-- 폴더선택 end -->
+
+
+<script type="text/javascript" src="/enixClever/plugins/jquery/js/jquery.min.js"></script>
+
+<script type="text/javascript" src="/enixClever/plugins/plupload/plupload.full.min.js"></script>
+<script type="text/javascript" src="/enixClever/plugins/plupload/jquery.plupload.queue/jquery.plupload.queue.js"></script>
+<script type="text/javascript" src="/enixClever/plugins/plupload/i18n/ko.js" type="text/javascript"></script>
+
+<script type="text/javascript" src="/enixClever/assets/javascript/dafault.js"></script>
+<script type="text/javascript" src="/enixClever/assets/javascript/common.js"></script>
+<script type="text/javascript" src="/enixClever/assets/javascript/enixForms.js"></script>
+
+<script type="text/javascript" src="/enixClever/assets/javascript/enixAccessorList.js"></script>
+<script type="text/javascript" src="/enixClever/assets/javascript/enixFileList.js"></script>
+<script type="text/javascript" src="/enixClever/assets/javascript/enixForms.js"></script>
+<script type="text/javascript" src="/enixClever/assets/javascript/enixList.js"></script>
+<script type="text/javascript" src="/enixClever/assets/javascript/enixTable.js"></script>
+<script type="text/javascript" src="/enixClever/assets/javascript/util.js"></script>
+<script type="text/javascript" src="/enixClever/assets/javascript/autocomplete.js"></script>
+
+<link rel="stylesheet" href="/enixClever/plugins/jquery-ui-1.13.2/jquery-ui.css">
+<script type="text/javascript" src="/enixClever/plugins/jquery-ui-1.13.2/jquery-ui.js"></script>
+
+<!-- Fancytree -->
+<script src="/enixClever/plugins/fancytree/jquery.fancytree-all.js"></script>
+<script src="/enixClever/plugins/fancytree/modules/jquery.fancytree.contextMenu.js"></script>
+
+
+
+<script>
+	$(document).ready(function () {
+	    $.getScript("/enixClever/cms/document/documentCreate.js");
+	});
+</script>
+<script>
+    $(document).ready(function () {
+        $.getScript("/enixClever/cms/menu/boxGroup.js");
+    });
+</script>
+
+
+
+</html>

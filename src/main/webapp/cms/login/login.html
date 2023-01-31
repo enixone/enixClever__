@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="subject" content="enixClever">
+<meta name="author" content="enixClever">
+<meta name="publisher" content="enixClever">
+<meta name="description" content="enixClever">
+<meta name="keywords" content="enixClever, 전자적비밀관리 시스템">
+<link rel="shortcut icon" type="image/x-icon" href="/enixClever/assets/images/favicon.ico" />
+<title>전자적 비밀관리(enixClever)</title>
+<link rel="stylesheet" type="text/css" href="/enixClever/assets/css/common.css">
+<link rel="stylesheet" type="text/css" href="/enixClever/assets/css/layout.css">
+
+</head>
+
+<body>
+<div class="login-wrap">
+	<div class="login-container">
+	<form class="" name="loginForm">
+		<div class="login-logo">
+			<img src="/enixClever/assets/images/login_logo.png" alt=""> <h1>로그인</h1>
+		</div>
+		<div class="login-inp">
+			<span><img src="/enixClever/assets/images/login_id.png" alt=""></span>
+			<input type="text" name="userKey" id="userKey" placeholder="ID">
+		</div>
+		<div class="login-inp">
+			<span><img src="/enixClever/assets/images/login_pwd.png" alt=""></span>
+			<input type="password" name="userPass" id="userPass" placeholder="PASSWORD">
+		</div>
+		<div class="save-find-area">
+			<label class="check-box">
+				<input name="storedId" id="storedId" type="checkbox" class="form-check-input"><i></i>
+				아이디 저장
+				<a href="#" onclick="alert('아이디/비밀번호 찾기는 시스템 관리자에게 문의 바랍니다.\n(통합로그인 적용)');">아이디/비밀번호 찾기</a>
+			</label>
+		</div>
+		<div class="login-btn-wrap">
+			<a href="#" onclick="fnLoginClick()"  class="loginBtn">로그인</a>
+		</div>
+	</form>
+	</div>
+</div>
+
+
+
+
+
+
+</body>
+
+<script type="text/javascript" src="/enixClever/plugins/jquery/js/jquery.min.js"></script>
+<script type="text/javascript" src="/enixClever/plugins/jquery-ui/js/jquery-ui.min.js"></script>
+<!--<script type="text/javascript" src="/enixClever/plugins/jquery/js/jquery-1.9.1.min.js"></script>-->
+<script type="text/javascript" src="/enixClever/plugins/jquery.cookie/js/jquery.cookie.js"></script>
+
+<script type="text/javascript" src="/enixClever/plugins/sweetalert2/sweetalert2.all.js"></script>
+
+<script type="text/javascript" src="/enixClever/assets/javascript/dafault.js"></script>
+<script type="text/javascript" src="/enixClever/assets/javascript/common.js"></script>
+<script type="text/javascript" src="/enixClever/cms/login/login.js"></script>
+<script>
+$(document).ready(function () {
+    //$.getScript("/enixClever/cms/login/login.js");
+});
+</script>
+</html>

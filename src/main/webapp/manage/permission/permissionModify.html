@@ -1,0 +1,100 @@
+<div id="" class="modal">
+	<div class="modal-title">
+		권한 수정
+		<div class="modal-btnGrp">
+			<a href="#" class="modal-close" onclick="_permModify.evtCancelClick()"><img src="/enixClever/manage/assets/images/modal_cancel.png" alt=""></a>
+		</div>	
+	</div>
+		<div class="modal-body">
+			<div class="write_info_area">
+				<form name="permissionModifyForm">
+					<input type="hidden" name="permissionId"/>
+					<div class="info_copy">
+						<table class="table-list permissionBox" style="margin-top: 20px;">
+							<colgroup>
+								<col width="18%">
+								<col width="82%">	
+							</colgroup>
+							<tr> 
+								<th style="font-weight: 600">명칭</th>
+								<td><input type="text" name="permissionName" id="permissionName" data-name="명칭" placeholder="명칭을 입력하세요" style="width: 100%; float: left; border-bottom: 1px solid #e0e0e0;"></td>
+							</tr>
+							<tr> 
+								<th style="font-weight: 600">소유자</th>
+								<td>
+									<input type="hidden" name="ownerId" id="ownerId" tabindex="3" size="24" readonly>
+									<input type="hidden" name="ownerType" id="ownerType" tabindex="3" size="24" value="USER" readonly>
+									<input type="text" name="ownerName" id="ownerName" data-name="소유자" tabindex="3" size="24" placeholder="소유자를 검색하세요" readonly  style="color: blue; float: left; width: 70%;" ><a href="#" onclick="_permModify.evtSelectUser();" class="btn_txtbt">소유자 선택</a>
+	                			</td>
+							</tr>
+							<tr>
+								<th style="font-weight: 600">적용대상</th>
+								<td>
+									<div class="accessorBox">	
+										<table name="accessorListTable" style="width: 100%" border="0">
+										</table>
+									</div>
+								</td>
+							</tr>			
+						</table>
+						
+						<table style="width: 100%; margin-top:10px;" border="0">
+							<colgroup>
+								<col width="200px">
+								<col width="*">
+								<col width="50px">	
+							</colgroup>
+							<tr>
+								<td>
+									<div class="rDefault">
+										<input type="radio" name="searchPart" id="ptUser" value="ptUser" style="width: 15px;" checked/>
+										<label for="ptUser">사용자</label>	
+										<input type="radio" name="searchPart" id="ptRole"  value="ptRole" style="width: 15px;" />
+										<label for="ptRole">역할</label>
+										<input type="radio" name="searchPart" id="ptGroup" value="ptGroup"style="width: 15px;" />
+										<label for="ptGroup">부서명</label>	
+										
+									</div>
+								</td>
+								<td>
+									<input type="text" id="keyword" name="keyword" class="searchPerm" tabindex="3" value="" placeholder="성명/직책을 검색하세요"  onkeyUp="evtKey(event.keyCode, this.value);" autocomplete="off">
+								</td>
+								<td>
+									<button type="button" class="btn btn-sm btn-line" onclick="evtSearchList(); ">검색</button>
+								</td>
+							</tr>	
+							<tr>
+								<td colspan="3"  style="height:210px; vertical-align:top;">
+									<div name="selectDataDiv" class="divScrollBox">
+										<table name="dataListTable" border="0">
+										</table>
+									</div>
+									<!-- 초기 출력 -->
+									<div id="dataDivInit" class="dataDivision" style="font-weight: 500;">권한 대상을 검색하세요.</div>
+									<!-- 데이터 가져오는 중 -->
+									<div id="dataDivIng" class="dataDivision" style="display:none;">데이터를 가져 오는 중입니다</div>
+									<!-- 데이터가 없는 경우 -->
+									<div id="dataDivNoData" class="dataDivision" style="display:none;">검색한 대상자가 없습니다. </div>
+								</td>
+							</tr>
+						</table>
+						
+						<div style="float:left">
+							<input type="checkbox" name="isSystem" id="permissionIsSystem_create" style="position: relative; bottom:-6.5px; width: 15px;">
+               				<label for="permissionIsSystem_create" style="margin-bottom: 8px; ">시스템 권한</label>
+						</div>
+					</div>										
+				</form>
+			</div>
+			<div class="sys-modal-footer perm-footer">
+				<a href="#" onclick="_permModify.evtSubmitClick()" class="modal-save-btn">확인</a>
+				<a href="#" onclick="_permModify.evtCancelClick()" class="modal-cancle-btn">취소</a>
+			</div>
+		</div>
+</div>
+
+<script>
+function loadScript(callback) {
+   $.getScript("/enixClever/manage/permission/permissionModify.js", callback);
+}
+</script>

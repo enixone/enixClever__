@@ -1,0 +1,32 @@
+<!-- 복사 -->
+<form name="workflowForm" onsubmit="return false;">
+<input type="hidden" name="docId">
+<input type="hidden" name="workflowId">
+<input type="hidden" name="workflowStatus">
+<div id="defaultModal2" class="modal">
+	<div class="modal-title">
+		<div id="label_workflow_information"></div>
+		<div class="modal-btnGrp">
+			<a href="#" class="modal-close"><img src="/enixClever/assets/images/modal_cancel.png" alt=""></a>
+		</div>
+	</div>
+	<div class="modal-body">
+		<div class="modal_info_area">
+			<div class="info_copy">
+				<textarea class="textarea" name="actorMessage" id="actorMessage" placeholder="사유를 입력해 주세요"></textarea>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<a href="#" class="modal-save-btn" onclick="evtSubmitClick()">확인</a>
+		<a href="#" class="modal-cancle-btn" onclick="evtCancelClick()">취소</a>
+	</div>
+</div>
+</div>
+
+<script>
+    // 스크립트 로드 후 콜백을 전달한다
+    function loadScript(callback) {
+		$.getScript("/enixClever/cms/common/workflowStep.js", callback);
+    }
+</script>

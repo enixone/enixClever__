@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="subject" content="enixClever">
+<meta name="author" content="enixClever">
+<meta name="publisher" content="enixClever">
+<meta name="description" content="enixClever">
+<meta name="robots" content="index,follow">
+<meta name="keywords" content="enixClever, 전자적비밀관리 시스템">
+<title>enixClever</title>
+<link rel="stylesheet" type="text/css" href="./inc/css/common.css">
+<link rel="stylesheet" type="text/css" href="./inc/css/layout.css">
+<script type="text/javascript" src="./inc/js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="./inc/js/dafault.js"></script>
+</head>
+
+<body>
+<div class="overlay"></div>
+<!-- 복사 -->
+<div id="defaultModal1" class="modal">
+	<div class="modal-title">
+		복사할 위치를 선택해 주세요.
+		<div class="modal-btnGrp">
+			<a href="#" class="modal-close"><img src="/enixClever/assets/images/modal_cancel.png" alt=""></a>
+		</div>
+	</div>
+	<div class="modal-body">
+		<div class="modal_info_area">
+							<div class="info_copy">
+								<div class="tabs">
+									<a href="#" class="active">부서공유함</a>
+									<a href="#">공통공유함</a>
+								</div>
+								<div class="docubox_menu">
+									<ul>
+										<a href="#"><li><img src="./images/icon_folder.png">000 Sanfablic</li></a>
+										<a href="#"><li><img src="./images/icon_folder.png">000 데이터바우처사업</li></a>
+										<a href="#"><li><img src="./images/icon_folder.png">001 클라우드 시그너처 견적</li></a>
+										<a href="#"><li><img src="./images/icon_folder.png">010 공공.국방</li></a>
+										<a href="#"><li><img src="./images/icon_folder.png">020 금융</li></a>
+										<a href="#"><li><img src="./images/icon_folder.png">030 제조,서비스</li></a>
+										<a href="#"><li><img src="./images/icon_folder.png">040 정부사업</li></a>
+									</ul>
+								</div>
+							</div>
+						</div>
+	</div>
+	<div class="modal-footer">
+		<a href="#" class="modal-save-btn">확인</a>
+		<a href="#" class="modal-cancle-btn">취소</a>
+	</div>
+</div>
+<!-- 복사 end -->
+<!-- 복사 -->
+<div id="defaultModal2" class="modal">
+	<div class="modal-title">
+		반려사유 입력
+		<div class="modal-btnGrp">
+			<a href="#" class="modal-close"><img src="/enixClever/assets/images/modal_cancel.png" alt=""></a>
+		</div>
+	</div>
+	<div class="modal-body">
+		<div class="modal_info_area">
+			<div class="info_copy">
+				<textarea class="textarea mgB20" name="answer" id="answer">반려 사유를 입력하세요.</textarea>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<a href="#" class="modal-save-btn">확인</a>
+		<a href="#" class="modal-cancle-btn">취소</a>
+	</div>
+</div>
+<div id="wrap">
+	<div class="container-pop">
+		<div class="row">
+					<div class="btnGroup">
+						<a href="#" class="btn btnFill">목록</a>
+						<a href="#" class="btn btnLine">수정</a>
+						<a href="#" class="btn btnLine">삭제</a>
+						<a href="#" class="btn btnLine">이동</a>
+						<a href="#" class="btn btnLine rel-pop">복사</a>
+						<a href="#" class="btn btnLine">소유권 변경</a>
+						<a href="#" class="btn btnLine">비밀이력카드</a>
+						<a href="#" class="btn btnLine">승인</a>
+						<a href="#" class="btn btnLine rel-pop1">반려</a>
+					</div>
+					<div class="frm-title-wrap">
+						<div class="frm-view-title">
+							<label for="t_like_chk12" class="findTlike pdL5">
+								<input type="checkbox" name="t_like_chk12" id="t_like_chk12" value="Y"><span class="like_icon" ></span>
+							</label>
+							회사 경영전략 보고서
+						</div>
+					</div>
+					<div class="wrap_movement">
+							<span class="btn_move disabled"><span class="img_mail ico_prev"></span>위</span>
+							
+							<span class="txt_bar"></span>
+							
+								<a href="#" class="btn_move">아래<span class="img_mail ico_next"></span></a>
+							
+							<button type="button" class="btn_print"><span class="img_mail ico_print"></span></button>
+					</div>
+
+					<div class="frm-body-full">
+						<div class="view_info_area">
+							<div class="info_con">
+								<dl>
+									<dt>저장경로</dt>
+									<dd>/신사업팀/해외수출 개발/아산만 프로젝트</dd>
+								</dl>
+							</div>
+							<div class="info_con_half">
+								<dl>
+									<dt>생산자</dt>
+									<dd>/경영기획팀/장홍대</dd>
+									<dt>문서번호</dt>
+									<dd>22-19327828-21</dd>
+									<dt>보안등급</dt>
+									<dd class="txt-red">대외비</dd>
+								</dl>
+							</div>
+							<div class="info_con_half">
+								<dl>
+									<dt>생산일시</dt>
+									<dd>2022-08-21 09:45</dd>
+									<dt>보존기간</dt>
+									<dd>5년(만료일자 : 2027-08-20)</dd>
+									<dt>문서유형</dt>
+									<dd>보고서</dd>
+								</dl>
+							</div>
+						</div>
+						<div class="view_info_area bg_icon_secret">
+							<div class="info_con">
+								<dl>
+									<dt>접근권한</dt>
+									<dd>우리부서만을 위한 접근권한</dd>
+									<dt></dt>
+									<dd><img src="./images/icon_access_all.png">전체사용자
+										<div class="btn_access_area">
+											<span class="btn_access">목록<i></i></span>
+											<span class="btn_access"><span class="disabled">열람</span><i></i></span>
+											<span class="btn_access"><span class="disabled">수정</span><i></i></span>
+											<span class="btn_access"><span class="disabled">삭제</span></span>
+										</div>
+									</dd>
+									<dt></dt>
+									<dd><img src="./images/icon_access_plan.png">경영기획팀
+										<div class="btn_access_area">
+											<span class="btn_access">목록<i></i></span>
+											<span class="btn_access"><span class="disabled">열람</span><i></i></span>
+											<span class="btn_access"><span class="disabled">수정</span><i></i></span>
+											<span class="btn_access"><span class="disabled">삭제</span></span>
+										</div>
+									</dd>
+									<dt></dt>
+									<dd><img src="./images/icon_access_manager.png">총무팀 / 최대용
+										<div class="btn_access_area">
+											<span class="btn_access">목록<i></i></span>
+											<span class="btn_access"><span class="disabled">열람</span><i></i></span>
+											<span class="btn_access"><span class="disabled">수정</span><i></i></span>
+											<span class="btn_access"><span class="disabled">삭제</span></span>
+										</div>
+									</dd>
+									<dt></dt>
+									<dd><img src="./images/icon_access_person.png">경영기획 담당
+										<div class="btn_access_area">
+											<span class="btn_access">목록<i></i></span>
+											<span class="btn_access"><span class="disabled">열람</span><i></i></span>
+											<span class="btn_access"><span class="disabled">수정</span><i></i></span>
+											<span class="btn_access"><span class="disabled">삭제</span></span>
+										</div>
+									</dd>
+								</dl>
+							</div>
+							<!-- <div class="info_con_half">
+								<dl>
+									<dt>생산자</dt>
+									<dd>/경영기획팀/장홍대</dd>
+									<dt>문서번호</dt>
+									<dd>22-19327828-21</dd>
+									<dt>보안등급</dt>
+									<dd class="txt-red">대외비</dd>
+								</dl>
+							</div>
+							<div class="info_con_half">
+								<dl>
+									<dt>생산일시</dt>
+									<dd>2022-08-21 09:45</dd>
+									<dt>보존기간</dt>
+									<dd>5년(만료일자 : 2027-08-20)</dd>
+									<dt>문서유형</dt>
+									<dd>보고서</dd>
+								</dl>
+							</div> -->
+						</div>
+						<div class="view_info_area">
+							<div class="info_con">
+								<dl>
+									<dt>붙임파일</dt>
+									<dd><img src="./images/icon_file.png"><b class="txt-blue">총3개</b> 첨부파일 (56KB) <a href="#" class="btn_download"> Download</a></dd>
+									<dt></dt>
+									<dd><a href=""><img src="./images/icon_download_b.png"></a><img src="./images/icon_pdf.png"> <p>회사 경영전략 보고서.pptx</p> (538.9KB)</dd>
+									<dt></dt>
+									<dd><a href=""><img src="./images/icon_download_b.png"></a><img src="./images/icon_exel.png"> <p>사무용 집기 교체 품의서.xlsx </p> (538.9KB)</dd>
+									<dt></dt>
+									<dd><a href=""><img src="./images/icon_download_b.png"></a><img src="./images/icon_word.png"> <p>싱가폴 출장 보고서 (홍순길 전무외 3명).doc </p> (538.9KB)</dd>
+								</dl>
+							</div>
+						</div>
+						<div class="view_info_area border_b0">
+							<div class="info_con">
+								<dl>
+									<dt>요약정보</dt>
+									<dd><p>문서 요약정보입니다.<br>본 문서는 경영기획팀에서 작성한 문서입니다. </p></dd>
+								</dl>
+							</div>
+						</div>
+					</div>
+				</div>
+	</div>
+</div>
+</body>
+</html>

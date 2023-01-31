@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.enixone.enixClever.cms.was.dao.MyPrivateDao">
+
+    <!-- 내 문서 -->
+    <select id="selectMyDocumentList" resultMap="commonSql.Document">
+        SELECT *
+        FROM (
+            SELECT
+                <include refid="commonSql.pagingSelect"/>
+                ED.DOC_ID, ED.DOC_NAME, ED.FILE_COUNT, ED.VERSION,
+                ED.DESCRIPTION, FIRST_DOC_ID,
+                ED.PERMISSION_ID,
+                ED.STATUS_CODE, ED.STATUS_CODE_NAME,
+                ED.SECURITY_CODE, ED.SECURITY_CODE_NAME,
+                ED.DOC_TYPE_ID, ED.DOC_TYPE_ID_NAME,
+                ED.CREATOR_ID, CONVERT(CHAR(16), ED.CREATE_DATE, 20) AS CREATE_DATE, ED.CREATOR_NAME
+            FROM EC_DOCUMENT ED
+            WHERE
+                STATUS_CODE = 'ACTIVE' 
+                AND ED.CREATOR_ID = #{userKey}
+                <if test="@com.enixone.enixClever.cms.was.utils.CommonUtil@notEmpty({paging.keyword})">
+                    AND ED.DOC_NAME LIKE '%${paging.keyword}%'
+                </if>
+        ) LIST
+        <include refid="commonSql.pagingWhere"/>
+    </select>
+
+	<!-- 최근 등록 문서 목록 조회 -->
+    <select id="selectNewDocList" resultMap="commonSql.Document">
+        SELECT *
+        FROM (
+            SELECT
+                <include refid="commonSql.pagingSelect"/>
+                ED.DOC_ID, ED.DOC_NAME, ED.FILE_COUNT, ED.VERSION,
+                ED.DESCRIPTION, FIRST_DOC_ID,
+                ED.PERMISSION_ID,
+                ED.STATUS_CODE, ED.STATUS_CODE_NAME,
+                ED.SECURITY_CODE, ED.SECURITY_CODE_NAME,
+                ED.DOC_TYPE_ID, ED.DOC_TYPE_ID_NAME,
+                ED.CREATOR_ID, CONVERT(CHAR(16), ED.CREATE_DATE, 20) AS CREATE_DATE, ED.CREATOR_NAME
+            FROM EC_DOCUMENT ED
+            INNER JOIN EC_FOLDER_DOCUMENT_MAPPING FD ON FD.IS_LAST_DOC = 'Y' AND ED.DOC_ID = FD.DOC_ID
+            WHERE
+                STATUS_CODE != 'DELETED'
+                AND ED.CREATE_DATE > DATEADD(MONTH, -1, ED.CREATE_DATE)
+                <if test="@com.enixone.enixClever.cms.was.utils.CommonUtil@notEmpty({paging.keyword})">
+                    AND ED.DOC_NAME LIKE '%${paging.keyword}%'
+                </if>
+                <if test="permissionList != null and permissionList.size > 0">
+	           	AND PERMISSION_ID IN
+	                <foreach collection="permissionList" item="item" index="index" separator="," open="(" close=")">
+	                    #{item}
+	                </foreach>
+	            </if>
+        ) LIST
+        <include refid="commonSql.pagingWhere"/>
+    </select>
+
+	<!-- 임시 저장문서 -->
+    <select id="selectTempSaveList" resultMap="commonSql.Document">
+        SELECT *
+        FROM (
+            SELECT
+                <include refid="commonSql.pagingSelect"/>
+                ED.DOC_ID, ED.DOC_NAME, ED.FILE_COUNT, ED.VERSION,
+                ED.DESCRIPTION, FIRST_DOC_ID,
+                ED.PERMISSION_ID,
+                ED.STATUS_CODE, ED.STATUS_CODE_NAME,
+                ED.SECURITY_CODE, ED.SECURITY_CODE_NAME,
+                ED.DOC_TYPE_ID, ED.DOC_TYPE_ID_NAME,
+                ED.CREATOR_ID, CONVERT(CHAR(16), ED.CREATE_DATE, 20) AS CREATE_DATE, ED.CREATOR_NAME
+            FROM EC_DOCUMENT ED
+            WHERE
+                STATUS_CODE = 'TEMP_SAVE' 
+                AND ED.CREATOR_ID = #{userKey}
+                <if test="@com.enixone.enixClever.cms.was.utils.CommonUtil@notEmpty({paging.keyword})">
+                    AND ED.DOC_NAME LIKE '%${paging.keyword}%'
+                </if>
+        ) LIST
+        <include refid="commonSql.pagingWhere"/>
+    </select>
+    
+    
+    <!-- 비밀관리 기록부 -->
+    <select id="selectSecurityDocList" resultMap="commonSql.Document">
+        SELECT *
+        FROM (
+            SELECT
+                <include refid="commonSql.pagingSelect"/>
+                ED.DOC_ID,
+				CONVERT(CHAR(16), ED.CREATE_DATE, 20) AS CREATE_DATE,
+				ED.CREATOR_NAME,
+				ISNULL(ED.DOC_NO,'----') AS DOC_NO,
+				ED.SECURITY_CODE_NAME,
+				ED.DOC_NAME,
+				ED.EXPIRE_DATE,
+				ED.EXPIRE_CODE_NAME,
+				ED.STATUS_CODE,
+				(SELECT CODE_NAME FROM EC_CODE WHERE CODE_GROUP = 'WORKFLOW_STATUS' AND CODE = EW.WORKFLOW_STATUS) AS WORKFLOW_TYPE_NAME
+            FROM EC_DOCUMENT ED
+            INNER JOIN EC_WORKFLOW EW ON ED.DOC_ID = EW.DOC_ID AND EW.WORKFLOW_STATUS = 'APPROVAL'
+            WHERE 
+                ED.SECURITY_CODE IN ('S2','S3')
+                <if test="@com.enixone.enixClever.cms.was.utils.CommonUtil@notEmpty({paging.keyword})">
+                    AND ED.DOC_NAME LIKE '%${paging.keyword}%'
+                </if>
+        ) LIST
+        <include refid="commonSql.pagingWhere"/>
+    </select>
+
+	<!-- 결재 대상 문서 -->
+    <select id="selectWorkflowList" resultMap="commonSql.Document">
+        SELECT *
+        FROM (
+        	SELECT
+                <include refid="commonSql.pagingSelect"/>
+                ED.DOC_ID, 
+				ED.DOC_NAME,
+				ED.SECURITY_CODE_NAME,
+				EU.GROUP_NAME,
+				WF.WORKFLOW_ID,
+				CONVERT(CHAR(16), WF.CREATION_DATE, 20) AS CREATION_DATE,
+				WF.ACTOR_ID,
+				WF.ACTOR_NAME,
+				WF.ACTOR_MESSAGE,
+				WF.WORKFLOW_STATUS,
+				CONVERT(CHAR(16), WF.ACTION_DATE, 20) AS ACTION_DATE,
+				WF.CREATOR_NAME,
+				WF.CREATOR_MESSAGE,
+				(SELECT CODE_NAME FROM EC_CODE WHERE CODE_GROUP = 'WORKFLOW_STATUS' AND CODE = WF.WORKFLOW_STATUS) AS WORKFLOW_STATUS_NAME,
+				(SELECT CODE_NAME FROM EC_CODE WHERE CODE_GROUP = 'WORKFLOW_TYPE' AND CODE = WF.WORKFLOW_TYPE) AS WORKFLOW_TYPE_NAME
+            FROM EC_DOCUMENT ED
+            <if test="listPart == 'SendIng'">
+            INNER JOIN EC_WORKFLOW WF ON WF.CREATOR_ID = #{userKey} AND ED.DOC_ID = WF.DOC_ID AND IS_COMPLETED = '0'
+           	</if>
+            <if test="listPart == 'SendEnd'">
+            INNER JOIN EC_WORKFLOW WF ON WF.CREATOR_ID = #{userKey} AND ED.DOC_ID = WF.DOC_ID AND IS_COMPLETED = '1'
+           	</if>
+            <if test="listPart == 'ReceiveIng'">
+            INNER JOIN EC_WORKFLOW WF ON WF.WORKFLOW_OWNER = #{userKey} AND ED.DOC_ID = WF.DOC_ID AND IS_COMPLETED = '0'
+           	</if>
+            <if test="listPart == 'ReceiveEnd'">
+            INNER JOIN EC_WORKFLOW WF ON WF.ACTOR_ID = #{userKey} AND ED.DOC_ID = WF.DOC_ID AND IS_COMPLETED = '1'
+           	</if>
+            INNER JOIN EC_USER EU ON EU.USER_KEY = WF.WORKFLOW_OWNER
+            WHERE
+                ED.STATUS_CODE != 'DELETED'
+                <if test="@com.enixone.enixClever.cms.was.utils.CommonUtil@notEmpty({paging.keyword})">
+                    AND ED.DOC_NAME LIKE '%${paging.keyword}%'
+                </if>
+        ) LIST
+        <include refid="commonSql.pagingWhere"/>
+    </select>
+
+
+    <!-- 만기문서 목록 조회 -->
+    <select id="selectExpiredDocList" resultMap="commonSql.Document">
+        SELECT *
+        FROM (
+            SELECT
+                <include refid="commonSql.pagingSelect"/>
+                ED.DOC_ID, ED.DOC_NAME, ED.DOC_TYPE_ID, ED.FILE_COUNT, ED.VERSION,
+                ED.DESCRIPTION, ED.FIRST_DOC_ID,
+                ED.PERMISSION_ID, (SELECT PERMISSION_NAME FROM EC_PERMISSION WHERE PERMISSION_ID = ED.PERMISSION_ID) AS PERMISSION_NAME,
+                ED.EXPIRE_CODE, (SELECT EC.CODE_NAME FROM EC_CODE EC WHERE EC.CODE_GROUP = 'EXPIRE' AND EC.CODE = ED.EXPIRE_CODE) AS EXPIRE_CODE_NAME,
+                ED.STATUS_CODE, (SELECT EC.CODE_NAME FROM EC_CODE EC WHERE EC.CODE_GROUP = 'DOCUMENT_STATUS' AND EC.CODE = ED.STATUS_CODE) AS STATUS_CODE_NAME,
+                ED.CREATOR_ID, ED.CREATE_DATE, (SELECT USER_NAME FROM EC_USER WHERE USER_KEY = ED.CREATOR_ID) AS CREATOR_NAME,
+                ED.UPDATOR_ID, ED.UPDATE_DATE, (SELECT USER_NAME FROM EC_USER WHERE USER_KEY = ED.UPDATOR_ID) AS UPDATOR_NAME,
+                ED.DELETOR_ID, ED.DELETE_DATE, (SELECT USER_NAME FROM EC_USER WHERE USER_KEY = ED.DELETOR_ID) AS DELETOR_NAME
+            FROM EC_DOCUMENT ED
+            INNER JOIN EC_FOLDER_DOCUMENT_MAPPING FD ON FD.IS_LAST_DOC = 'Y' AND ED.DOC_ID = FD.DOC_ID
+            WHERE
+                STATUS_CODE = 'EXPIRED'
+                ED.CREATOR_ID = #{userKey}
+        ) LIST
+        <include refid="commonSql.pagingWhere"/>
+    </select>
+</mapper>

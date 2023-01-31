@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="subject" content="enixClever">
+<meta name="author" content="enixClever">
+<meta name="publisher" content="enixClever">
+<meta name="description" content="enixClever">
+<meta name="keywords" content="enixClever, 전자적비밀관리 시스템">
+<link rel="shortcut icon" type="image/x-icon" href="/enixClever/assets/images/favicon.ico" />
+<title>전자적 비밀관리(enixClever)</title>
+<link rel="stylesheet" type="text/css" href="/enixClever/assets/css/common.css">
+<link rel="stylesheet" type="text/css" href="/enixClever/assets/css/layout.css">
+<link rel="stylesheet" type="text/css" href="/enixClever/assets/css/modal.css">
+
+<link rel="stylesheet" type="text/css" href="/enixClever/plugins/plupload/jquery.plupload.queue/css/jquery.plupload.queue.css">
+</head>
+
+<body>
+<!-- 리스트가 없는 경우 화면 출력 -->
+<div id="progressZone" class="dataDivision"  style="display:block;">
+	<div id="noDataImage" class="noDataImage"><img src="/enixClever/assets/images/loading.gif"></div>
+  	<div id="noDataMessage" class="txt-message"><p>문서 정보를 가져오는 중입니다.</p><p>서버와 통신이 끊어진 경우 새로고침("F5")를 눌러주세요.</div>
+</div>
+
+<div id="wrap" style="display:none;">
+	<div class="container-pop">
+		<div class="row">
+			<div id="btnGroup-pop" class="btnGroup-pop"> 
+				<a href="#" onclick="_docDetail.evtReClassification();"><button class="btn btn-sm btn-line-none" id="btnReclassfication">재분류</button></a>
+				<a href="#" onclick="_docDetail.evtTakeoverDocument();"><button class="btn btn-sm btn-line-none" id="btnTakeover">인수인계	</button></a>
+				<a href="#" onclick="_docDetail.evtDestroyDocument();"><button class="btn btn-sm btn-line-none" id="btnDelete">파기신청</button></a>
+				<a href="#" onclick="_docDetail.evtWorkflowStep('WITHDRAW');"><button class="btn btn-sm btn-line-none" id="btnWithDraw">등록회수</button></a>
+				<a href="#" onclick="window.close();"><button class="btn btn-sm btn-line-none">닫기</button></a>
+				<div class="PrintBtn"> 
+					<img src="/enixClever/assets/images/icon_print.png">
+				</div>
+			</div>
+			
+			<div class="frm-body-full"> 
+			<div id="write_info_area"  class="write_info_area">
+			<div id="secretImage" class="secretImage" align="center" style="display:none;"><img src=""></div>
+			<div  class="frm-view-titleW" name="workflowApplovalDiv" id="workflowApplovalDiv" style="display:none;">
+				<label class="frm-view-title-workflow">■ 결재대상 문서입니다. 결재요청 정보를 확인 바랍니다.</label>
+				<table border="0" width="100%" name="workflowApplovalTable">
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+			<div class="frm-view-title">
+				<label for="t_like_chk12" class="findTlike pdL5">
+					<input type="checkbox" name="t_like_chk12" id="t_like_chk12" onclick="_docDetail.evtReverseBookmark(this);"><span class="like_icon" align="left"></span>
+				</label>
+				<label id="documentTitle"></label id="documentTitle">
+			</div>
+			
+			<table class="table-list">
+				<colgroup>
+					<col width="100px">
+					<col width="200px">
+					<col width="100px">
+					<col width="200px">
+				</colgroup>
+				<thead>
+					<tr>
+						<th class="text-center">문서상태</th> 
+						<td class="text-left" colspan="3"><div id="statusCodeName"></div></td>
+					</tr>
+					<tr>
+						<th class="text-center">저장경로</th> 
+						<td class="text-left" colspan="3"><div id="fullPath"></div></td>
+					</tr>
+					<tr>
+						<th class="text-center">생산자</th> 
+						<td class="text-left"><div id="creatorName"></div></td>
+						<th class="text-center">생산일시</th>
+						<td class="text-left"><div id="createDate"></div></td>
+					</tr>
+					<tr>
+						<th class="text-center">문서번호</th>
+						<td class="text-left"><div id="docId"></div></td>
+						<th class="text-center"><div id="expireTitle"></div> </th>
+						<td class="text-left"><div id="expireValue"></div></td>
+					</tr>
+					<tr>
+						<th class="text-center">보안등급</th>
+						<td class="text-left"><div id="securityCodeName">-</div></td>
+						<th class="text-center">문서유형</th>
+						<td class="text-left"><div id="docTypeIdName"></div></td>
+					</tr>
+					<tr height="200">
+						<th class="text-center">요약정보</th> 
+						<td class="text-left" colspan="3">
+							<div id="description" class="description"></div>							
+						</td>
+					</tr>
+					<tr height="160">
+						<th class="text-center">접근권한</th> 
+						<td class="text-left" colspan="3">
+						<div name="selectPermissionDiv" class="description">
+							<table border="0" width="100%" class="permission-table" name="permissionListTable">
+								<colgroup>
+									<col width="30px">
+									<col width="*">
+									<col width="120px">
+								</colgroup>
+								<tbody>
+								</tbody>
+							</table>
+						</div>
+						</td>
+					</tr>
+					<tr>
+						<th class="text-center">붙임파일</th> 
+						<td class="text-left" colspan="3">
+							<div name="selectAttachfileDiv">
+								<table border="0" width="100%" class="permission-table" name="attachFileListTable">
+									<tbody>
+									</tbody>
+								</table>
+							</div>
+						</td>
+					</tr>
+				</thead>
+			</table>
+			<div id="secretImageB" class="secretImage" align="center" style="display: none;"><img src=""></div>			
+		</div>
+	</div>
+</div>
+
+
+<script type="text/javascript" src="/enixClever/plugins/jquery/js/jquery.min.js"></script>
+
+<script type="text/javascript" src="/enixClever/plugins/plupload/plupload.full.min.js"></script>
+<script type="text/javascript" src="/enixClever/plugins/plupload/jquery.plupload.queue/jquery.plupload.queue.js"></script>
+<script type="text/javascript" src="/enixClever/plugins/plupload/i18n/ko.js" type="text/javascript"></script>
+
+<script type="text/javascript" src="/enixClever/assets/javascript/dafault.js"></script>
+<script type="text/javascript" src="/enixClever/assets/javascript/common.js"></script>
+<script type="text/javascript" src="/enixClever/assets/javascript/message.js"></script>
+
+<script type="text/javascript" src="/enixClever/assets/javascript/enixAccessorList.js"></script>
+<script type="text/javascript" src="/enixClever/assets/javascript/enixFileList.js"></script>
+<script type="text/javascript" src="/enixClever/assets/javascript/enixForms.js"></script>
+<script type="text/javascript" src="/enixClever/assets/javascript/enixList.js"></script>
+<script type="text/javascript" src="/enixClever/assets/javascript/enixTable.js"></script>
+<script type="text/javascript" src="/enixClever/assets/javascript/util.js"></script>
+<script type="text/javascript" src="/enixClever/assets/javascript/autocomplete.js"></script>
+
+<link rel="stylesheet" href="/enixClever/plugins/jquery-ui-1.13.2/jquery-ui.css">
+<script type="text/javascript" src="/enixClever/plugins/jquery-ui-1.13.2/jquery-ui.js"></script>
+
+<script type="text/javascript" src="/enixClever/cms/document/documentCreate.js"></script>
+
+<link rel="stylesheet" type="text/css" href="/enixClever/plugins/flatpickr/flatpickr.min.css">
+<script type="text/javascript" src="/enixClever/plugins/flatpickr/flatpickr.min.js"></script>
+<script type="text/javascript" src="/enixClever/plugins/flatpickr/ko.js"></script>
+
+
+<script>
+$(document).ready(function () {
+    $.getScript("/enixClever/cms/document/documentDetail.js");
+});
+</script>
+
+</html>
+

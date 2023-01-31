@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.enixone.enixClever.cms.was.dao.StatisticsDao">
+    
+    <!-- 최다 조회 문서 목록 조회 -->
+    <select id="selectMostViewDocList" resultMap="commonSql.Document">
+        SELECT *
+        FROM (
+            SELECT
+                <include refid="commonSql.pagingSelect"/>
+                ED.DOC_ID, ED.DOC_NAME, ED.DOC_TYPE_ID, ED.FILE_COUNT, ED.VERSION,
+                ED.DESCRIPTION, ED.FIRST_DOC_ID,
+                ED.PERMISSION_ID, (SELECT PERMISSION_NAME FROM EC_PERMISSION WHERE PERMISSION_ID = ED.PERMISSION_ID) AS PERMISSION_NAME,
+                ED.EXPIRE_CODE, (SELECT EC.CODE_NAME FROM EC_CODE EC WHERE EC.CODE_GROUP = 'EXPIRE' AND EC.CODE = ED.EXPIRE_CODE) AS EXPIRE_CODE_NAME,
+                ED.STATUS_CODE, (SELECT EC.CODE_NAME FROM EC_CODE EC WHERE EC.CODE_GROUP = 'DOCUMENT_STATUS' AND EC.CODE = ED.STATUS_CODE) AS STATUS_CODE_NAME,
+                ED.CREATOR_ID, ED.CREATE_DATE, (SELECT USER_NAME FROM EC_USER WHERE USER_KEY = ED.CREATOR_ID) AS CREATOR_NAME,
+                ED.UPDATOR_ID, ED.UPDATE_DATE, (SELECT USER_NAME FROM EC_USER WHERE USER_KEY = ED.UPDATOR_ID) AS UPDATOR_NAME,
+                ED.DELETOR_ID, ED.DELETE_DATE, (SELECT USER_NAME FROM EC_USER WHERE USER_KEY = ED.DELETOR_ID) AS DELETOR_NAME,
+                HD.CNT AS VIEW_COUNT
+            FROM EC_DOCUMENT ED
+            INNER JOIN EC_FOLDER_DOCUMENT_MAPPING FD ON FD.IS_LAST_DOC = 'Y' AND ED.DOC_ID = FD.DOC_ID
+            INNER JOIN (
+                SELECT SD.DOC_ID,  SUM(DATA_COUNT) AS CNT
+                FROM EC_STATISTIC_DOCCUMENT SD
+                WHERE
+                SD.STATS_DATE BETWEEN #{fromDate} AND #{toDate}
+                AND SD.DATA_TYPE = 'READ'
+                GROUP BY SD.DOC_ID
+            ) HD ON ED.DOC_ID = HD.DOC_ID
+        ) LIST
+        <include refid="commonSql.pagingWhere"/>
+    </select>
+    
+    <!-- 사용자별 문서 조회 -->
+    <select id="selectStatsByUser" resultMap="commonSql.ActorStats">
+        SELECT *
+        FROM (
+            SELECT
+                <include refid="commonSql.pagingSelect"/>
+                U.USER_KEY, U.USER_NAME, G.GROUP_ID, G.GROUP_NAME,
+                ISNULL(SA.CREATED, 0) AS CREATE_CNT,
+                ISNULL(SA.UPDATED, 0) AS UPDATE_CNT,
+                ISNULL(SA.DELETED, 0) AS DELETE_CNT,
+                ISNULL(SA.READED, 0) AS READ_CNT
+            FROM EC_USER U
+            INNER JOIN EC_GROUP_ASSIGN AD ON U.USER_KEY = AD.USER_KEY
+            INNER JOIN EC_GROUP G ON AD.GROUP_ID = G.GROUP_ID AND IS_MAIN = 'Y'
+            INNER JOIN (
+                SELECT *
+                FROM (
+                    SELECT ACTOR_ID, DATA_TYPE, DATA_COUNT AS CNT
+                    FROM EC_STATISTIC_ACTOR
+                    WHERE
+                        STATS_DATE BETWEEN #{fromDate} AND #{toDate}
+                    AND ACTOR_TYPE = 'USER'
+                    <if test="@com.enixone.enixClever.cms.was.utils.CommonUtil@notEmpty(userName)">
+                    AND ACTOR_ID IN (SELECT USER_KEY FROM EC_USER WHERE USER_NAME LIKE '%'||#{userName}||'%')
+                    </if>
+                )
+                PIVOT (
+                    SUM(CNT)
+                    FOR DATA_TYPE 
+                    IN ([CREATED] , [UPDATED], [DELETED], [READED])
+                ) AS PVT
+            ) SA ON U.USER_KEY = SA.ACTOR_ID
+        ) LIST
+        <include refid="commonSql.pagingWhere"/>
+    </select>
+    
+    <!-- 부서별 문서 조회 -->
+    <select id="selectStatsByGroup" resultMap="commonSql.ActorStats">
+        SELECT *
+        FROM (
+            SELECT
+                <include refid="commonSql.pagingSelect"/>
+                G.GROUP_ID, G.GROUP_NAME,
+                ISNULL(SA.CREATED, 0) AS CREATE_CNT,
+                ISNULL(SA.UPDATED, 0) AS UPDATE_CNT,
+                ISNULL(SA.DELETED, 0) AS DELETE_CNT,
+                ISNULL(SA.READED, 0) AS READ_CNT
+            FROM EC_GROUP G
+            INNER JOIN (
+                SELECT *
+                FROM (
+                    SELECT ACTOR_ID, DATA_TYPE, DATA_COUNT AS CNT
+                    FROM EC_STATISTIC_ACTOR
+                    WHERE
+                        STATS_DATE BETWEEN #{fromDate} AND #{toDate}
+                    AND ACTOR_TYPE = 'GROUP'
+                    <if test="@com.enixone.enixClever.cms.was.utils.CommonUtil@notEmpty(groupName)">
+                    AND ACTOR_ID IN (SELECT GROUP_ID FROM EC_GROUP WHERE GROUP_NAME LIKE '%'||#{groupName}||'%')
+                    </if>
+                )
+                PIVOT (
+                    SUM(CNT)
+                    FOR DATA_TYPE
+                    IN ([CREATED] , [UPDATED], [DELETED], [READED])
+                ) AS PVT
+            ) SA ON G.GROUP_ID = SA.ACTOR_ID
+        ) LIST
+        <include refid="commonSql.pagingWhere"/>
+    </select>
+    
+    <!-- 유형별 문서 조회 -->
+    <select id="selectStatsByType" resultMap="commonSql.TypeStats">
+        SELECT
+            T.TYPE_ID, T.TYPE_NAME,
+            ISNULL(SA.CREATED, 0) AS CREATE_CNT,
+            ISNULL(SA.UPDATED, 0) AS UPDATE_CNT,
+            ISNULL(SA.DELETED, 0) AS DELETE_CNT,
+            ISNULL(SA.READED, 0) AS READ_CNT
+        FROM EC_TYPE T
+        INNER JOIN (
+            SELECT *
+            FROM (
+                SELECT DOC_TYPE_ID, DATA_TYPE, DATA_COUNT AS CNT
+                FROM EC_STATISTIC_DOCCUMENT_TYPE
+                WHERE
+                    STATS_DATE BETWEEN #{fromDate} AND #{toDate}
+            )
+            PIVOT (
+                SUM(CNT)
+                FOR DATA_TYPE
+                IN ([CREATED] , [UPDATED], [DELETED], [READED])
+            ) AS PVT
+        ) SA ON T.TYPE_ID = SA.DOC_TYPE_ID
+    </select>
+    
+    <!-- 문서 추적 -->
+    <select id="searchDocumentTrace" resultMap="commonSql.DocumentTrace">
+        SELECT *
+        FROM (
+            SELECT
+                <include refid="commonSql.pagingSelect"/>
+                HD.HISTORY_ID, G.GROUP_ID, G.GROUP_NAME, U.USER_KEY, U.USER_NAME, HD.DOC_ID, HD.DOC_NAME,
+                HD.ACTION_CODE, (SELECT C.CODE_NAME FROM EC_CODE C WHERE C.CODE = HD.ACTION_CODE AND C.CODE_GROUP = 'ACTION') AS ACTION_NAME, HD.ACTION_DATE
+            FROM EC_DOCUMENT_HISTORY HD
+            INNER JOIN EC_USER U ON HD.ACTOR_ID = U.USER_KEY
+            INNER JOIN EC_GROUP_ASSIGN AD ON HD.ACTOR_ID = AD.USER_KEY AND AD.IS_MAIN = 'Y'
+            INNER JOIN EC_GROUP G ON AD.GROUP_ID = G.GROUP_ID
+            WHERE
+                HD.ACTION_DATE BETWEEN #{fromDate} AND #{toDate}
+                <if test="@com.enixone.enixClever.cms.was.utils.CommonUtil@notEmpty(actionCodeList)">
+                    <foreach item="item" index="index" collection="actionCodeList" open="AND HD.ACTION_CODE IN (" separator="," close=")">
+                        #{item}
+                    </foreach>
+                </if>
+                <if test="@com.enixone.enixClever.cms.was.utils.CommonUtil@notEmpty(groupName)">
+                    AND G.GROUP_NAME LIKE '%'||#{groupName}||'%'
+                </if>
+                <if test="@com.enixone.enixClever.cms.was.utils.CommonUtil@notEmpty(docName)">
+                    AND HD.DOC_NAME LIKE '%'||#{docName}||'%'
+                </if>
+        ) LIST
+        <include refid="commonSql.pagingWhere"/>
+    </select>
+    
+    <!-- 사용자/부서 별 통계 자료 추가 -->
+    <insert id="insertActorData">
+        INSERT INTO EC_STATISTIC_ACTOR
+        (STATS_ID, STATS_DATE, DATA_TYPE, DATA_COUNT, ACTOR_ID, ACTOR_TYPE, ACTOR_NAME)
+        SELECT #{statsId}, #{statsDate}, #{dataType}, #{dataCount}, #{actorId}, #{actorType}, (
+            <choose>
+                <when test="actorType == 'USER'">
+                    SELECT USER_NAME FROM EC_USER WHERE USER_KEY = #{actorId}
+                </when>
+                <otherwise>
+                    SELECT GROUP_NAME FROM EC_GROUP WHERE GROUP_ID = #{actorId}
+                </otherwise>
+            </choose>
+            )
+        FROM DUAL
+        WHERE NOT EXISTS(
+            SELECT *
+            FROM EC_STATISTIC_ACTOR
+            WHERE
+                STATS_DATE = #{statsDate}
+            AND DATA_TYPE = #{dataType}
+            AND ACTOR_ID = #{actorId}
+        )
+    </insert>
+    
+    <!-- 최다 조회 문서 통계 자료 추가 -->
+    <insert id="insertMostReadData">
+        INSERT INTO EC_STATISTIC_DOCCUMENT
+        (STATS_ID, STATS_DATE, DATA_TYPE, DATA_COUNT, DOC_ID, DOC_NAME)
+        SELECT #{statsId}, #{statsDate}, #{dataType}, #{dataCount}, #{docId}, (SELECT DOC_NAME FROM EC_DOCUMENT WHERE DOC_ID = #{docId})
+        FROM DUAL
+        WHERE NOT EXISTS(
+            SELECT *
+            FROM EC_STATISTIC_DOCCUMENT
+            WHERE
+                STATS_DATE = #{statsDate}
+            AND DATA_TYPE = #{dataType}
+            AND DOC_ID = #{docId}
+        )
+    </insert>
+    
+    <!-- 문서 유형 별 통계 추가 -->
+    <insert id="insertDocTypeData">
+        INSERT INTO EC_STATISTIC_DOCCUMENT_TYPE
+        (STATS_ID, STATS_DATE, DATA_TYPE, DATA_COUNT, DOC_TYPE_ID)
+        SELECT #{statsId}, #{statsDate}, #{dataType}, #{dataCount}, #{docTypeId}
+        FROM DUAL
+        WHERE NOT EXISTS(
+            SELECT *
+            FROM EC_STATISTIC_DOCCUMENT_TYPE
+            WHERE
+                STATS_DATE = #{statsDate}
+            AND DATA_TYPE = #{dataType}
+            AND DOC_TYPE_CODE = #{docTypeId}
+        )
+    </insert>
+</mapper>

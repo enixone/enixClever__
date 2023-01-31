@@ -1,0 +1,54 @@
+<div class="row">
+		<div class="frm-title-wrap">
+			<div class="frm-title">최근 등록문서 </div>
+		</div>
+		<div class="btnGroup"> 
+			<button class="btn btn-sm btn-line">수정</button>
+			<button class="btn btn-sm btn-line">삭제</button>
+			<label for="t_like_chk1" class="viewtype01_top pdL5"> 
+				<input type="checkbox" name="t_like_chk1" id="t_like_chk1" value="Y">
+				<span class="view01_icon"></span>
+			</label> 
+			<label for="t_like_chk2" class="viewtype02_top pdL5">
+				<input type="checkbox" name="t_like_chk2" id="t_like_chk2" value="Y">
+				<span class="view02_icon"></span>
+			</label>
+		</div>
+		<div class="frm-body-full">
+		<div class="frm-body-frame ">
+			<div class="cont-body-wrap">
+				
+				<div class="tmpLeft">
+				
+					<!-- 페이지리스트 테이블 -->
+					<table id="documentListTable" class="table-list">
+					</table>
+					
+					<!-- 리스트가 없는 경우 화면 출력 -->
+					<table id="groupPlaceNoDocMessage">
+	                   <tbody>
+		                    <tr>
+								<td>조회된 문서가 없습니다..---</td>
+							</tr>
+						</tbody>
+					</table>
+	                
+	                <!-- 페이지 네비게이션 -->
+					<div id="docListPagination"  class="PageArea">
+	                </div>
+                </div>
+                <div class="tmpRight">
+                	<!-- 상세 -->
+	            	<div class="app-inner-layout__content card detailView" name="docDetail"></div>
+                </div>
+                
+			</div>
+				
+		</div>
+		</div>
+</div>
+<script>
+    $(document).ready(function () {
+        $.getScript("/enixClever/manage/list/recentDocument.js");
+    });
+</script>

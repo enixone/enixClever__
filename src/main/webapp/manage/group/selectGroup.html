@@ -1,0 +1,36 @@
+<div id="popupSelectGroup" class="card md-content">
+    <div class="card-body">
+        <h5 class="card-title">대상 선택</h5>
+        <div class="modal-btnGrp">
+			<a href="#" class="modal-close" onclick="_selectGroup.evtCancelClick()"><img src="/enixClever/manage/assets/images/modal_cancel.png" alt=""></a>
+		</div>
+        <div class="row" style="margin-bottom: 0px">
+            <div class="col-lg-12">
+                <div class="mb-3 card" style="margin: 0px 0px 0px -15px; width: 500px">
+                    <div class="card-header-tab card-header">
+                        <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
+                            <i class="header-icon lnr-users icon-gradient bg-night-fade"> </i>
+                            부서 목록
+                        </div>
+                    </div>
+                    <div class="p-0 card-body" style="height:calc(100vh - 450px)">
+                        <div id="selectGroupTree"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        <!-- 하단 버튼 부분 -->
+        <div class="btn_group" style="margin: 0px 20px; border-top: 1px solid rgba(26, 54, 126, 0.125)">
+            <button onclick="_selectGroup.evtSubmitClick()" class="btn btn-sm btn-primary" style="margin-left: 77%">확인</button>
+            <button onclick="_selectGroup.evtCancelClick()" class="btn btn-sm btn-default">취소</button>
+        </div>
+</div>
+
+
+<script>
+    // 스크립트 로드 후 콜백을 전달한다
+    function loadScript(callback) {
+        $.getScript("/enixClever/manage/group/selectGroup.js", callback);
+    }
+</script>

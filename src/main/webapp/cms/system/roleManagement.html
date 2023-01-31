@@ -1,0 +1,74 @@
+<div class="row">
+	<div class="frm-title-wrap">
+		<div class="frm-title">역할 관리</div>
+	</div>
+	<div class="btnGroup">
+		<button class="btn btn-sm btn-line" onclick="evtCreateRolePopup()">등록</button>
+		<button class="btn btn-sm btn-line" onclick="evtModifyRolePopup()">수정</button>
+		<button class="btn btn-sm btn-line-accent" onclick="evtDeleteRolePopup()">삭제</button>
+	</div>
+	<div class="frm-body-full">
+		<div class="frm-body-frame ">
+			<div class="cont-body-wrap">
+				<div class="itemList">
+					<!-- 페이지리스트 테이블 -->
+					<div class="table-responsive table-line">
+						<table id="roleListTable" class="text-nowrap table-lg mb-0 table table-hover">
+						</table>
+					</div>
+
+					<!-- 리스트가 없는 경우 화면 출력 -->
+					<div id="roleManagementNoDocMessage" class="text-center p-40 hidden">
+						<label class="text-danger text-xl-center">조회된 역할이 없습니다.</label>
+					</div>
+
+					<!-- 페이지 네비게이션 -->
+					<div id="roleListPagination">
+					</div>
+				</div>
+
+				<div class="itemDetail">
+					<div class="sysWriteinfo-area">
+					<h5 class="card-title mt-5"></h5>
+						<form name="roleDetailForm">
+							<table class="sysTable" border="0">
+								<tr class="sysTabletr">
+									<th class="sysTableth">역할 명</th>
+									<td class="sysTabletd"><input name="roleName" type="text"
+										class="sysTableinput"  readonly></td>
+								</tr>
+								<tr>
+									<th class="sysTableth">역할 생성자</th>
+									<td class="sysTabletd"><input name="creatorName" type="text"
+										class="sysTableinput" readonly></td>
+								</tr>
+								<tr>
+									<th class="sysTableth">역할 생성일자</th>
+									<td class="sysTabletd"><input name="createDate"
+										type="text" class="sysTableinput" readonly></td>
+								</tr>
+								<tr>
+									<th class="sysTableth attrlist">역할 설정</th>
+										<td>
+											<div class="table-responsive">
+												<table name="roleItemTable" class="text-nowrap table-lg mb-0 table table-hover" border="0">
+												</table>
+											</div>
+										</td>
+								</tr>
+							</table>
+							<div id="noTypeItemMessage" class="text-center p-40 hidden">
+								<label class="text-danger text-xl-center">조회된 속성이 없습니다.</label>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	$(document).ready(function() {
+		$.getScript("./cms/system/roleManagement.js");
+	});
+</script>

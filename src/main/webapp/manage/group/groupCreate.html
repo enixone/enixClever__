@@ -1,0 +1,57 @@
+<div id="" class="modal">
+	<div class="modal-title" style="margin-bottom: 20px;">
+		부서 등록
+		<div class="modal-btnGrp">
+			<a href="#" class="modal-close" onclick="_groupCreate.evtCancelClick()"><img src="/enixClever/manage/assets/images/modal_cancel.png" alt=""></a>
+		</div>
+	</div>
+		<div class="modal-body">
+			<div class="write_info_area">
+				<form name="groupCreateForm"  autocomplete="off">
+					<table class="table-list">
+						<colgroup>
+							<col width="25%">
+							<col width="75%">	
+						</colgroup>
+						<thead>
+							<tr> 
+								<th>상위 부서</th>
+								<td>
+									<input type="text" name="parentGroupName" id="parentGroupName" data-name="상위 부서" tabindex="3" style="width: 100%;" readonly>
+									<input type="hidden" name="parentGroupId" id="parentGroupId" data-name="상위 부서" tabindex="3" >
+									 <input name="boxId" type="hidden"/>								
+								</td>
+							</tr>
+							<tr> 
+								<th>명칭</th>
+								<td><input type="text" name="groupName" id="groupName" data-name="명칭" tabindex="3" placeholder="성명을 입력하세요" style="width: 100%;"></td>
+							</tr>
+							<tr> 
+								<th>상태</th>
+								<td>
+									<div class="rDefault">
+										<input type="radio" name="statusCode" value="ACTIVE" style="width: 15px;" checked />
+										<label for="statusCode" style="border-bottom:none;">활성화</label>	
+										<input type="radio" name="statusCode" value="PASSIVE" style="width: 15px;"/>
+										<label for="statusCode" style="border-bottom:none;">등록대기</label>	
+									</div>
+								</td>
+							</tr>
+						<thead>
+					</table>
+				</form>
+			</div>
+			<div class="sys-modal-footer perm-footer">
+				<a href="#" onclick="_groupCreate.evtSubmitClick()" class="modal-save-btn">확인</a>
+				<a href="#" onclick="_groupCreate.evtCancelClick()" class="modal-cancle-btn">취소</a>
+			</div>
+		</div>
+</div>
+
+
+<script>
+    // 스크립트 로드 후 콜백을 전달한다
+    function loadScript(callback) {
+        $.getScript("/enixClever/manage/group/groupCreate.js", callback);
+    }
+</script>

@@ -1,0 +1,29 @@
+<!-- 폴더선택 -->
+<div id="defaultModal1" class="modal">
+	<div class="modal-title">
+		비밀열람기록전
+		<div class="modal-btnGrp">
+			<a href="#" class="modal-close" onclick="_securityCard.evtCancelClick();"><img src="/enixClever/assets/images/modal_cancel.png" alt=""></a>
+		</div>
+	</div>
+	
+	<div class="modal-body">
+	<div class="modal_info_area">
+		<div class="info_copy">
+			<div class="secret_card_title" name="secret_card_title"></div>
+			<div class="secret_card_level" name="secret_card_level"></div>
+			<div name="securityHistoryDiv" class="divScrollBox" style="height:600px;margin-top:10px">
+				<table name="table-list-secret" border="1">
+				</table>
+			</div>
+			</div>
+		</div>
+	</div>
+	</div>
+
+<script>
+    // 스크립트 로드 후 콜백을 전달한다
+    function loadScript(callback) {
+		$.getScript("/enixClever/cms/document/securityCard.js", callback);
+    }
+</script>

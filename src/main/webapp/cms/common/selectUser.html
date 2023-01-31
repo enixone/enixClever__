@@ -1,0 +1,69 @@
+<!-- 폴더선택 -->
+<div id="defaultModal1" class="modal">
+	<div class="modal-title">
+		결재 승인자를 선택하세요.
+		<div class="modal-btnGrp">
+			<a href="#" class="modal-close"><img src="/enixClever/assets/images/modal_cancel.png" alt=""></a>
+		</div>
+	</div>
+	<div class="modal-body"> 
+		<div class="modal_info_area">
+			<div class="info_copy">
+			<form name="userForm" onsubmit="return false;">
+			<table style="width:100%" border="0">
+					<tr>
+						<td align="center" style="width:*">
+						<input type="text" id="userName" name="userName" class="searchText" tabindex="3" placeholder="성명/직책을 검색하세요"  onkeyUp="evtKeyUp(event.keyCode, this.value);">
+						</td>
+						<td align="right" style="width:70px">
+						<button class="btn btn-md btn-line-primary" onclick="evtSeachUser();">검색</button></td>
+					</tr>
+					<trvalign="top">
+						<td colspan="2">
+						<div name="selectDataDiv">
+							<table name="dataListTable">
+								<tbody>
+								</tbody>
+							</table>
+						</div>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2">
+							<!-- 초기 출력 -->
+							<div id="dataDivInit" class="dataDivision">성명/직책으로 결재대상자를 검색하세요</div>
+							<!-- 데이터 가져오는 중 -->
+							<div id="dataDivIng" class="dataDivision" style="display:none;">데이터를 가져 오는 중입니다</div>
+							<!-- 데이터가 없는 경우 -->
+							<div id="dataDivNoData" class="dataDivision" style="display:none;">검색한 대상자가 없습니다. </div>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2">
+							<div class="rDefault">
+							<input type="checkbox" id="selfMe" onclick="evtChoiceMe();"> <label for="selfMe">자가결재</label>	
+							</div>
+						</td>
+					</tr>
+			</table>
+			
+					
+			
+			</form>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<a href="#" class="modal-save-btn" onclick="evtSubmitClick()">확인</a>
+		<a href="#" class="modal-cancle-btn" onclick="evtCancelClick()">취소</a>
+	</div>
+</div>
+
+<!-- 폴더선택 end -->
+
+<script>
+    // 스크립트 로드 후 콜백을 전달한다
+    function loadScript(callback) {
+		$.getScript("/enixClever/cms/common/selectUser.js", callback);
+    }
+</script>

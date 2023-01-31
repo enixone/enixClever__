@@ -1,0 +1,33 @@
+	<div class="navigation-wrap cont-body-scroll height100">
+	<div class="navigation-title" id="leftMenuDiv"><a href="javascript:createDocument();"><img src="/enixClever/assets/images/icon_pen.png" class="pdR10">새문서 등록</a></div>
+		<ul class="navBtnWrap">
+			<li><a href="#" class="navBtn" data-menu-id="docListMyDocument"><img src="/enixClever/assets/images/icon_menu01.png">내가 등록한 문서</a></li>
+			<li><a href="#" class="navBtn" data-menu-id="docListLatest"><img src="/enixClever/assets/images/icon_menu03.png">최신 문서함</a></li>
+			<li><a href="#" class="navBtn" data-menu-id="docListRecent"><img src="/enixClever/assets/images/icon_menu02.png">최근 조회 문서</a></li>
+			<li><a href="#" class="navBtn" data-menu-id="tempSaveList"><img src="/enixClever/assets/images/icon_menu04.png">임시 보관함</a></li>
+			<!--li><a href="#" class="navBtn" data-menu-id="bookmarkFolderList"><img src="/enixClever/assets/images/icon_menu05.png">즐겨 찾는 폴더</a></li-->
+			<li><a href="#" class="navBtn" data-menu-id="bookmarkDocList"><img src="/enixClever/assets/images/icon_menu05.png">즐겨 찾는 문서</a></li>
+			<li class=""><a href="#" class="navBtn navBtnArrow"><img src="/enixClever/assets/images/icon_menu10.png">결재 문서</a>
+				<div class="navSubWrap">
+					<a href="#" class="navSubBtn" data-menu-id="workflowDocListSendIng" onclick="evtWorkflowDocListSendIng();">[상신] 진행함</a>
+					<a href="#" class="navSubBtn" data-menu-id="workflowDocListSendEnd" onclick="evtWorkflowDocListSendEnd();">[상신] 완료함</a>
+					<a href="#" class="navSubBtn" data-menu-id="workflowDocListReceiveIng" onclick="evtWorkflowDocListReceiveIng();">[수신] 결재 대기함</a> 
+					<a href="#" class="navSubBtn" data-menu-id="workflowDocListReceiveEnd" onclick="evtWorkflowDocListReceiveEnd();">[수신] 결재 완료함</a>
+				</div>
+			</li>
+			<li><a href="#" class="navBtn" data-menu-id="myScretDocList"><img src="/enixClever/assets/images/icon_menu11.png">비밀소유현황</a></li>
+			<li><a href="#" class="navBtn" data-menu-id="securityDocument"><img src="/enixClever/assets/images/icon_menu11.png">비밀관리 기록부</a></li>
+			<li class=""><a href="#" class="navBtn navBtnArrow" data-menu-id="myDocument11"><img src="/enixClever/assets/images/icon_menu10.png">소유권 인수/인계</a>
+				<div class="navSubWrap" style="display:none;">
+					<a href="#" class="navSubBtn" onclick="evtWorkflowDocList();">인수 문서</a>
+					<a href="#" class="navSubBtn" onclick="evtWorkflowDocList();">인계 문서</a>
+				</div>
+			</li>
+			<li><a href="#" class="navBtn"  data-menu-id="expireDocList" onclick="evtExpireDocList();"><img src="/enixClever/assets/images/icon_menu07.png">만기문서함</a></li>
+			<li><a href="#" class="navBtn" data-menu-id="destroyDocList" onclick="evtDestroyDocList();"><img src="/enixClever/assets/images/icon_menu07.png">파기문서함</a></li>
+		</ul>
+	</div><script>
+	$(document).ready(function () {
+			$.getScript("/enixClever/cms/menu/myDocument.js");
+	});
+	</script>

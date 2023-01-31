@@ -1,0 +1,73 @@
+<div id="" class="modal">
+	<div class="modal-title" style="margin:30px 20px 0px;">
+		사용자 상세정보
+		<div class="modal-btnGrp">
+			<a href="#" class="modal-close" onclick="_userDetail.evtCancelClick()"><img src="/enixClever/manage/assets/images/modal_cancel.png" alt=""></a>
+		</div>
+	</div>
+	<div id="btnGroup" style="margin: 10px 0px 0px 20px; display: inline-block;"> 
+			<a href="#" onclick="approval();"><button class="btn btn-xsm btn-line btn_Restore" id="btnReclassfication btn_Restore">복원</button></a>
+			<a href="#" onclick="evtModifyUserPopup(); "><button class="btn btn-xsm btn-line btn_Modify" id="btnReclassfication btn_Modify">수정</button></a>
+			<a href="#" onclick="approval();"><button class="btn btn-xsm btn-line btn_approval" id="btnReclassfication btn_approval">승인</button></a>
+			<a href="#" onclick="evtDeleteUserPopup();"><button class="btn btn-xsm btn-line btn_Delete" id="btnReclassfication btn_Delete">삭제</button></a>
+	</div>
+
+	<div class="modal-body" style="padding-top: 10px">
+		<div class="write_info_area">
+			<form name="userDetailForm" autocomplete="on">
+				<table class="table-list">
+					<colgroup>
+						<col width="25%">
+						<col width="25%">
+						<col width="25%">
+						<col width="25%">
+					</colgroup>
+					<thead>
+						<tr> 
+							<th>성명</th>
+							<td><input type="text" name="userName" id="userName" data-name="성명" readonly="readonly" style="width: 130px;"></td>
+							<th>아이디</th>
+							<td><label name="userKey" id="userKey" class="userKey"></label></td>
+						</tr>
+						<tr> 
+							<th>소속부서</th>
+							<td colspan="3"><input type="text" name="groupName" id="groupName" data-name="소속부서" style="border-bottom:none;" readonly="readonly"><br/>
+								<input type="hidden" name="groupId" id="groupId" data-name="그룹아이디" style="border-bottom:none;"></td>
+						</tr>
+						<tr> 
+							<th>역할</th>
+							<td colspan="3"><input name="roleName" id="roleName" type="text" data-ame="역할" style="border-bottom:none;" readonly="readonly">
+<!-- 								<label name="roleName" id="roleName" data-name="직책이름"></label></td>    -->
+						</tr>
+						<tr> 
+							<th>전화번호</th>
+							<td colspan="3"><input type="text" name="telNo" id="telNo" data-name="전화번호" style="border-bottom:none;" readonly="readonly"></td>
+						</tr>
+						<tr> 
+							<th>이메일</th>
+							<td colspan="3"><input type="text" name="email" id="email" data-name="전자메일" style="border-bottom:none;" readonly="readonly"></td>
+						</tr>
+						<tr> 
+							<th>마지막접속일</th>
+							<td colspan="3"><input type="text" name="lastAccessDate" id="lastAccessDate"  style="border-bottom:none;" readonly="readonly"></td>
+						</tr>
+					</thead>
+				</table>
+				<div>
+					<input type="hidden" id="statusCode" class="statusCode" name="statusCode" value="" />
+				</div>
+			</form>
+		</div>
+		<div class="sys-modal-footer">
+			<a href="#" onclick="_userDetail.evtCancelClick()" class="modal-save-btn">확인</a>		
+		</div>
+	</div>
+</div>
+
+<script>
+    function loadScript(callback) {
+        $.getScript("/enixClever/manage/user/userDetail.js", callback);
+        //$.getScript("/enixClever/manage/user/userModify.js", callback);
+           
+    }
+</script>

@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="subject" content="enixClever">
+<meta name="author" content="enixClever">
+<meta name="publisher" content="enixClever">
+<meta name="description" content="enixClever">
+<meta name="robots" content="index,follow">
+<meta name="keywords" content="enixClever, 전자적비밀관리 시스템">
+<title>enixClever</title>
+<link rel="stylesheet" type="text/css" href="./inc/css/common.css">
+<link rel="stylesheet" type="text/css" href="./inc/css/layout.css">
+<script type="text/javascript" src="./inc/js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="./inc/js/dafault.js"></script>
+</head>
+
+<body>
+<div class="overlay"></div>
+<!-- 접근권한 목록 -->
+<div id="defaultModal1" class="modal">
+	<div class="modal-title">
+		접근권한 목록
+		<div class="modal-btnGrp">
+			<a href="#" class="modal-close"><img src="/enixClever/assets/images/modal_cancel.png" alt=""></a>
+		</div>
+	</div>
+	<div class="modal-body">
+		<div class="modal_info_area">
+							<div class="info_access">
+								<dl>
+									<dt>권한명칭</dt>
+									<dd class="on"><input type="text" id="Subject" tabindex="3" value="우리팀 접근권한"><button type="submit" class="btn_search_t"></button></dd>
+									<dt>권한목록</dt>
+									<dd>
+										<div class="cont-body-scroll height170 border-top1">
+											<table class="table-list">
+												<colgroup>
+													<col width="">
+													<col width="100px">
+												</colgroup>
+												<thead>
+													<tr>
+														<th class="text-center">권한명칭</th>
+														<th class="text-center pd">마지막적용일</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+														<td class="text-left pd"><img src="./images/icon_access.png" class="pdR5">회사 경영전략 보고서</td>
+														<td class="pd fs_1">2022-08-03</td>
+													</tr>
+													<tr>
+														<td class="text-left pd"><img src="./images/icon_access.png" class="pdR5">회사 경영전략 보고서</td>
+														<td class="pd">2022-08-03</td>
+													</tr>
+													<tr>
+														<td class="text-left pd"><img src="./images/icon_access.png" class="pdR5">회사 경영전략 보고서</td>
+														<td class="pd">2022-08-03</td>
+													</tr>
+													<tr>
+														<td class="text-left pd"><img src="./images/icon_access.png" class="pdR5">회사 경영전략 보고서</td>
+														<td class="pd">2022-08-03</td>
+													</tr>
+													<tr>
+														<td class="text-left pd"><img src="./images/icon_access.png" class="pdR5">회사 경영전략 보고서</td>
+														<td class="pd">2022-08-03</td>
+													</tr>
+													<tr>
+														<td class="text-left pd"><img src="./images/icon_access.png" class="pdR5">회사 경영전략 보고서</td>
+														<td class="pd">2022-08-03</td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</dd>
+								</dl>
+							</div>
+							<div class="info_access mgT20">
+								<dl>
+									<dt>적용대상</dt>
+									<dd>
+									<div class="cont-body-scroll height170">
+										<div class="access_box info_access_topline">
+											<img src="./images/icon_access_all.png">전체사용자
+											<div class="btn_access_area">
+												<span class="btn_access">목록<i></i></span>
+												<span class="btn_access"><span class="disabled">열람</span><i></i></span>
+												<span class="btn_access"><span class="disabled">수정</span><i></i></span>
+												<span class="btn_access"><span class="disabled">삭제</span></span>
+											</div>
+										</div>
+										<div class="access_box info_access_topline">
+											<img src="./images/icon_access_plan.png">경영기획팀
+											<div class="btn_access_area">
+												<span class="btn_access">목록<i></i></span>
+												<span class="btn_access"><span class="disabled">열람</span><i></i></span>
+												<span class="btn_access"><span class="disabled">수정</span><i></i></span>
+												<span class="btn_access"><span class="disabled">삭제</span></span>
+											</div>
+										</div>
+										<div class="access_box info_access_topline">
+											<img src="./images/icon_access_manager.png">총무팀 / 최대용
+											<div class="btn_access_area">
+												<span class="btn_access">목록<i></i></span>
+												<span class="btn_access"><span class="disabled">열람</span><i></i></span>
+												<span class="btn_access"><span class="disabled">수정</span><i></i></span>
+												<span class="btn_access"><span class="disabled">삭제</span></span>
+											</div>
+										</div>
+										<div class="access_box info_access_topline">
+											<img src="./images/icon_access_person.png">경영기획 담당
+											<div class="btn_access_area">
+												<span class="btn_access">목록<i></i></span>
+												<span class="btn_access"><span class="disabled">열람</span><i></i></span>
+												<span class="btn_access"><span class="disabled">수정</span><i></i></span>
+												<span class="btn_access"><span class="disabled">삭제</span></span>
+											</div>
+										</div>
+										<div class="access_box info_access_topline">
+											<img src="./images/icon_access_all.png">전체사용자
+											<div class="btn_access_area">
+												<span class="btn_access">목록<i></i></span>
+												<span class="btn_access"><span class="disabled">열람</span><i></i></span>
+												<span class="btn_access"><span class="disabled">수정</span><i></i></span>
+												<span class="btn_access"><span class="disabled">삭제</span></span>
+											</div>
+										</div>
+									</div>
+									</dd>
+								</dl>
+							</div>
+						</div>
+	</div>
+	<div class="modal-footer">
+		<a href="#" class="modal-save-btn">적용</a>
+		<a href="#" class="modal-cancle-btn">취소</a>
+		<a href="#" class="modal-newmake-btn rel-pop1">새로 만들기</a>
+	</div>
+</div>
+<!-- 접근권한 목록 end -->
+
+<!-- 접근권한 생성/수정 -->
+<div id="defaultModal2" class="modal">
+	<div class="modal-title">
+		접근권한 생성/수정
+		<div class="modal-btnGrp">
+			<a href="#" class="modal-close"><img src="/enixClever/assets/images/modal_cancel.png" alt=""></a>
+		</div>
+	</div>
+	<div class="modal-body">
+		<div class="modal_info_area">
+							<div class="info_access">
+								<dl>
+									<dt>권한명칭</dt>
+									<dd class="on"><input type="text" id="Subject" tabindex="3" value="우리팀 접근권한"></dd>
+									<dt>대상검색</dt>
+									<dd>
+										<input type="text" id="target_search" tabindex="3" value="접근권한 선택"><button type="submit" class="btn_search_b"></button>
+										<div class="searching_list">
+											<ul>
+											<a href="#"><li>권한목록 최근 검색어 리스트</li></a>
+											<a href="#"><li>권한목록 최근 검색어 리스트</li></a>
+											<a href="#"><li>권한목록 최근 검색어 리스트</li></a>
+											<a href="#"><li>권한목록 최근 검색어 리스트</li></a>
+											</ul>
+										</div>
+										<div class="tabs">
+											<a href="#" class="active">전체</a>
+											<a href="#">사용자</a>
+											<a href="#">조직</a>
+											<a href="#">직책</a>
+										</div>
+										<div class="cont-body-scroll height170">
+											<table class="table-list">
+												<colgroup>
+													<col width="">
+													<col width="100px">
+												</colgroup>
+												<tbody>
+													<tr>
+														<td class="text-left pd"><img src="./images/icon_access.png" class="pdR5">회사 경영전략 보고서</td>
+														<td class="pd fs_1">2022-08-03</td>
+													</tr>
+													<tr>
+														<td class="text-left pd"><img src="./images/icon_access.png" class="pdR5">회사 경영전략 보고서</td>
+														<td class="pd">2022-08-03</td>
+													</tr>
+													<tr>
+														<td class="text-left pd"><img src="./images/icon_access.png" class="pdR5">회사 경영전략 보고서</td>
+														<td class="pd">2022-08-03</td>
+													</tr>
+													<tr>
+														<td class="text-left pd"><img src="./images/icon_access.png" class="pdR5">회사 경영전략 보고서</td>
+														<td class="pd">2022-08-03</td>
+													</tr>
+													<tr>
+														<td class="text-left pd"><img src="./images/icon_access.png" class="pdR5">회사 경영전략 보고서</td>
+														<td class="pd">2022-08-03</td>
+													</tr>
+													<tr>
+														<td class="text-left pd"><img src="./images/icon_access.png" class="pdR5">회사 경영전략 보고서</td>
+														<td class="pd">2022-08-03</td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</dd>
+								</dl>
+							</div>
+							<div class="btn_updown">
+								<a href="#" class="btn_updown_down"></a>
+								<a href="#" class="btn_updown_up"></a>
+							</div>
+							<div class="info_access mgT20">
+								<dl>
+									<dt>적용대상</dt>
+									<dd>
+									<div class="cont-body-scroll height170">
+										<div class="access_box info_access_topline">
+											<img src="./images/icon_access_all.png">전체사용자
+											<div class="btn_access_area">
+												<span class="btn_access">목록<i></i></span>
+												<span class="btn_access"><span class="disabled">열람</span><i></i></span>
+												<span class="btn_access"><span class="disabled">수정</span><i></i></span>
+												<span class="btn_access"><span class="disabled">삭제</span></span>
+											</div>
+										</div>
+										<div class="access_box info_access_topline">
+											<img src="./images/icon_access_plan.png">경영기획팀
+											<div class="btn_access_area">
+												<span class="btn_access">목록<i></i></span>
+												<span class="btn_access"><span class="disabled">열람</span><i></i></span>
+												<span class="btn_access"><span class="disabled">수정</span><i></i></span>
+												<span class="btn_access"><span class="disabled">삭제</span></span>
+											</div>
+										</div>
+										<div class="access_box info_access_topline">
+											<img src="./images/icon_access_manager.png">총무팀 / 최대용
+											<div class="btn_access_area">
+												<span class="btn_access">목록<i></i></span>
+												<span class="btn_access"><span class="disabled">열람</span><i></i></span>
+												<span class="btn_access"><span class="disabled">수정</span><i></i></span>
+												<span class="btn_access"><span class="disabled">삭제</span></span>
+											</div>
+										</div>
+										<div class="access_box info_access_topline">
+											<img src="./images/icon_access_person.png">경영기획 담당
+											<div class="btn_access_area">
+												<span class="btn_access">목록<i></i></span>
+												<span class="btn_access"><span class="disabled">열람</span><i></i></span>
+												<span class="btn_access"><span class="disabled">수정</span><i></i></span>
+												<span class="btn_access"><span class="disabled">삭제</span></span>
+											</div>
+										</div>
+										<div class="access_box info_access_topline">
+											<img src="./images/icon_access_all.png">전체사용자
+											<div class="btn_access_area">
+												<span class="btn_access">목록<i></i></span>
+												<span class="btn_access"><span class="disabled">열람</span><i></i></span>
+												<span class="btn_access"><span class="disabled">수정</span><i></i></span>
+												<span class="btn_access"><span class="disabled">삭제</span></span>
+											</div>
+										</div>
+									</div>
+									</dd>
+								</dl>
+							</div>
+						</div>
+	</div>
+	<div class="modal-footer">
+		<a href="#" class="modal-save-btn">적용</a>
+		<a href="#" class="modal-cancle-btn">취소</a>
+	</div>
+</div>
+<!-- 접근권한 생성/수정 end -->
+
+<div id="wrap">
+	<div class="container-pop">
+		<div class="row">
+					<div class="btnGroup">
+						<a href="#" class="btn btnFill">저장</a>
+						<a href="#" class="btn btnLine">취소</a>
+						<a href="#" class="btn btnLine">임시저장</a>
+					</div>
+					<div class="frm-body-full">
+						<div class="write_info_area">
+							<div class="info_write">
+								<dl>
+									<dt>제목</dt>
+									<dd class="on"><input type="text" id="Subject" class="tf_subject" tabindex="3"></dd>
+									<dt>저장위치</dt>
+									<dd><input type="text" id="save" class="tf_subject" tabindex="3"><a href="#" class="btn_txtbt">저장위치 변경</a></dd>
+									<dt>문서유형</dt>
+									<dd>
+										<div class="rDefault">
+											<input type="radio" name="" id="" value="" checked="">
+											<label for="rd_color1" class="txt-dafault">보고서</label>	
+											<input type="radio" name="" id="rd_txt1" value="" />
+											<label for="rd_txt1">기획서</label>	
+											<input type="radio" name="" id="rd_txt1" value="" />
+											<label for="rd_txt1">기안문서</label>	
+											<input type="radio" name="" id="rd_txt1" value="" />
+											<label for="rd_txt1">품의서</label>	
+											<input type="radio" name="" id="rd_txt1" value="" />
+											<label for="rd_txt1">기타</label>	
+										</div>
+									</dd>
+									<dt>보존기간</dt>
+									<dd>
+										<div class="rDefault">
+											<input type="radio" name="" id="" value="" checked="">
+											<label for="rd_color1" class="txt-dafault">1년</label>	
+											<input type="radio" name="" id="rd_txt1" value="" />
+											<label for="rd_txt1">2년</label>	
+											<input type="radio" name="" id="rd_txt1" value="" />
+											<label for="rd_txt1">3년</label>	
+											<input type="radio" name="" id="rd_txt1" value="" />
+											<label for="rd_txt1">5년</label>	
+											<input type="radio" name="" id="rd_txt1" value="" />
+											<label for="rd_txt1">10년</label>
+											<input type="radio" name="" id="rd_txt1" value="" />
+											<label for="rd_txt1">영구</label>
+										</div>
+									</dd>
+									<dt>보안등급</dt>
+									<dd>
+										<div class="rDefault">
+											<input type="radio" name="" id="" value="" checked="">
+											<label for="rd_color1" class="txt-dafault">일반문서</label>	
+											<input type="radio" name="" id="rd_txt1" value="" />
+											<label for="rd_txt1">대외비</label>	
+											<input type="radio" name="" id="rd_txt1" value="" />
+											<label for="rd_txt1">Ⅱ급보안</label>	
+											<input type="radio" name="" id="rd_txt1" value="" />
+											<label for="rd_txt1">Ⅲ급보안</label>	
+										</div>
+									</dd>
+									<dt>승인자</dt>
+									<dd><input type="text" id="save" class="tf_subject" tabindex="3"><a href="#" class="btn_txtbt">승인자 선택</a></dd>
+									<dt>접근권한</dt>
+									<dd><input type="text" id="save" class="tf_subject" tabindex="3"><a href="#" class="btn_txtbox floatR rel-pop">권한목록</a></dd>
+									<dt>첨부파일</dt>
+									<dd><a href="#" class="btn_txtbox">파일첨부</a><div class="box_attach"><p class="text_info">여러개의 파일을 마우스로 끌어놓으세요.</p></div></dd>
+									<dt>요약정보</dt>
+									<dd class="pdy5">에디터가 들어가면 됩니다.</dd>
+								</dl>
+							</div>
+						</div>
+					</div>
+				</div>
+	</div>
+</div>
+</body>
+</html>

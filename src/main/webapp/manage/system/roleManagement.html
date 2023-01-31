@@ -1,0 +1,81 @@
+<div class="sys-full-frm">
+	<div class="sys-frm-body-full">
+		<!-- 상단 -->
+		<div>
+			<div class="frm-title-wrap">
+				<div class="frm-title">역할 관리</div>
+			</div>
+			<div class="btnGroup">
+				<button class="btn btn-sm btn-line" onclick="evtCreateRolePopup()">등록</button>
+				<button class="btn btn-sm btn-line" onclick="evtModifyRolePopup()">수정</button>
+				<button class="btn btn-sm btn-line-accent" onclick="evtDeleteRolePopup()">삭제</button>
+			</div>
+		</div>
+		
+		<!-- 하단 -->
+		<div class="sys-contents-area">
+			<!-- 좌측 -->
+			<div class="sys-leftList" style="width: 50%">
+				<div style="padding-right: 15px">
+					<!-- 테이블 -->
+					<table id="roleListTable">
+					</table>
+					<!-- 페이지 -->
+					<div id="roleListPagination" class="PageArea" style="position: relative; border-top: none;">
+					</div>
+					 <!-- 리스트가 없는 경우 화면 출력 -->
+					 <div id="noDataDiv" class="dataDivision">
+						<div id="noDataImage" class="noDataImage">
+							<img src="/enixClever/manage/assets/images/loading.gif">
+						</div>
+						<div id="noDataMessage" class="txt-message"></div>
+					</div>
+				</div>
+			</div>
+			<!-- 우측 -->
+			<div class="sys-divContent" style="left: 50%; right: 10%">
+				<div class="sys-viewWrap">
+					<form name="roleDetailForm">
+						<table class="table-list" style="width:500px">
+							<colgroup>
+								<col width="18%">
+								<col width="82%">
+
+							</colgroup>
+							<thead>
+								<tr>
+									<th>명칭</th>
+									<td><input name="roleName" type="text" readonly style="border:none"></td>
+								</tr>
+								<tr>
+									<th>생성자</th>
+									<td><input name="creatorName" type="text" readonly style="border:none"></td>
+								</tr>
+								<tr>
+									<th>생성일</th>
+									<td><input name="createDate" type="text" readonly style="border:none"></td>
+								</tr>
+								<tr>
+									<th>적용대상</th>
+									<td colspan="2" style="height:45px">
+										<div class="table-responsive">				
+											<table name="roleItemTable">
+											</table>
+										</div>
+									</td>
+								</tr>
+							</thead>
+						</table>
+					</form>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+</div>
+<script>
+	$(document).ready(function() {
+		$.getScript("/enixClever/manage/system/roleManagement.js");
+
+	});
+</script>

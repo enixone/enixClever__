@@ -1,0 +1,51 @@
+<div class="row">
+		<div class="frm-title-wrap">
+			<div class="frm-title"><label for="TEXT_TITLE">내 문서함</label><label class="doc-count" for="doc-count"></label><label class="folder-path" for="folder-path"></label></div>
+		</div>
+		<div id="frm-title"></div>
+		<div class="btnGroup"> 
+			<button class="btn btn-sm btn-line" onclick="fnSetFavoriteDocument();">즐겨찾기 등록</button>
+			<button class="btn btn-sm btn-line" onclick="fnClearFavoriteDocument();">즐겨찾기 해제</button>
+			<button class="btn btn-sm btn-line" onclick="fnClearFavoriteDocument();">열람요청</button>
+			<button class="btn btn-sm btn-line" onclick="fnClearFavoriteDocument();">인수인계요청</button>
+			<button class="btn btn-sm btn-line" onclick="fnClearFavoriteDocument();">재분류요청</button>
+			<button class="btn btn-sm btn-line" onclick="fnClearFavoriteDocument();">파기요청</button>
+			
+		</div>
+		<div class="frm-body-full">
+		<div class="frm-body-frame">
+			<div class="cont-body-wrap">
+				<!-- 페이지리스트 테이블 -->
+				<div class="tmpLeft">
+					<div>
+						<table id="documentListTable" class="table-list" border="0">
+						</table>					
+					</div>
+					<!-- 페이지 네비게이션 -->
+					<div id="docListPagination"  class="PageArea">
+					</div>
+					<!-- 리스트가 없는 경우 화면 출력 -->
+					<div id="noDataDiv" class="dataDivision">
+				      <div id="noDataImage" class="noDataImage"><img src="/enixClever/assets/images/loading.gif"></div>
+				      <div id="noDataMessage" class="txt-message"></div>
+					</div>
+				</div>
+				<!-- 상세 페이지 -->
+				<div class="tmpRight">
+					<div class="divContent">
+						<div class="viewWrap">
+						</div>
+					</div>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        $.getScript("/enixClever/cms/list/deptDocument.js");
+    });
+</script>

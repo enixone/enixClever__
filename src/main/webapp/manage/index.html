@@ -1,0 +1,82 @@
+ <head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="subject" content="enixClever">
+<meta name="author" content="enixClever">
+<meta name="publisher" content="enixClever">
+<meta name="description" content="enixClever">
+<meta name="keywords" content="enixClever, 전자적비밀관리 시스템">
+<link rel="shortcut icon" type="image/x-icon" href="/enixClever/manage/assets/images/favicon.ico" />
+<title>시스템 관리(System Management)</title>
+<link rel="stylesheet" type="text/css" href="/enixClever/manage/assets/css/common.css">
+<link rel="stylesheet" type="text/css" href="/enixClever/manage/assets/css/modal.css">
+<link rel="stylesheet" type="text/css" href="/enixClever/manage/assets/css/layout.css">
+</head>
+
+<body>
+	<div class="sys-container-pop">
+		<div class="sys-pop-row">
+			<div class="sys-logo">
+				<a href="/enixClever/manage/index.html" class="sys-logo-area"><img src="/enixClever/manage/assets/images/logo.png" alt="에닉스클레버"
+					style="margin: 14px 10px" /></a>
+			</div>
+			<div class="sys-top">
+				<a href="#" onclick="fnLogout()" class="sys-logout btn btn-sm btn-line-none">로그아웃</a>
+			</div>
+		</div>
+
+		<!--  좌측화면 -->
+		<div class="pop-container-area" >
+			<div class="pop-navi" id="leftMenuDiv"></div>
+		</div>
+		
+		<!-- 메인화면 -->
+		<div class="sys-flex-area" id="mainContentDiv">
+			<!-- 리스트가 없는 경우 화면 출력 -->
+			<div id="noDataDiv" class="dataDivision">
+				<div id="noDataImage" class="noDataImage">
+					<img src="/enixClever/manage/assets/images/loading.gif">
+				</div>
+				<div id="noDataMessage" class="txt-message"></div>
+			</div>
+		</div>
+	</div>
+</body>
+
+<script type="text/javascript" src="/enixClever/plugins/jquery/js/jquery.min.js"></script>
+<script type="text/javascript" src="/enixClever/plugins/jquery-contextmenu/jquery.contextMenu.js"></script>
+
+<script type="text/javascript" src="/enixClever/plugins/plupload/plupload.full.min.js"></script>
+<script type="text/javascript" src="/enixClever/plugins/plupload/jquery.plupload.queue/jquery.plupload.queue.js"></script>
+<script type="text/javascript" src="/enixClever/plugins/plupload/i18n/ko.js" type="text/javascript"></script>
+
+<script type="text/javascript" src="/enixClever/manage/assets/javascript/dafault.js"></script>
+<script type="text/javascript" src="/enixClever/manage/assets/javascript/common.js"></script>
+<script type="text/javascript" src="/enixClever/manage/assets/javascript/enixForms.js"></script>
+
+<script type="text/javascript" src="/enixClever/manage/assets/javascript/enixAccessorList.js"></script>
+<script type="text/javascript" src="/enixClever/manage/assets/javascript/enixFileList.js"></script>
+<script type="text/javascript" src="/enixClever/manage/assets/javascript/enixForms.js"></script>
+<script type="text/javascript" src="/enixClever/manage/assets/javascript/enixList.js"></script>
+<script type="text/javascript" src="/enixClever/manage/assets/javascript/enixTable.js"></script>
+<script type="text/javascript" src="/enixClever/manage/assets/javascript/util.js"></script>
+<script type="text/javascript" src="/enixClever/manage/assets/javascript/autocomplete.js"></script>
+
+<link rel="stylesheet" href="/enixClever/plugins/jquery-ui-1.13.2/jquery-ui.css">
+<script type="text/javascript" src="/enixClever/plugins/jquery-ui-1.13.2/jquery-ui.js"></script>
+
+
+<!-- Fancytree -->
+<link rel="stylesheet" href="/enixClever/plugins/jquery-contextmenu/jquery.contextMenu.css">
+<link href="/enixClever/plugins/fancytree/skin-win8/ui.fancytree.css" rel="stylesheet">
+
+<script src="/enixClever/plugins/fancytree/jquery.fancytree-all.js"></script>
+<script src="/enixClever/plugins/fancytree/modules/jquery.fancytree.contextMenu.js"></script>
+
+<!-- Sweetalert -->
+<script src="/enixClever/plugins/sweetalert2/sweetalert2.all.js"></script>
+
+<script> 
+$(document).ready(function() {
+	$.getScript("/enixClever/manage/index.js");
+});
+</script>

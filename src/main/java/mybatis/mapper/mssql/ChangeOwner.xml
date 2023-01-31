@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.enixone.enixClever.cms.was.dao.ChangeOwnerDao">
+
+    <!--
+    ======================================
+    =   EC_CHANGE_OWNER 관련 쿼리
+    ======================================
+    -->
+
+    <!-- 인계 목록 조회 -->
+    <select id="selectGiveOwnerList" resultMap="commonSql.ChangeOwner">
+        SELECT
+            CHANGE_ID,
+               GIVER_ID, (SELECT USER_NAME FROM EC_USER WHERE USER_KEY = GIVER_ID) AS GIVER_NAME,
+               TAKER_ID, (SELECT USER_NAME FROM EC_USER WHERE USER_KEY = TAKER_ID) AS TAKER_NAME,
+               STATUS_CODE, (SELECT EC.CODE_NAME FROM EC_CODE EC WHERE EC.CODE_GROUP = 'DOCUMENT_STATUS' AND EC.CODE = STATUS_CODE) AS STATUS_CODE_NAME,
+               GIVE_DATE, TAKE_DATE
+        FROM EC_CHANGE_OWNER
+        WHERE GIVER_ID = #{giverId}
+    </select>
+
+    <!-- 인수 목록 조회 -->
+    <select id="selectTakeOwnerList" resultMap="commonSql.ChangeOwner">
+        SELECT
+            CHANGE_ID,
+            GIVER_ID, (SELECT USER_NAME FROM EC_USER WHERE USER_KEY = GIVER_ID) AS GIVER_NAME,
+            TAKER_ID, (SELECT USER_NAME FROM EC_USER WHERE USER_KEY = TAKER_ID) AS TAKER_NAME,
+            STATUS_CODE, (SELECT EC.CODE_NAME FROM EC_CODE EC WHERE EC.CODE_GROUP = 'DOCUMENT_STATUS' AND EC.CODE = STATUS_CODE) AS STATUS_CODE_NAME,
+            GIVE_DATE, TAKE_DATE
+        FROM EC_CHANGE_OWNER
+        WHERE TAKER_ID = #{takerId}
+    </select>
+
+    <!-- 인수/인계 상세 조회 -->
+    <select id="selectChangeOwnerInfo" resultMap="commonSql.ChangeOwner">
+        SELECT
+            CHANGE_ID,
+            GIVER_ID, (SELECT USER_NAME FROM EC_USER WHERE USER_KEY = GIVER_ID) AS GIVER_NAME,
+            TAKER_ID, (SELECT USER_NAME FROM EC_USER WHERE USER_KEY = TAKER_ID) AS TAKER_NAME,
+            STATUS_CODE, (SELECT EC.CODE_NAME FROM EC_CODE EC WHERE EC.CODE_GROUP = 'DOCUMENT_STATUS' AND EC.CODE = STATUS_CODE) AS STATUS_CODE_NAME,
+            GIVE_DATE, TAKE_DATE
+        FROM EC_CHANGE_OWNER
+        WHERE CHANGE_ID = #{changeId}
+    </select>
+
+    <!-- 부서영역에있는 사용자 소유의 문서 갯수 조회 -->
+    <select id="countUserWorkspaceDocs" resultType="int">
+        SELECT COUNT(*) AS CNT
+        FROM EC_DOCUMENT ED
+        INNER JOIN EC_FOLDER_DOCUMENT_MAPPING MFD ON ED.DOC_ID = MFD.DOC_ID AND MFD.IS_LAST_DOC = 'Y'
+        INNER JOIN EC_BOX_FOLDER_MAPPING MBF ON MFD.FOLDER_ID = MBF.FOLDER_ID AND MBF.BOX_ID != 'BOX_PRIVATE'
+        WHERE
+            ED.CREATOR_ID = #{userKey}
+    </select>
+
+    <!-- 인수 인계 등록 -->
+    <insert id="insertChangeOwner" parameterType="ChangeOwner">
+        INSERT INTO EC_CHANGE_OWNER
+        (CHANGE_ID, GIVER_ID, TAKER_ID, STATUS_CODE, GIVE_DATE)
+        VALUES
+        (#{changeId}, #{giverId}, #{takerId}, #{statusCode}, GETDATE())
+    </insert>
+
+    <!-- 내가 요청한 소유권 변경 중 처리되지 않은 건을 조회 -->
+    <select id="countMyRequest" resultType="int">
+        SELECT COUNT(*) AS CNT
+        FROM EC_CHANGE_OWNER
+        WHERE GIVER_ID = #{giverId}
+          AND STATUS_CODE = 'REQUEST'
+    </select>
+
+    <!-- 소유권 이전 상태 변경 -->
+    <update id="updateChangeOwnerStatus">
+        UPDATE EC_CHANGE_OWNER
+        SET STATUS_CODE = #{statusCode}
+        WHERE
+            CHANGE_ID = #{changeId}
+    </update>
+    
+    <!-- 소유권 이전 수락 -->
+    <update id="takeChangeOwner">
+        UPDATE EC_CHANGE_OWNER
+        SET
+            STATUS_CODE = #{statusCode},
+            TAKE_DATE = GETDATE()
+        WHERE
+            CHANGE_ID = #{changeId}
+    </update>
+</mapper>

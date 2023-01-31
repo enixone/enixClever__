@@ -1,0 +1,46 @@
+<div class="row">
+		<div class="frm-title-wrap">
+			<div class="frm-title"><label for="TEXT_TITLE">내 문서함</label><label class="doc-count" for="doc-count"></label></div>
+		</div>
+		<div class="btnGroup"> 
+			<button class="btn btn-sm btn-line" onclick="fnSetFavoriteDocument();">즐겨찾기 등록</button>
+			<button class="btn btn-sm btn-line" onclick="fnClearFavoriteDocument();">즐겨찾기 해제</button>
+		</div>
+		<div class="frm-body-full">
+		<div class="frm-body-frame">
+			<div class="cont-body-wrap">
+				<!-- 페이지리스트 테이블 -->
+				<div class="tmpLeft">
+					<div>
+						<table id="documentListTable" class="table-list" border="0">
+						</table>					
+					</div>
+					<!-- 페이지 네비게이션 -->
+					<div id="docListPagination"  class="PageArea">
+					</div>
+					<!-- 리스트가 없는 경우 화면 출력 -->
+					<div id="noDataDiv" class="dataDivision">
+				      <div id="noDataImage" class="noDataImage"><img src="/enixClever/assets/images/loading.gif"></div>
+				      <div id="noDataMessage" class="txt-message"></div>
+					</div>
+				</div>
+				<!-- 상세 페이지 -->
+				<div class="tmpRight">
+					<div class="divContent">
+						<div class="viewWrap">
+						</div>
+					</div>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<script>
+    // 스크립트 로드 후 콜백을 전달한다
+    function loadScript(callback) {
+		$.getScript("/enixClever/cms/list/myDocument.js", callback);
+    }
+</script>

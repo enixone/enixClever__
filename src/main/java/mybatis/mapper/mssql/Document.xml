@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.enixone.enixClever.cms.was.dao.DocumentDao">
+
+    <!--
+    ======================================
+    =   EC_DOCUMENT 관련 쿼리
+    ======================================
+    -->
+
+    <!-- 폴더의 문서 목록 조회 -->
+    <select id="selectDocListByFolderId" resultMap="commonSql.Document">
+        SELECT *
+        FROM (
+            SELECT
+                <include refid="commonSql.pagingSelect"/>
+                ED.DOC_ID, ED.DOC_NAME, ED.FILE_COUNT, ED.VERSION,
+                ED.DESCRIPTION, FIRST_DOC_ID,
+                ED.PERMISSION_ID,
+                ED.STATUS_CODE, ED.STATUS_CODE_NAME,
+                ED.SECURITY_CODE, ED.SECURITY_CODE_NAME,
+                ED.DOC_TYPE_ID, ED.DOC_TYPE_ID_NAME,
+                ED.CREATOR_ID, CONVERT(CHAR(16), ED.CREATE_DATE, 20) AS CREATE_DATE, ED.CREATOR_NAME
+            FROM EC_DOCUMENT ED
+            INNER JOIN EC_FOLDER_DOCUMENT_MAPPING FD ON FD.FOLDER_ID = #{folderId} AND FD.IS_LAST_DOC = 'Y' AND ED.DOC_ID = FD.DOC_ID
+            WHERE
+                STATUS_CODE = 'ACTIVE'
+                <if test="permissionList != null and permissionList.size > 0">
+                    AND PERMISSION_ID IN
+                        <foreach collection="permissionList" item="item" index="index" separator="," open="(" close=")">#{item}
+                        </foreach>
+                </if>
+        ) LIST
+        <include refid="commonSql.pagingWhere"/>
+    </select>
+
+    <!-- 폴더의 문서 권한 목록 조회 -->
+    <select id="selectPermissionIdListByDocFolderId" resultType="String">
+        SELECT
+            ED.PERMISSION_ID
+        FROM EC_DOCUMENT ED
+        INNER JOIN EC_FOLDER_DOCUMENT_MAPPING FD ON FD.FOLDER_ID = #{folderId} AND FD.IS_LAST_DOC = 'Y' AND ED.DOC_ID = FD.DOC_ID
+        GROUP BY ED.PERMISSION_ID
+    </select>
+
+
+
+	<!-- 사용자 아이디를 이용해서 문서목록에서 접근권한아이디를 구해온다 -->
+    <select id="selectPermissionIdDocListByUserKey" resultType="String">
+        SELECT
+            DISTINCT P.PERMISSION_ID
+        FROM EC_PERMISSION P
+        INNER JOIN EC_PERMISSION_ASSIGN AP ON P.PERMISSION_ID = AP.PERMISSION_ID
+        WHERE
+        (
+            (
+                P.OWNER_TYPE = 'GROUP' AND P.OWNER_ID IN (SELECT GROUP_ID FROM EC_GROUP_ASSIGN WHERE USER_KEY = #{userKey})
+                OR
+                P.OWNER_TYPE = 'USER' AND P.OWNER_ID = #{userKey}
+            )
+            OR
+            (
+                AP.TARGET_TYPE = 'GROUP' AND AP.TARGET_ID IN (SELECT GROUP_ID FROM EC_GROUP_ASSIGN WHERE USER_KEY = #{userKey})
+                OR
+                AP.TARGET_TYPE = 'USER' AND AP.TARGET_ID = #{userKey}
+            )
+        )
+		AND	APPLY_READ = 'Y';
+    </select>
+
+
+
+
+    <!-- 폴더의 문서 갯수 조회 -->
+    <select id="countDocByFolderId" resultType="int">
+        SELECT COUNT(*)
+        FROM EC_DOCUMENT ED
+        INNER JOIN EC_FOLDER_DOCUMENT_MAPPING FD ON FD.FOLDER_ID = #{folderId} AND ED.DOC_ID = FD.DOC_ID
+    </select>
+
+    <!-- 문서 정보 등록 -->
+    <insert id="insertDocument" parameterType="Document">
+        INSERT INTO EC_DOCUMENT
+        (DOC_ID, FIRST_DOC_ID, DOC_NAME, DOC_TYPE_ID, FILE_COUNT, VERSION, DESCRIPTION, PERMISSION_ID, EXPIRE_CODE, EXPIRE_DATE, STATUS_CODE, SECURITY_CODE, CREATOR_ID, CREATOR_NAME, OWNER_ID, OWNER_NAME, CREATE_DATE, EXPIRE_CODE_NAME, STATUS_CODE_NAME, SECURITY_CODE_NAME, DOC_TYPE_ID_NAME)
+        VALUES
+        (
+	        #{docId}, #{firstDocId, jdbcType=VARCHAR}, #{docName}, #{docTypeId}, #{fileCount}, #{version}, #{description}, #{permissionId}, #{expireCode}, #{expireDate}, #{statusCode}, #{securityCode}, #{creatorId}, #{creatorName}, #{creatorId}, #{creatorName}, GETDATE(), 
+	        (SELECT MAX(EC.CODE_NAME) FROM EC_CODE EC WHERE EC.CODE_GROUP = 'EXPIRE' AND EC.CODE = #{expireCode}), 
+			(SELECT MAX(EC.CODE_NAME) FROM EC_CODE EC WHERE EC.CODE_GROUP = 'DOCUMENT_STATUS' AND EC.CODE = #{statusCode}), 
+			(SELECT MAX(EC.CODE_NAME) FROM EC_CODE EC WHERE EC.CODE_GROUP = 'SECURITY' AND EC.CODE = #{securityCode}),  
+			(SELECT MAX(ET.TYPE_NAME) FROM EC_TYPE ET WHERE TYPE_ID = #{docTypeId})
+		)
+    </insert>
+
+    <!-- 문서 정보 조회 -->
+    <select id="selectDocInfo" resultMap="commonSql.Document">
+        SELECT
+            ED.DOC_ID, ED.DOC_NAME, ED.FILE_COUNT, ED.VERSION, ED.DESCRIPTION, FIRST_DOC_ID,
+            ED.PERMISSION_ID, (SELECT PERMISSION_NAME FROM EC_PERMISSION WHERE PERMISSION_ID = ED.PERMISSION_ID) AS PERMISSION_NAME,
+            ED.EXPIRE_CODE, EXPIRE_CODE_NAME, EXPIRE_DATE,
+            ED.STATUS_CODE, STATUS_CODE_NAME,
+            ED.SECURITY_CODE, SECURITY_CODE_NAME,
+            ED.DOC_TYPE_ID, DOC_TYPE_ID_NAME,
+            ED.OWNER_ID,
+            ED.CREATOR_ID, CONVERT(CHAR(16), ED.CREATE_DATE, 20) AS CREATE_DATE, (SELECT USER_NAME FROM EC_USER WHERE USER_KEY = ED.CREATOR_ID) AS CREATOR_NAME,
+            ED.UPDATOR_ID, CONVERT(CHAR(16), ED.UPDATE_DATE, 20) AS UPDATE_DATE, (SELECT USER_NAME FROM EC_USER WHERE USER_KEY = ED.UPDATOR_ID) AS UPDATOR_NAME,
+            ED.DELETOR_ID, CONVERT(CHAR(16), ED.DELETE_DATE, 20) AS DELETE_DATE, (SELECT USER_NAME FROM EC_USER WHERE USER_KEY = ED.DELETOR_ID) AS DELETOR_NAME
+        FROM EC_DOCUMENT ED
+        WHERE
+            ED.DOC_ID = #{docId}
+    </select>
+
+    <!-- 문서의 전체 버전 정보 조회 -->
+    <select id="selectAllVersionDocInfo" resultMap="commonSql.Document">
+        SELECT
+            ED.DOC_ID, ED.DOC_NAME, ED.DOC_TYPE_ID, ED.FILE_COUNT, ED.VERSION, ED.DESCRIPTION, ED.FIRST_DOC_ID,
+            ED.PERMISSION_ID, (SELECT PERMISSION_NAME FROM EC_PERMISSION WHERE PERMISSION_ID = ED.PERMISSION_ID) AS PERMISSION_NAME,
+            ED.EXPIRE_CODE, (SELECT EC.CODE_NAME FROM EC_CODE EC WHERE EC.CODE_GROUP = 'EXPIRE' AND EC.CODE = ED.EXPIRE_CODE) AS EXPIRE_CODE_NAME,
+            ED.STATUS_CODE, (SELECT EC.CODE_NAME FROM EC_CODE EC WHERE EC.CODE_GROUP = 'DOCUMENT_STATUS' AND EC.CODE = ED.STATUS_CODE) AS STATUS_CODE_NAME,
+            ED.CREATOR_ID, ED.CREATE_DATE, (SELECT USER_NAME FROM EC_USER WHERE USER_KEY = ED.CREATOR_ID) AS CREATOR_NAME,
+            ED.UPDATOR_ID, ED.UPDATE_DATE, (SELECT USER_NAME FROM EC_USER WHERE USER_KEY = ED.UPDATOR_ID) AS UPDATOR_NAME,
+            ED.DELETOR_ID, ED.DELETE_DATE, (SELECT USER_NAME FROM EC_USER WHERE USER_KEY = ED.DELETOR_ID) AS DELETOR_NAME
+        FROM (
+            SELECT * FROM EC_DOCUMENT WHERE DOC_ID = #{docId}
+        ) LIST
+        INNER JOIN EC_DOCUMENT ED ON
+            ED.DOC_ID = LIST.DOC_ID
+            OR
+            ED.DOC_ID = LIST.FIRST_DOC_ID
+            OR
+            ED.FIRST_DOC_ID = LIST.DOC_ID
+            OR
+            ED.FIRST_DOC_ID = LIST.FIRST_DOC_ID
+        ORDER BY VERSION
+    </select>
+
+    <!-- 문서를 삭제상태로 바꾼다 -->
+    <update id="trashDocument">
+        UPDATE EC_DOCUMENT
+        SET STATUS_CODE = 'DELETED'
+        WHERE
+            DOC_ID = #{docId}
+        <if test="@com.enixone.enixClever.cms.was.utils.CommonUtil@notEmpty(firstDocId)">
+            OR FIRST_DOC_ID = #{firstDocId}
+            OR DOC_ID = #{firstDocId}
+        </if>
+    </update>
+
+    <!-- 문서를 삭제상태로 바꾼다 -->
+    <update id="terminateDocument">
+        UPDATE EC_DOCUMENT
+        SET STATUS_CODE = 'TERMINATED'
+        WHERE
+            DOC_ID = #{docId}
+    </update>
+
+    <!--
+    ======================================
+    =   EC_DOCUMENT_FILE_MAPPING 관련 쿼리
+    ======================================
+    -->
+
+    <!-- 문서함 폴더 맵핑 등록 -->
+    <insert id="insertMappingDocFile">
+        INSERT INTO EC_DOCUMENT_FILE_MAPPING
+        (DOC_ID, FILE_ID)
+        VALUES
+        (#{docId}, #{fileId})
+    </insert>
+
+
+    <!--
+    ======================================
+    =   만기문서 관련
+    ======================================
+    -->
+
+    <!-- 만기문서 목록 조회 -->
+    <select id="selectExpiredDocList" resultMap="commonSql.Document">
+        SELECT *
+        FROM (
+            SELECT
+                <include refid="commonSql.pagingSelect"/>
+                ED.DOC_ID, ED.DOC_NAME, ED.DOC_TYPE_ID, ED.FILE_COUNT, ED.VERSION,
+                ED.DESCRIPTION, ED.FIRST_DOC_ID,
+                ED.PERMISSION_ID, (SELECT PERMISSION_NAME FROM EC_PERMISSION WHERE PERMISSION_ID = ED.PERMISSION_ID) AS PERMISSION_NAME,
+                ED.EXPIRE_CODE, (SELECT EC.CODE_NAME FROM EC_CODE EC WHERE EC.CODE_GROUP = 'EXPIRE' AND EC.CODE = ED.EXPIRE_CODE) AS EXPIRE_CODE_NAME,
+                ED.STATUS_CODE, (SELECT EC.CODE_NAME FROM EC_CODE EC WHERE EC.CODE_GROUP = 'DOCUMENT_STATUS' AND EC.CODE = ED.STATUS_CODE) AS STATUS_CODE_NAME,
+                ED.CREATOR_ID, ED.CREATE_DATE, (SELECT USER_NAME FROM EC_USER WHERE USER_KEY = ED.CREATOR_ID) AS CREATOR_NAME,
+                ED.UPDATOR_ID, ED.UPDATE_DATE, (SELECT USER_NAME FROM EC_USER WHERE USER_KEY = ED.UPDATOR_ID) AS UPDATOR_NAME,
+                ED.DELETOR_ID, ED.DELETE_DATE, (SELECT USER_NAME FROM EC_USER WHERE USER_KEY = ED.DELETOR_ID) AS DELETOR_NAME
+            FROM EC_DOCUMENT ED
+            INNER JOIN EC_FOLDER_DOCUMENT_MAPPING FD ON FD.IS_LAST_DOC = 'Y' AND ED.DOC_ID = FD.DOC_ID
+            WHERE
+            STATUS_CODE = 'EXPIRED'
+        ) LIST
+        <include refid="commonSql.pagingWhere"/>
+    </select>
+    
+    <!-- 내 만기문서 목록 조회 -->
+    <select id="selectMyExpireDocList" resultMap="commonSql.Document">
+        SELECT *
+        FROM (
+            SELECT
+                <include refid="commonSql.pagingSelect"/>
+                ED.DOC_ID, ED.DOC_NAME, ED.DOC_TYPE_ID, ED.FILE_COUNT, ED.VERSION,
+                ED.DESCRIPTION, ED.FIRST_DOC_ID,
+                ED.PERMISSION_ID, (SELECT PERMISSION_NAME FROM EC_PERMISSION WHERE PERMISSION_ID = ED.PERMISSION_ID) AS PERMISSION_NAME,
+                ED.EXPIRE_CODE, (SELECT EC.CODE_NAME FROM EC_CODE EC WHERE EC.CODE_GROUP = 'EXPIRE' AND EC.CODE = ED.EXPIRE_CODE) AS EXPIRE_CODE_NAME,
+                ED.STATUS_CODE, (SELECT EC.CODE_NAME FROM EC_CODE EC WHERE EC.CODE_GROUP = 'DOCUMENT_STATUS' AND EC.CODE = ED.STATUS_CODE) AS STATUS_CODE_NAME,
+                ED.CREATOR_ID, ED.CREATE_DATE, (SELECT USER_NAME FROM EC_USER WHERE USER_KEY = ED.CREATOR_ID) AS CREATOR_NAME,
+                ED.UPDATOR_ID, ED.UPDATE_DATE, (SELECT USER_NAME FROM EC_USER WHERE USER_KEY = ED.UPDATOR_ID) AS UPDATOR_NAME,
+                ED.DELETOR_ID, ED.DELETE_DATE, (SELECT USER_NAME FROM EC_USER WHERE USER_KEY = ED.DELETOR_ID) AS DELETOR_NAME
+            FROM EC_DOCUMENT ED
+            INNER JOIN EC_FOLDER_DOCUMENT_MAPPING FD ON FD.IS_LAST_DOC = 'Y' AND ED.DOC_ID = FD.DOC_ID
+            WHERE
+            STATUS_CODE = 'EXPIRED'
+            AND ED.CREATOR_ID = #{userKey}
+        ) LIST
+        <include refid="commonSql.pagingWhere"/>
+    </select>
+
+    <!-- 만기문서를 기간별 조건으로 조회한다 -->
+    <select id="selectExpiredDocListByInterval" resultMap="commonSql.Document">
+        <![CDATA[
+        SELECT ED.DOC_ID, ED.DOC_NAME, ED.DOC_TYPE_ID, ED.STATUS_CODE, ED.CREATE_DATE, ED.UPDATE_DATE, ED.DELETE_DATE
+        FROM EC_DOCUMENT ED
+        INNER JOIN EC_FOLDER_DOCUMENT_MAPPING FD ON FD.IS_LAST_DOC = 'Y' AND ED.DOC_ID = FD.DOC_ID
+        WHERE
+        STATUS_CODE = 'ACTIVATE'
+        AND DATEADD(${interval}, ${intervalValue}, ED.CREATE_DATE) < GETDATE()
+        AND ED.EXPIRE_CODE = #{intervalCode}
+        ]]>
+    </select>
+    
+    <!-- 만기 문서로 처리한다 -->
+    <update id="setExpiredDoc">
+        UPDATE EC_DOCUMENT
+        SET STATUS_CODE = 'EXPIRED'
+        WHERE
+            DOC_ID = #{docId}
+    </update>
+
+    <update id="restoreDoc">
+        UPDATE EC_DOCUMENT
+        SET STATUS_CODE = 'ACTIVATE',
+            CREATE_DATE = GETDATE()
+        WHERE
+            DOC_ID = #{docId}
+    </update>
+
+    <!--
+    ======================================
+    =  사용자 휴지통 관련
+    ======================================
+    -->
+
+    <select id="selectTrashDocList" resultMap="commonSql.Document">
+        SELECT *
+        FROM (
+            SELECT
+                <include refid="commonSql.pagingSelect"/>
+                ED.DOC_ID, ED.DOC_NAME, ED.DOC_TYPE_ID, ED.FILE_COUNT, ED.VERSION,
+                ED.DESCRIPTION, ED.FIRST_DOC_ID,
+                ED.PERMISSION_ID, (SELECT PERMISSION_NAME FROM EC_PERMISSION WHERE PERMISSION_ID = ED.PERMISSION_ID) AS PERMISSION_NAME,
+                ED.EXPIRE_CODE, (SELECT EC.CODE_NAME FROM EC_CODE EC WHERE EC.CODE_GROUP = 'EXPIRE' AND EC.CODE = ED.EXPIRE_CODE) AS EXPIRE_CODE_NAME,
+                ED.STATUS_CODE, (SELECT EC.CODE_NAME FROM EC_CODE EC WHERE EC.CODE_GROUP = 'DOCUMENT_STATUS' AND EC.CODE = ED.STATUS_CODE) AS STATUS_CODE_NAME,
+                ED.CREATOR_ID, ED.CREATE_DATE, (SELECT USER_NAME FROM EC_USER WHERE USER_KEY = ED.CREATOR_ID) AS CREATOR_NAME,
+                ED.UPDATOR_ID, ED.UPDATE_DATE, (SELECT USER_NAME FROM EC_USER WHERE USER_KEY = ED.UPDATOR_ID) AS UPDATOR_NAME,
+                ED.DELETOR_ID, ED.DELETE_DATE, (SELECT USER_NAME FROM EC_USER WHERE USER_KEY = ED.DELETOR_ID) AS DELETOR_NAME
+            FROM EC_DOCUMENT ED
+            INNER JOIN EC_FOLDER_DOCUMENT_MAPPING FD ON FD.IS_LAST_DOC = 'Y' AND ED.DOC_ID = FD.DOC_ID
+            WHERE
+                STATUS_CODE = 'DELETED'
+                AND ED.CREATOR_ID = #{userKey}
+            
+        ) LIST
+        <include refid="commonSql.pagingWhere"/>
+    </select>
+
+    <!--
+    ======================================
+    =  관리자 휴지통 관련
+    ======================================
+    -->
+
+    <select id="selectTerminateDocList" resultMap="commonSql.Document">
+        SELECT *
+        FROM (
+            SELECT
+                <include refid="commonSql.pagingSelect"/>
+                ED.DOC_ID, ED.DOC_NAME, ED.DOC_TYPE_ID, ED.FILE_COUNT, ED.VERSION,
+                ED.DESCRIPTION, ED.FIRST_DOC_ID,
+                ED.PERMISSION_ID, (SELECT PERMISSION_NAME FROM EC_PERMISSION WHERE PERMISSION_ID = ED.PERMISSION_ID) AS PERMISSION_NAME,
+                ED.EXPIRE_CODE, (SELECT EC.CODE_NAME FROM EC_CODE EC WHERE EC.CODE_GROUP = 'EXPIRE' AND EC.CODE = ED.EXPIRE_CODE) AS EXPIRE_CODE_NAME,
+                ED.STATUS_CODE, (SELECT EC.CODE_NAME FROM EC_CODE EC WHERE EC.CODE_GROUP = 'DOCUMENT_STATUS' AND EC.CODE = ED.STATUS_CODE) AS STATUS_CODE_NAME,
+                ED.CREATOR_ID, ED.CREATE_DATE, (SELECT USER_NAME FROM EC_USER WHERE USER_KEY = ED.CREATOR_ID) AS CREATOR_NAME,
+                ED.UPDATOR_ID, ED.UPDATE_DATE, (SELECT USER_NAME FROM EC_USER WHERE USER_KEY = ED.UPDATOR_ID) AS UPDATOR_NAME,
+                ED.DELETOR_ID, ED.DELETE_DATE, (SELECT USER_NAME FROM EC_USER WHERE USER_KEY = ED.DELETOR_ID) AS DELETOR_NAME
+            FROM EC_DOCUMENT ED
+            INNER JOIN EC_FOLDER_DOCUMENT_MAPPING FD ON FD.IS_LAST_DOC = 'Y' AND ED.DOC_ID = FD.DOC_ID
+            WHERE
+                STATUS_CODE = 'TERMINATED'
+        ) LIST
+        <include refid="commonSql.pagingWhere"/>
+    </select>
+    <!--
+    ======================================
+    =   이력 관련
+    ======================================
+    -->
+    <select id="selectRecentDocList" resultMap="commonSql.Document">
+        SELECT *
+        FROM (
+            SELECT
+                <include refid="commonSql.pagingSelect"/>
+                ED.DOC_ID, ED.DOC_NAME, ED.DOC_TYPE_ID, ED.DOC_TYPE_ID_NAME, ED.FILE_COUNT,
+                ED.SECURITY_CODE, ED.SECURITY_CODE_NAME,
+                ED.CREATOR_ID, ED.CREATOR_NAME,
+                CONVERT(CHAR(16), ED.CREATE_DATE, 20) AS CREATE_DATE
+            FROM EC_DOCUMENT ED
+            INNER JOIN EC_FOLDER_DOCUMENT_MAPPING FD ON FD.IS_LAST_DOC = 'Y' AND ED.DOC_ID = FD.DOC_ID
+            WHERE
+                ED.STATUS_CODE = 'ACTIVE'
+                AND ED.DOC_ID IN (
+                    SELECT DOC_ID
+                    FROM EC_DOCUMENT_HISTORY HD
+                    WHERE HD.ACTOR_ID = #{actorId} 
+                      AND HD.ACTION_DATE > DATEADD(MONTH, -3, HD.ACTION_DATE)
+                )
+                
+			<if test="@com.enixone.enixClever.cms.was.utils.CommonUtil@notEmpty({paging.keyword})">
+                AND ED.DOC_NAME LIKE '%${paging.keyword}%'
+            </if>
+                
+        ) LIST
+        <include refid="commonSql.pagingWhere"/> 
+
+    </select>
+
+    <!--
+    ======================================
+    =   소유권 이전 관련
+    ======================================
+    -->
+
+    <!-- 사용자의 부서문서함 문서 조회 -->
+    <select id="selectUserWorkspaceDocs" resultMap="commonSql.Document">
+        SELECT
+            ED.DOC_ID, ED.DOC_NAME, ED.DOC_TYPE_ID, ED.FILE_COUNT, ED.VERSION,
+            ED.DESCRIPTION, ED.FIRST_DOC_ID,
+            ED.PERMISSION_ID, (SELECT PERMISSION_NAME FROM EC_PERMISSION WHERE PERMISSION_ID = ED.PERMISSION_ID) AS PERMISSION_NAME,
+            ED.EXPIRE_CODE, (SELECT EC.CODE_NAME FROM EC_CODE EC WHERE EC.CODE_GROUP = 'EXPIRE' AND EC.CODE = ED.EXPIRE_CODE) AS EXPIRE_CODE_NAME,
+            ED.STATUS_CODE, (SELECT EC.CODE_NAME FROM EC_CODE EC WHERE EC.CODE_GROUP = 'DOCUMENT_STATUS' AND EC.CODE = ED.STATUS_CODE) AS STATUS_CODE_NAME,
+            ED.CREATOR_ID, ED.CREATE_DATE, (SELECT USER_NAME FROM EC_USER WHERE USER_KEY = ED.CREATOR_ID) AS CREATOR_NAME,
+            ED.UPDATOR_ID, ED.UPDATE_DATE, (SELECT USER_NAME FROM EC_USER WHERE USER_KEY = ED.UPDATOR_ID) AS UPDATOR_NAME,
+            ED.DELETOR_ID, ED.DELETE_DATE, (SELECT USER_NAME FROM EC_USER WHERE USER_KEY = ED.DELETOR_ID) AS DELETOR_NAME
+        FROM EC_DOCUMENT ED
+        INNER JOIN EC_FOLDER_DOCUMENT_MAPPING FD ON FD.IS_LAST_DOC = 'Y' AND ED.DOC_ID = FD.DOC_ID AND FD.IS_LAST_DOC = 'Y'
+        INNER JOIN EC_BOX_FOLDER_MAPPING MBF ON FD.FOLDER_ID = MBF.FOLDER_ID AND MBF.BOX_ID != 'BOX_PRIVATE'
+        WHERE
+            ED.CREATOR_ID = #{userKey}
+    </select>
+
+    <!-- 문서 소유권 변경 -->
+    <update id="changeOwner">
+        UPDATE EC_DOCUMENT
+        SET CREATOR_ID = #{ownerId},
+            UPDATOR_ID = #{ownerId}
+        WHERE DOC_ID = #{docId}
+    </update>
+
+</mapper>

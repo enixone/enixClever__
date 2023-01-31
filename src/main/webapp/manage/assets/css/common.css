@@ -1,0 +1,249 @@
+/**************************
+파일 만든이 : 조주미
+파일 제작일 : 2022.08.17
+파일 최종수정일 :
+***************************/
+
+@charset "utf-8";
+
+html,body {margin: 0;height: 100%;position:relative;}
+body, input, textarea, select, button, table{margin:0;font-size:14px;font-family: 'Malgun Gothic','맑은 고딕','돋움',dotum,sans-serif !important;color:#333;letter-spacing:-1px;}
+body, h1, h2, h3, h4, h5, dl, dt, dd, ul, li, ol, th, td, p, form, fieldset, legend, button { margin: 0; padding: 0; }
+input:focus, select:focus, option:focus, textarea:focus, button:focus{
+	outline: none;
+}
+
+img, fieldset{border:0 none}
+dl, ul, ol, li {list-style: none outside none;}
+button{border:0 none; cursor:pointer; display: block;}
+table, th, td{border-collapse:collapse;}
+
+div {
+  border: 0px solid red;
+}
+ 
+
+a,img,input {
+	outline:none; 
+}
+
+
+li img { vertical-align:top;}
+/* td img { vertical-align:middle} */
+
+a {text-decoration:none; color:#111;}
+a:hover, a:active, a:focus {text-decoration:none;}
+a.underline {text-decoration:none; color:#111;}
+table a:link, table a:visited {color:#111;}
+table a:hover, table a:active {color:#000; text-decoration:underline;}
+address, caption, cite, code, dfn, em, var {font-style:normal;}
+
+strong, .strong , b { font-weight: bold; }
+.blind, legend, caption, .hide {display:none !important}
+.cursor { cursor: pointer;}
+.clear {clear:both}
+
+textarea.textarea {height:100px; padding:5px; width:100%; box-sizing:border-box; border:1px solid #ececec; background:#ffffff; resize: none; }
+ 
+/* button */
+a.btn_blue {display:inline-block; width:64px; height:28px; line-height:28px; text-align:center; color:#fff !important; background:url('/enixClever/manage/assets/images/common/btn_blue.gif') no-repeat left top; }
+a.btn_darkgray {display:inline-block; width:64px; height:28px; line-height:28px; text-align:center; color:#fff !important; background:url('/enixClever/manage/assets/images/common/btn_darkgray.gif') no-repeat left top; }
+a.btn_lineblue {display:inline-block; width:64px; height:28px; line-height:28px; text-align:center; color:#003e7b !important; background:url('/enixClever/manage/assets/images/common/btn_lineblue.gif') no-repeat left top; }
+a.btn_lineblack {display:inline-block; width:64px; height:28px; line-height:28px; text-align:center; color:#333 !important; background:url('/enixClever/manage/assets/images/common/btn_lineblack.gif') no-repeat left top; }
+a.btn_linegray {display:inline-block; width:64px; height:28px; line-height:28px; text-align:center; color:#333 !important; background:url('/enixClever/manage/assets/images/common/btn_linegray.gif') no-repeat left top; }
+
+.btnGroup-pop {position:fixed;min-width: 100%;min-height: 30px;background: #323743;padding:15px 0px 15px 25px;z-index:9900;}
+
+/* float */
+.floatL {float:left;}
+.floatR {float:right;}
+
+/* align */
+.imgC {vertical-align:middle !important}
+
+/* margin */
+.mgL0 {margin-left:0 !important}
+
+.mgL14 {margin-left:14px !important;}
+.mgL7 {margin-left:7px !important;}
+.mgR7 {margin-right:7px !important;}
+
+.mgT15 {margin-top:15px !important}
+.mgT20 {margin-top:20px !important}
+
+.mgB20 {margin-bottom:20px !important}
+.mb0 {margin-bottom:0 !important;}
+
+/* padding */
+.pdcus1 {padding:10px 5px;}
+.pdX5 {padding:0 5px !important}
+.pdR5 {padding-right:5px !important}
+.pdL5 {padding-left:5px !important}
+.pdL10 {padding-left:10px !important}
+.pdR10 {padding-right:10px !important}
+.pdR20 {padding-right:20px !important}
+.pt9 {padding-top:9px !important;}
+.pdy5 {padding-top:5px; padding-bottom:5px !important}
+
+
+.text-left {text-align:left !important;}
+.text-center {text-align:center !important;}
+
+.height100 {height:100%;}
+.height170 {height:170px;}
+.height280 {height:280px;}
+.height205 {height:205px;}
+.height310 {height:310px;}
+.height375 {height:375px;}
+
+.w100p {width:100% !important;}
+.w380 {width:380px;}
+.w100 {width:100px;}
+
+.col-12 {width: 100% !important;}
+.col-11 {width: 91.66666667% !important;}
+.col-10 {width: 83.33333333% !important;}
+.col-9 {width: 75% !important;}
+.col-8 {width: 66.66666667% !important;}
+.col-7 {width: 58.33333333% !important;}
+.col-6 {width: 50% !important;}
+.col-5 {width: 41.66666667% !important;}
+.col-4 {width: 33.33333333% !important;}
+.col-3 {width: 25% !important;}
+.col-2 {width: 16.66666667% !important;}
+.col-1 {width: 8.33333333% !important;}
+
+/* border */
+.border-top1 {border-top:1px solid #e0e0e0;}
+
+/*스코롤바 커스텀*/
+::-webkit-scrollbar {width: 5px;height:7px;border-radius: 10px;}
+::-webkit-scrollbar-track {background: none;border-radius: 10px;}
+::-webkit-scrollbar-thumb {background: #9199a4;border-radius: 10px;}
+::-webkit-scrollbar-thumb:hover {background: #6b7583;}
+
+.overlay {display:none; position:fixed; top:0; left:0; right:0;bottom:0; background-color:rgba(0,0,0,0.7); z-index:500;}
+
+/* 마이메뉴 */
+#mymenu {display:none; position:fixed; top:0; right:-100vw; display:block; width:400px; height:100%; z-index:550;}
+#mymenu .mymenu_wrap {
+	position:absolute; top:0; right:0; width:100%; height:100%; padding-left:35px;padding-right:35px; padding-top:100px; padding-bottom:60px; 
+	background:#fff; overflow-y:auto; z-index:10; box-sizing:border-box;}
+#mymenu .mymenu-close {
+	position:absolute; top:30px; right:36px; width:12px; height:12px; background:url('/enixClever/manage/assets/images/mypage_close.png') no-repeat center center; font-size:0; 
+	line-height:0; text-indent:-9999px; z-index:20;padding:10px;
+}
+.myinfo-wrap {position:relative;font-size:20px;font-weight:600;margin-bottom:25px;}
+.myLogoutBtn {
+	position:absolute;right:0;padding-right:25px;background:url('/enixClever/manage/assets/images/mypage_logout.png') no-repeat right center;
+	font-size:12px;color:#818893;height:20px;line-height:22px;
+}
+#mymenu .all-inmn dl {float:left;width:100%;margin-bottom:25px;font-size:14px; font-weight:600; color:#818893;}
+#mymenu .all-inmn dl dt {float:left;position:relative;width:110px;}
+#mymenu .all-inmn dl dd {float:left;position:relative;width:220px;}
+#mymenu .all-inmn dl dd li {margin-bottom:12px;}
+.myPwdChange {display:block;background-color:#102454;color:#ffffff;font-weight:600;border-radius:30px;height:36px;line-height:36px;text-align:center;}
+
+.rDefault {margin-top:5px;}
+.rDefault input {position:absolute;padding-top:5px;padding-left:10px; }
+.rDefault input + label {
+	display:inline-block;
+	padding-left: 15px;
+	padding-right: 1px;
+	padding-top:2px;
+	padding-bottom:8px;
+	cursor:pointer;
+	margin-left: 2px;
+}
+
+.cDefault input {position:absolute; visibility:hidden;width:0; height:0;}
+.cDefault input + label {
+	display:inline-block;padding-left:25px;background:url('/enixClever/manage/assets/images/check_off.png') no-repeat left center;background-size:18px 18px;
+	padding-top:2px;padding-bottom:2px;cursor:pointer;
+}
+.cDefault input:checked + label {background:url('/enixClever/manage/assets/images/check_on.png') no-repeat left center;}
+
+.txt-dafault {color:#102454;}
+.txt-red {color:#bc162c;}
+.txt-blue {color:#5b84ff;}
+.color-dafault {display:inline-block;background-color:#102454;width:10px;height:10px;border-radius:30px;}
+.color-red {display:inline-block;background-color:#bc162c;width:10px;height:10px;border-radius:30px;}
+.color-blue {display:inline-block;background-color:#106ab6;width:10px;height:10px;border-radius:30px;}
+
+.txt-left {text-align:left !important;}
+.txt-center {text-align:center !important;}
+.txt-right {text-align:right !important;}
+
+.txt-message {text-align:center; font-size:16px; padding-top:20px;}
+
+.txt-folder-path {text-align:center; font-size:18px;color:#333333; padding-left:5px;}
+
+.l-height32 {line-height:32px;}
+
+.modalM {width:100%;max-width:800px;min-width:700px;background-color:#ffffff;border-radius:12px;position:absolute;z-index:600;top:45%;left:50%;	transform: translate(-50% -50%);margin-left:-350px;margin-top:-240px;}
+.modal-title {position:relative;height:40px;border-bottom:1px solid #e0e0e0; color:#111111;font-weight:bold;font-size:20px;border-radius:12px 12px 0 0;	box-sizing: border-box; margin:30px 20px 20px;}
+.modal-btnGrp {position:absolute;right:0;top:-10px;}
+.modal-btnGrp a {display:inline-block;padding: 15px 7px;box-sizing: border-box;font-size:0;}
+.modal-body {position:relative;padding:0 20px 0 20px;}
+
+.form-group {padding-bottom:10px;margin-bottom:10px;}
+.form-row {display: -ms-flexbox;display: flex;-ms-flex-wrap: wrap;flex-wrap: wrap;}
+.control-label {text-align: left;line-height: 36px;padding-left:10px;box-sizing: border-box;}
+.form-control {position: relative;border: 1px solid #cfd3da;border-radius: 30px;padding-left: 20px;padding-right: 30px;height: 36px;line-height: 36px; font-size: 14px;box-sizing: border-box;width:100%;}
+.form-txt {line-height:36px;padding-left:10px;}
+i.req {color:#d7162a;}
+
+.modal-footer {text-align:center;padding:20px 25px 20px 25px;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;}
+.modal-save-btn {display:inline-block;border:1px solid #1139a0;border-radius:3px;padding:0 20px;height: 36px;line-height: 35px;font-size:14px;	box-sizing: border-box;color:#ffffff;background:#1139a0;}
+.modal-cancle-btn {display:inline-block;border:1px solid #1139a0;border-radius:3px;padding:0 20px;height: 36px;line-height: 35px;font-size:14px;	box-sizing: border-box;color:#1139a0;background:#fff;}
+.modal-newmake-btn {display:inline-block;border:1px solid #4876ef;border-radius:3px;padding:0 20px;height: 36px;line-height: 35px;font-size:14px;	box-sizing: border-box;color:#ffffff;background:#4876ef;}
+
+.pageActive {
+    font-weight:bold;
+    color:#bc162c;
+}
+
+.hidden {
+    visibility: collapse;
+    display: none;
+}
+
+.NameClick:hover {
+	cursor: pointer;
+	text-decoration: underline;
+}
+
+.folder-icon-group-top {
+	background-image:url('/enixClever/manage/assets/images/folder-icon-home.png')
+}
+
+.folder-icon-group {
+	background-image:url('/enixClever/manage/assets/images/img_Company.png')
+}
+
+.Usersearch {
+	display: inline-block;
+    float: right;
+}
+
+.Usersearch input {
+	height: 30px;
+	margin-bottom: 0px;
+	padding: 0 0px 0 5px;
+	border-radius: 5px;
+	font-size: 12px;
+	line-height: 28px;
+	border: 1px solid #d0d0d0;
+	vertical-align: top;
+	width: 180px;
+}
+
+.dataDivision {
+	text-align: center;
+	padding-top: 50px;
+	
+}
